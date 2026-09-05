@@ -1,0 +1,77 @@
+:root {
+  --teal-primary: #0d9488;
+  --teal-hover: #0f766e;
+  --teal-subtle: rgba(13, 148, 136, 0.1);
+  --teal-glow: rgba(13, 148, 136, 0.25);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+}
+
+[data-bs-theme="dark"] {
+  --teal-primary: #14b8a6;
+  --teal-hover: #0d9488;
+  --teal-subtle: rgba(20, 184, 166, 0.15);
+  --teal-glow: rgba(20, 184, 166, 0.3);
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+#root {
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Custom Teal Utilities */
+.bg-teal {
+  background-color: var(--teal-primary) !important;
+}
+
+.text-teal {
+  color: var(--teal-primary) !important;
+}
+
+.btn-teal {
+  background-color: var(--teal-primary);
+  border-color: var(--teal-primary);
+  color: #ffffff;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-teal:hover, .btn-teal:focus {
+  background-color: var(--teal-hover);
+  border-color: var(--teal-hover);
+  color: #ffffff;
+  box-shadow: 0 4px 12px var(--teal-glow);
+}
+
+.btn-outline-teal {
+  color: var(--teal-primary);
+  border-color: var(--teal-primary);
+}
+
+.btn-outline-teal:hover {
+  background-color: var(--teal-primary);
+  color: #ffffff;
+}
+
+.bg-teal-subtle {
+  background-color: var(--teal-subtle) !important;
+}
+
+/* Glassmorphism & Card polish */
+.card-hover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card-hover:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1) !important;
+}
+
+.transition-all {
+  transition: all 0.3s ease;
+}
