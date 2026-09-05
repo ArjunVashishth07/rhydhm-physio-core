@@ -7,7 +7,7 @@ import { Calendar, Clock, User, Phone, Activity, CheckCircle, AlertCircle, Messa
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/appointments`;
 
 export const BookingForm = () => {
-  const { t, lang } = useApp();
+  const { t, lang, user, openAuthModal } = useApp();
 
   // Today's date in YYYY-MM-DD format
   const getTodayString = () => {
@@ -35,6 +35,13 @@ export const BookingForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(null);
   const [bookingError, setBookingError] = useState('');
+
+  // Auto-fill phone when logged in
+  useEffect(() => {
+    if (user && user.phone && !phone) {
+      setPhone(user.phone);
+    }
+  }, [user]);
 
   // Fetch available time slots whenever date changes
   useEffect(() => {
@@ -77,22 +84,13 @@ export const BookingForm = () => {
     }
   };
 
-  // Submit Handler
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setBookingError('');
-    setBookingSuccess(null);
-
-    if (!timeSlot) {
-      const msg = lang === 'hi' ? 'कृपया एक समय स्लॉट चुनें' : 'Please select an appointment time slot.';
-      setBookingError(msg);
-      alert(msg);
-      return;
-    }
+  // Core Booking Execution Helper
+  const executeBooking = async (activePhone) => {
+    const targetPhone = activePhone || phone || (user ? user.phone : '');
 
     const payload = {
       patientName,
-      phone,
+      phone: targetPhone,
       age: Number(age),
       gender,
       primaryIssue,
@@ -116,7 +114,7 @@ export const BookingForm = () => {
 
         // Reset form inputs except date
         setPatientName('');
-        setPhone('');
+        if (!user) setPhone('');
         setAge('');
         setSymptoms([]);
         setTimeSlot('');
@@ -133,6 +131,32 @@ export const BookingForm = () => {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // Submit Handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setBookingError('');
+    setBookingSuccess(null);
+
+    if (!timeSlot) {
+      const msg = lang === 'hi' ? 'कृपया एक समय स्लॉट चुनें' : 'Please select an appointment time slot.';
+      setBookingError(msg);
+      alert(msg);
+      return;
+    }
+
+    // If guest, pause and prompt OTP modal
+    if (!user) {
+      openAuthModal((loggedInUser) => {
+        const finalPhone = loggedInUser?.phone || phone;
+        executeBooking(finalPhone);
+      });
+      return;
+    }
+
+    // Logged in user, submit directly
+    executeBooking(user.phone || phone);
   };
 
   // Generate WhatsApp Share Link

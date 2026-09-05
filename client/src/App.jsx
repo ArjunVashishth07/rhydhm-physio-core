@@ -3,7 +3,9 @@ import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Home from './pages/Home';
 import AdminDashboard from './pages/AdminDashboard';
+import PatientDashboard from './pages/PatientDashboard';
 import Footer from './components/Footer';
+import AuthModal from './components/AuthModal';
 
 function App() {
   return (
@@ -14,9 +16,11 @@ function App() {
           <Routes>
             <Route path="/" element={<Home />} />
             <Route path="/admin" element={<AdminDashboard />} />
+            <Route path="/patient-dashboard" element={<PatientDashboard />} />
           </Routes>
         </main>
         <Footer />
+        <AuthModal />
       </div>
     </BrowserRouter>
   );

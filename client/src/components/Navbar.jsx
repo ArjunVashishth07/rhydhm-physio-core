@@ -2,11 +2,12 @@ import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { clinicDetails } from '../data/clinicData';
-import { Activity, Globe, Sun, Moon, PhoneCall, UserCheck, ShieldCheck } from 'lucide-react';
+import { Activity, Globe, Sun, Moon, PhoneCall, UserCheck, ShieldCheck, User, LogOut, FileText } from 'lucide-react';
 
 export const Navbar = () => {
-  const { theme, toggleTheme, lang, setLang, t } = useApp();
+  const { theme, toggleTheme, lang, setLang, t, user, openAuthModal, logoutUser } = useApp();
   const [navExpanded, setNavExpanded] = useState(false);
+  const [userDropdownOpen, setUserDropdownOpen] = useState(false);
 
   const toggleLanguage = () => {
     setLang(lang === 'en' ? 'hi' : 'en');
@@ -77,14 +78,14 @@ export const Navbar = () => {
               </a>
             </li>
             <li className="nav-item">
-              <a
+              <Link
                 className="nav-link fw-medium px-3 rounded-2 d-flex align-items-center gap-1"
-                href="/#patient-history"
+                to="/patient-dashboard"
                 onClick={() => setNavExpanded(false)}
               >
                 <UserCheck size={16} />
                 {t('patientHistory')}
-              </a>
+              </Link>
             </li>
             <li className="nav-item">
               <Link
@@ -101,6 +102,56 @@ export const Navbar = () => {
 
           {/* Right Controls */}
           <div className="d-flex align-items-center gap-2 flex-wrap mt-3 mt-lg-0">
+            {/* Patient Auth Button / User Dropdown */}
+            {user === null ? (
+              <button
+                onClick={() => openAuthModal()}
+                className="btn btn-outline-teal btn-sm rounded-pill px-3 py-1.5 fw-semibold d-flex align-items-center gap-1.5"
+                style={{ color: '#0d9488', borderColor: '#0d9488' }}
+              >
+                <User size={16} />
+                <span>{lang === 'hi' ? 'मरीज लॉगिन' : 'Patient Login'}</span>
+              </button>
+            ) : (
+              <div className="position-relative">
+                <button
+                  onClick={() => setUserDropdownOpen(!userDropdownOpen)}
+                  className="btn btn-teal-subtle btn-sm rounded-pill px-3 py-1.5 fw-semibold d-flex align-items-center gap-2 border"
+                  style={{ backgroundColor: 'rgba(13, 148, 136, 0.12)', color: '#0d9488', borderColor: '#0d9488' }}
+                >
+                  <User size={16} />
+                  <span>+91 {user.phone}</span>
+                </button>
+
+                {userDropdownOpen && (
+                  <div
+                    className="dropdown-menu dropdown-menu-end show position-absolute shadow-lg border-0 rounded-3 mt-2 p-2"
+                    style={{ right: 0, minWidth: '180px', zIndex: 1050 }}
+                  >
+                    <Link
+                      className="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2 small fw-medium"
+                      to="/patient-dashboard"
+                      onClick={() => setUserDropdownOpen(false)}
+                    >
+                      <FileText size={16} className="text-teal" style={{ color: '#0d9488' }} />
+                      {lang === 'hi' ? 'मेरी अपॉइंटमेंट्स' : 'My Appointments'}
+                    </Link>
+                    <hr className="dropdown-divider my-1" />
+                    <button
+                      className="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2 small fw-medium text-danger"
+                      onClick={() => {
+                        setUserDropdownOpen(false);
+                        logoutUser();
+                      }}
+                    >
+                      <LogOut size={16} />
+                      {lang === 'hi' ? 'लॉगआउट' : 'Logout'}
+                    </button>
+                  </div>
+                )}
+              </div>
+            )}
+
             {/* Language Switcher */}
             <button
               onClick={toggleLanguage}
