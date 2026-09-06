@@ -10,7 +10,12 @@ const adminRoutes = require('./routes/adminRoutes');
 const app = express();
 
 // Middlewares (placed before routes)
-app.use(cors());
+app.use(
+  cors({
+    origin: ['http://localhost:5173', 'http://127.0.0.1:5173'],
+    credentials: true
+  })
+);
 app.use(express.json());
 
 // Register API routes
