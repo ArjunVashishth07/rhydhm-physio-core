@@ -383,12 +383,12 @@ export const AdminDashboard = () => {
             {/* Search Input */}
             <div className="col-md-5">
               <div className="input-group">
-                <span className="input-group-text bg-body border-end-0">
-                  <Search size={18} className="text-muted" />
+                <span className="input-group-text bg-white border-slate-300 dark:bg-slate-800 dark:text-white border-end-0">
+                  <Search size={18} className="text-slate-500 dark:text-slate-400" />
                 </span>
                 <input
                   type="text"
-                  className="form-control border-start-0 ps-0"
+                  className="form-control border-start-0 ps-0 text-slate-800 bg-white border-slate-300 dark:bg-slate-800 dark:text-white"
                   placeholder="Search patient name, phone, condition..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -435,8 +435,8 @@ export const AdminDashboard = () => {
                     <tr key={app._id}>
                       {/* Name & Phone */}
                       <td className="ps-4 py-3">
-                        <div className="fw-bold text-white fs-6">{app.patientName || 'Anonymous Patient'}</div>
-                        <div className="text-muted small">
+                        <div className="text-slate-900 dark:text-white font-semibold fs-6">{app.patientName || 'Anonymous Patient'}</div>
+                        <div className="text-slate-500 dark:text-slate-400 small">
                           <Phone size={14} className="me-1 text-teal" style={{ color: '#0d9488' }} />
                           {app.phone}
                         </div>
@@ -444,8 +444,8 @@ export const AdminDashboard = () => {
 
                       {/* Age & Gender */}
                       <td>
-                        <span className="fw-semibold">{app.age} yrs</span>
-                        <small className="text-muted d-block">{app.gender}</small>
+                        <span className="text-slate-800 dark:text-slate-200 font-semibold">{app.age} yrs</span>
+                        <small className="text-slate-500 dark:text-slate-400 d-block">{app.gender}</small>
                       </td>
 
                       {/* Condition */}
@@ -454,7 +454,7 @@ export const AdminDashboard = () => {
                           {app.primaryIssue}
                         </span>
                         {app.symptoms?.length > 0 && (
-                          <small className="text-muted d-block text-truncate mt-0.5" style={{ maxWidth: '220px' }}>
+                          <small className="text-slate-500 dark:text-slate-400 d-block text-truncate mt-0.5" style={{ maxWidth: '220px' }}>
                             {app.symptoms.join(', ')}
                           </small>
                         )}
@@ -462,8 +462,8 @@ export const AdminDashboard = () => {
 
                       {/* Date & Slot */}
                       <td>
-                        <div className="fw-semibold">{app.appointmentDate}</div>
-                        <small className="text-muted">{app.timeSlot}</small>
+                        <div className="text-slate-800 dark:text-slate-200 font-semibold">{app.appointmentDate}</div>
+                        <small className="text-slate-500 dark:text-slate-400">{app.timeSlot}</small>
                       </td>
 
                       {/* Status Badge */}
