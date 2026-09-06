@@ -106,8 +106,8 @@ export const Navbar = () => {
             {user === null ? (
               <button
                 onClick={() => openAuthModal()}
-                className="btn btn-outline-teal btn-sm rounded-pill px-3 py-1.5 fw-semibold d-flex align-items-center gap-1.5"
-                style={{ color: '#0d9488', borderColor: '#0d9488' }}
+                className="btn btn-teal btn-sm rounded-pill px-3 py-1.5 fw-semibold d-flex align-items-center gap-1.5"
+                style={{ color: '#ffffff', borderColor: '#0d9488' }}
               >
                 <User size={16} />
                 <span>{lang === 'hi' ? 'मरीज लॉगिन' : 'Patient Login'}</span>

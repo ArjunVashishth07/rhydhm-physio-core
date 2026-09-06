@@ -237,12 +237,12 @@ export const Home = () => {
             {servicesList.map((service, index) => {
               const IconComp = service.icon;
               return (
-                <div key={index} className="col-md-6 col-lg-4">
-                  <div className="card h-100 border-0 shadow-sm rounded-4 p-4 card-hover text-start">
+                <div key={index} className="col-md-6 col-lg-4 ">
+                  <div className="card h-100 border shadow-sm rounded-4 p-4 card-hover text-start">
                     <div className="p-3 rounded-3 bg-teal-subtle text-teal d-inline-flex mb-3" style={{ width: 'fit-content' }}>
                       <IconComp size={26} />
                     </div>
-                    <h5 className="fw-bold mb-2">{service.title}</h5>
+                    <h5 className="fw-bold mb-2 ">{service.title}</h5>
                     <p className="text-muted small mb-3">{service.desc}</p>
                     <a href="#booking-section" className="text-teal text-decoration-none fw-semibold small d-inline-flex align-items-center gap-1 mt-auto">
                       <span>{t('bookAppointment')}</span> &rarr;
