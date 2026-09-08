@@ -106,8 +106,9 @@ export const Navbar = () => {
             {user === null ? (
               <button
                 onClick={() => openAuthModal()}
-                className="btn btn-teal btn-sm rounded-pill px-3 py-1.5 fw-semibold d-flex align-items-center gap-1.5"
-                style={{ color: '#ffffff', borderColor: '#0d9488' }}
+                className="btn btn-outline-teal btn-sm rounded-pill px-3 py-1.5 fw-semibold d-flex align-items-center gap-1.5"
+                
+                
               >
                 <User size={16} />
                 <span>{lang === 'hi' ? 'मरीज लॉगिन' : 'Patient Login'}</span>
@@ -165,7 +166,7 @@ export const Navbar = () => {
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="btn btn-outline-secondary btn-sm rounded-circle p-2 d-flex align-items-center justify-content-center"
+              className="btn btn-outline-secondary btn-sm rounded-circle p-2 d-flex align-items-center justify-content-center "
               title={theme === 'dark' ? 'Switch to Light Mode' : 'Switch to Dark Mode'}
               style={{ width: '38px', height: '38px' }}
             >
@@ -179,7 +180,7 @@ export const Navbar = () => {
             {/* Direct Call Button */}
             <a
               href={`tel:${clinicDetails.contacts[0]}`}
-              className="btn text-white rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm"
+              className="btn text-white rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm "
               style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
             >
               <PhoneCall size={16} />
