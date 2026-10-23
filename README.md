@@ -38,7 +38,7 @@ The platform streamlines clinical operations by providing patients with an inter
 - **Prescription & Exercise Access:** Displays previous diagnoses, prescribed rehabilitation exercises, doctor's notes, and scheduled follow-up dates.
 
 ### 3. 🩺 Doctor / Admin Dashboard
-- **Passcode Protection:** Secure PIN entry gate (`7777` by default) to restrict access to clinical records.
+- **Passcode Protection:** Secure PIN entry gate to restrict access to clinical records.
 - **KPI Stat Cards:** Live counter statistics displaying:
   - 📊 *Total Appointments*
   - ⏳ *Pending Action*
@@ -184,7 +184,7 @@ cd ClinicProject
    | :--- | :--- | :--- |
    | `PORT` | Port for the Express server to listen on | `5000` |
    | `MONGO_URI` | MongoDB connection URI (Atlas or Local) | `mongodb://127.0.0.1:27017/rhythm_clinic` |
-   | `JWT_SECRET` | Secret key used for signing JWT tokens | `rhythm_clinic_secret_key_2026` |
+   | `JWT_SECRET` | Secret key used for signing JWT tokens | `your_jwt_secret_key_here` |
 
 4. **Start the backend server:**
    - In Development mode (with live auto-reload):
@@ -236,7 +236,7 @@ cd ClinicProject
 | Portal | URL | Default Credentials / Passcode |
 | :--- | :--- | :--- |
 | **Patient Portal (Landing Page)** | `http://localhost:5173/` | Public Access |
-| **Doctor / Admin Dashboard** | `http://localhost:5173/admin` | Passcode: **`7777`** |
+| **Doctor / Admin Dashboard** | `http://localhost:5173/admin` | Configured via Admin Settings / .env |
 | **API Health Check** | `http://localhost:5000/api/health` | Returns `{ "status": "ok" }` |
 
 ---
@@ -268,61 +268,6 @@ Defined in [`server/routes/adminRoutes.js`](file:///d:/ClinicProject/server/rout
 | Method | Endpoint | Description | Response |
 | :--- | :--- | :--- | :--- |
 | `GET` | `/api/health` | Server liveness check | `200 OK` `{ status: "ok", message: "RHYDHM Physio API Server Running" }` |
-
----
-
-## 🗄️ Database Schema (`Appointment`)
-
-The primary data entity is the **Appointment** model, managed via Mongoose in [`server/models/Appointment.js`](file:///d:/ClinicProject/server/models/Appointment.js):
-
-```javascript
-{
-  patientName: { type: String, required: true, trim: true },
-  phone: { type: String, required: true, trim: true },
-  age: { type: Number, required: true },
-  gender: { type: String, enum: ['Male', 'Female', 'Other'] },
-  primaryIssue: {
-    type: String,
-    required: true,
-    enum: [
-      'Cervical & Posture Care',
-      'Spine & Chiropractic Care',
-      'Paralysis & Neuro Rehab',
-      'Sports Rehab & Joint Pain',
-      'Osteopathy & Manual Therapy',
-      'Advanced Cupping & Needling',
-      'Home Physiotherapy'
-    ]
-  },
-  symptoms: [{ type: String }],
-  appointmentDate: { type: String, required: true }, // Format: YYYY-MM-DD
-  timeSlot: {
-    type: String,
-    required: true,
-    enum: [
-      '04:00 PM - 04:30 PM',
-      '04:30 PM - 05:00 PM',
-      '05:00 PM - 05:30 PM',
-      '05:30 PM - 06:00 PM',
-      '06:00 PM - 06:30 PM',
-      '06:30 PM - 07:00 PM',
-      '07:00 PM - 07:30 PM',
-      '07:30 PM - 08:00 PM'
-    ]
-  },
-  status: {
-    type: String,
-    enum: ['Pending', 'Confirmed', 'Completed', 'Cancelled'],
-    default: 'Pending'
-  },
-  sessionNotes: {
-    exercisesGiven: [{ type: String }],
-    doctorRemarks: { type: String, default: '' },
-    nextFollowUp: { type: String, default: '' }
-  },
-  timestamps: true // Automatically manages createdAt and updatedAt
-}
-```
 
 ---
 
