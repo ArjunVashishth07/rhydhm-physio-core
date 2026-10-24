@@ -16,13 +16,16 @@ import {
   Activity,
   ShieldAlert,
   Save,
-  Lock
+  Lock,
+  Megaphone
 } from 'lucide-react';
+import AdminAnnouncements from '../components/AdminAnnouncements';
 
 const ADMIN_API_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/admin/appointments`;
 
 export const AdminDashboard = () => {
   const { t, lang } = useApp();
+  const [mainTab, setMainTab] = useState('appointments'); // 'appointments' | 'announcements'
 
   // Authentication State (Simple PIN protection for doctor portal)
   const [isAuthenticated, setIsAuthenticated] = useState(() => {
@@ -306,7 +309,45 @@ export const AdminDashboard = () => {
           </div>
         </div>
 
-        {/* TOP KPI CARDS */}
+        {/* PRIMARY MANAGEMENT TABS */}
+        <div className="d-flex align-items-center gap-2 mb-4 border-bottom pb-3">
+          <button
+            type="button"
+            onClick={() => setMainTab('appointments')}
+            className={`btn rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 transition-all ${
+              mainTab === 'appointments'
+                ? 'btn-teal text-white shadow-sm'
+                : 'btn-outline-secondary'
+            }`}
+          >
+            <Calendar size={18} />
+            <span>Appointments</span>
+            <span className="badge rounded-pill bg-white text-dark ms-1 opacity-90 px-2 py-0.5">
+              {appointments.length}
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => setMainTab('announcements')}
+            className={`btn rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 transition-all ${
+              mainTab === 'announcements'
+                ? 'btn-teal text-white shadow-sm'
+                : 'btn-outline-secondary'
+            }`}
+          >
+            <Megaphone size={18} />
+            <span>Announcements</span>
+          </button>
+        </div>
+
+        {/* TAB: ANNOUNCEMENTS MANAGEMENT */}
+        {mainTab === 'announcements' && <AdminAnnouncements />}
+
+        {/* TAB: APPOINTMENTS MANAGEMENT */}
+        {mainTab === 'appointments' && (
+          <>
+            {/* TOP KPI CARDS */}
         <div className="row g-3 mb-4">
           <div className="col-6 col-md-3">
             <div className="card border-0 shadow-sm rounded-4 p-4 bg-body d-flex flex-column justify-content-between h-100" style={{ minHeight: '120px' }}>
@@ -509,6 +550,8 @@ export const AdminDashboard = () => {
             </div>
           )}
         </div>
+        </>
+        )}
       </div>
 
       {/* ACTION & PRESCRIPTION MODAL */}

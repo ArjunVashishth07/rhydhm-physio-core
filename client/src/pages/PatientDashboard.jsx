@@ -21,6 +21,7 @@ import {
   X
 } from 'lucide-react';
 import BookingForm from '../components/BookingForm';
+import AnnouncementBanner from '../components/AnnouncementBanner';
 
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/appointments`;
 
@@ -132,6 +133,9 @@ export const PatientDashboard = () => {
   return (
     <div className="patient-dashboard pt-5 mt-4 pb-5 px-3 bg-body-tertiary min-vh-100 text-start">
       <div className="container max-w-5xl">
+        {/* SKEUOMORPHIC / GLASSMORPHIC ANNOUNCEMENT BANNER */}
+        <AnnouncementBanner />
+
         {/* TOP GREETING BANNER */}
         <div
           className="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-4 text-white position-relative overflow-hidden clinical-banner"
