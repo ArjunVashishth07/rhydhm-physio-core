@@ -99,8 +99,8 @@ export const AuthModal = () => {
       className="modal fade show d-block"
       tabIndex="-1"
       style={{
-        backgroundColor: 'rgba(0, 0, 0, 0.65)',
-        backdropFilter: 'blur(6px)',
+        backgroundColor: 'rgba(20, 18, 16, 0.72)',
+        backdropFilter: 'blur(8px)',
         zIndex: 1060
       }}
       onClick={closeAuthModal}
@@ -112,9 +112,18 @@ export const AuthModal = () => {
       >
         <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden text-start">
           {/* Modal Header */}
-          <div className="modal-header bg-teal text-white p-4 position-relative" style={{ backgroundColor: '#0d9488' }}>
+          <div
+            className="modal-header text-white p-4 position-relative"
+            style={{
+              background: 'linear-gradient(135deg, #423022 0%, #291d14 100%)',
+              borderBottom: '1px solid rgba(244, 217, 160, 0.2)'
+            }}
+          >
             <div className="d-flex align-items-center gap-3">
-              <div className="p-2.5 rounded-circle bg-white text-teal d-flex align-items-center justify-content-center shadow-xs">
+              <div
+                className="p-2.5 rounded-circle d-flex align-items-center justify-content-center shadow-xs"
+                style={{ backgroundColor: '#f4d9a0', color: '#3a2717' }}
+              >
                 <ShieldCheck size={26} />
               </div>
               <div>
@@ -171,7 +180,7 @@ export const AuthModal = () => {
                     {lang === 'hi' ? '10-अंकों का मोबाइल नंबर' : '10-Digit Mobile Number'} <span className="text-danger">*</span>
                   </label>
                   <div className="input-group input-group-lg">
-                    <span className="input-group-text bg-body-tertiary fw-semibold text-teal fs-6" style={{ color: '#0d9488' }}>
+                    <span className="input-group-text bg-body-tertiary fw-semibold text-teal fs-6">
                       +91
                     </span>
                     <input
@@ -196,7 +205,6 @@ export const AuthModal = () => {
                   type="submit"
                   disabled={loading || phone.length < 10}
                   className="btn btn-teal text-white btn-lg w-100 rounded-pill py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2"
-                  style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
                 >
                   {loading ? (
                     <div className="spinner-border spinner-border-sm" role="status"></div>
@@ -220,7 +228,6 @@ export const AuthModal = () => {
                       type="button"
                       onClick={() => setStep(1)}
                       className="btn btn-link p-0 text-teal text-decoration-none small fw-semibold d-flex align-items-center gap-1"
-                      style={{ color: '#0d9488' }}
                     >
                       <ArrowLeft size={14} />
                       {lang === 'hi' ? 'नंबर बदलें' : 'Change Number'}
@@ -259,7 +266,6 @@ export const AuthModal = () => {
                       type="button"
                       onClick={handleResendOtp}
                       className="btn btn-link p-0 text-teal text-decoration-none fw-bold small d-flex align-items-center gap-1"
-                      style={{ color: '#0d9488' }}
                     >
                       <RefreshCw size={14} />
                       Resend OTP
@@ -271,7 +277,6 @@ export const AuthModal = () => {
                   type="submit"
                   disabled={loading || otp.length < 4}
                   className="btn btn-teal text-white btn-lg w-100 rounded-pill py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2"
-                  style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
                 >
                   {loading ? (
                     <div className="spinner-border spinner-border-sm" role="status"></div>

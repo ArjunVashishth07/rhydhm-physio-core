@@ -19,8 +19,8 @@ export const Navbar = () => {
       style={{
         backdropFilter: 'blur(12px)',
         WebkitBackdropFilter: 'blur(12px)',
-        backgroundColor: theme === 'dark' ? 'rgba(17, 24, 39, 0.92)' : 'rgba(255, 255, 255, 0.92)',
-        borderBottom: theme === 'dark' ? '1px solid rgba(255, 255, 255, 0.1)' : '1px solid rgba(0, 0, 0, 0.08)'
+        backgroundColor: theme === 'dark' ? 'rgba(20, 18, 16, 0.94)' : 'rgba(250, 248, 245, 0.94)',
+        borderBottom: theme === 'dark' ? '1px solid #332c25' : '1px solid #e8dfd3'
       }}
     >
       <div className="container">
@@ -29,14 +29,14 @@ export const Navbar = () => {
           <div
             className="p-2 rounded-circle d-flex align-items-center justify-content-center shadow-sm"
             style={{
-              backgroundColor: 'rgba(13, 148, 136, 0.15)',
-              color: '#0d9488'
+              backgroundColor: 'var(--teal-subtle)',
+              color: 'var(--teal-primary)'
             }}
           >
             <Activity size={24} className="stroke-[2.5]" />
           </div>
           <div className="d-flex flex-column">
-            <span className="fs-5 lh-1 fw-bold text-teal" style={{ color: '#0d9488', letterSpacing: '-0.02em' }}>
+            <span className="fs-5 lh-1 fw-bold text-teal" style={{ color: 'var(--teal-primary)', letterSpacing: '-0.02em' }}>
               {t('brand')}
             </span>
             <small className="text-muted fw-normal" style={{ fontSize: '0.75rem' }}>
@@ -92,7 +92,6 @@ export const Navbar = () => {
                 className="nav-link fw-semibold px-3 rounded-2 text-teal d-flex align-items-center gap-1"
                 to="/admin"
                 onClick={() => setNavExpanded(false)}
-                style={{ color: '#0d9488' }}
               >
                 <ShieldCheck size={16} />
                 {t('adminLogin')}
@@ -104,44 +103,55 @@ export const Navbar = () => {
           <div className="d-flex align-items-center gap-2 flex-wrap mt-3 mt-lg-0">
             {/* Patient Auth Button / User Dropdown */}
             {user === null ? (
-              <button
-                onClick={() => openAuthModal()}
-                className="btn btn-outline-teal btn-sm rounded-pill px-3 py-1.5 fw-semibold d-flex align-items-center gap-1.5"
-                
-                
+              <Link
+                to="/login"
+                onClick={() => setNavExpanded(false)}
+                className="btn btn-teal btn-sm rounded-pill px-3.5 py-1.5 fw-bold d-flex align-items-center gap-1.5 text-white shadow-sm"
               >
                 <User size={16} />
-                <span>{lang === 'hi' ? 'मरीज लॉगिन' : 'Patient Login'}</span>
-              </button>
+                <span>{lang === 'hi' ? 'लॉगिन / साइन अप' : 'Login / Sign Up'}</span>
+              </Link>
             ) : (
               <div className="position-relative">
                 <button
                   onClick={() => setUserDropdownOpen(!userDropdownOpen)}
-                  className="btn btn-teal-subtle btn-sm rounded-pill px-3 py-1.5 fw-semibold d-flex align-items-center gap-2 border"
-                  style={{ backgroundColor: 'rgba(13, 148, 136, 0.12)', color: '#0d9488', borderColor: '#0d9488' }}
+                  className="btn bg-teal-subtle text-teal btn-sm rounded-pill px-3 py-1.5 fw-semibold d-flex align-items-center gap-2 border"
+                  style={{ borderColor: 'var(--teal-border)' }}
                 >
                   <User size={16} />
-                  <span>+91 {user.phone}</span>
+                  <span>
+                    {user.fullName || (user.phone ? `+91 ${user.phone}` : (user.mobile ? `+91 ${user.mobile}` : 'Patient'))}
+                  </span>
                 </button>
 
                 {userDropdownOpen && (
                   <div
                     className="dropdown-menu dropdown-menu-end show position-absolute shadow-lg border-0 rounded-3 mt-2 p-2"
-                    style={{ right: 0, minWidth: '180px', zIndex: 1050 }}
+                    style={{ right: 0, minWidth: '200px', zIndex: 1050 }}
                   >
+                    <div className="px-3 py-1.5 mb-1 border-bottom">
+                      <strong className="d-block text-truncate small">{user.fullName || 'Patient'}</strong>
+                      <small className="text-muted text-truncate d-block" style={{ fontSize: '0.75rem' }}>
+                        {user.email || user.mobile || user.phone}
+                      </small>
+                    </div>
                     <Link
                       className="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2 small fw-medium"
                       to="/patient-dashboard"
-                      onClick={() => setUserDropdownOpen(false)}
+                      onClick={() => {
+                        setUserDropdownOpen(false);
+                        setNavExpanded(false);
+                      }}
                     >
-                      <FileText size={16} className="text-teal" style={{ color: '#0d9488' }} />
-                      {lang === 'hi' ? 'मेरी अपॉइंटमेंट्स' : 'My Appointments'}
+                      <FileText size={16} className="text-teal" />
+                      {lang === 'hi' ? 'मरीज डैशबोर्ड' : 'Patient Dashboard'}
                     </Link>
                     <hr className="dropdown-divider my-1" />
                     <button
                       className="dropdown-item rounded-2 py-2 d-flex align-items-center gap-2 small fw-medium text-danger"
                       onClick={() => {
                         setUserDropdownOpen(false);
+                        setNavExpanded(false);
                         logoutUser();
                       }}
                     >
@@ -159,7 +169,7 @@ export const Navbar = () => {
               className="btn btn-outline-secondary btn-sm rounded-pill d-flex align-items-center gap-1.5 px-3 py-1.5 fw-semibold"
               title="Switch Language / भाषा बदलें"
             >
-              <Globe size={16} className="text-teal" style={{ color: '#0d9488' }} />
+              <Globe size={16} className="text-teal" />
               <span>{lang === 'en' ? 'हिंदी' : 'English'}</span>
             </button>
 
@@ -180,8 +190,7 @@ export const Navbar = () => {
             {/* Direct Call Button */}
             <a
               href={`tel:${clinicDetails.contacts[0]}`}
-              className="btn text-white rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm "
-              style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
+              className="btn btn-teal btn-sm rounded-pill px-3 py-2 fw-semibold d-flex align-items-center gap-2 shadow-sm text-white"
             >
               <PhoneCall size={16} />
               <span>{t('callNow')}</span>

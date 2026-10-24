@@ -13,15 +13,13 @@ function App() {
   return (
     <BrowserRouter>
       <div className="d-flex flex-column min-vh-100">
-        {/* <Routes>
-          <Route path='/' element={<LoginPage></LoginPage>}></Route>
-          <Route path='/register' element={<SignUpPage></SignUpPage>}></Route>
-        </Routes> */}
         <Navbar />
         <main className="flex-grow-1">
           <Routes>
-            
             <Route path="/" element={<Home />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<SignUpPage />} />
+            <Route path="/signup" element={<SignUpPage />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/patient-dashboard" element={<PatientDashboard />} />
           </Routes>

@@ -1,23 +1,61 @@
 :root {
-  --teal-primary: #0d9488;
-  --teal-hover: #0f766e;
-  --teal-subtle: rgba(13, 148, 136, 0.1);
-  --teal-glow: rgba(13, 148, 136, 0.25);
+  /* Option B: Warm Osteopathy & Holistic Rehab Palette */
+  --amber-primary: #c8792c;
+  --amber-hover: #b2651e;
+  --gold-champagne: #f4d9a0;
+  --mocha-brown: #5b4632;
+
+  /* Aliasing teal utilities to the warm palette for seamless global styling */
+  --teal-primary: #c8792c;
+  --teal-hover: #b2651e;
+  --teal-subtle: rgba(200, 121, 44, 0.12);
+  --teal-border: rgba(200, 121, 44, 0.28);
+  --sage-accent: #f4d9a0;
+
+  --canvas-bg: #faf8f5;
+  --surface-card: #ffffff;
+  --border-color: #e8dfd3;
+  --text-primary: #241e19;
+  --text-muted: #6e6154;
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
-[data-bs-theme="dark"] {
-  --teal-primary: #14b8a6;
-  --teal-hover: #0d9488;
-  --teal-subtle: rgba(20, 184, 166, 0.15);
-  --teal-glow: rgba(20, 184, 166, 0.3);
+[data-bs-theme="dark"],
+[data-theme="dark"] {
+  --bs-body-bg: #141210 !important;
+  --bs-body-color: #faf5ee !important;
+  --bs-tertiary-bg: #1c1815 !important;
+  --bs-secondary-bg: #231e1a !important;
+  --bs-card-bg: #1e1a17 !important;
+  --bs-border-color: #332c25 !important;
+  --bs-border-color-translucent: rgba(244, 217, 160, 0.12) !important;
+  --bs-secondary-color: #ad9e8f !important;
+
+  --amber-primary: #d48b3b;
+  --amber-hover: #e09b4c;
+  --gold-champagne: #f4d9a0;
+  --mocha-brown: #5b4632;
+
+  --teal-primary: #d48b3b;
+  --teal-hover: #e09b4c;
+  --teal-subtle: rgba(212, 139, 59, 0.15);
+  --teal-border: rgba(244, 217, 160, 0.25);
+  --sage-accent: #f4d9a0;
+
+  --canvas-bg: #141210;
+  --surface-card: #1e1a17;
+  --border-color: #332c25;
+  --text-primary: #faf5ee;
+  --text-muted: #ad9e8f;
 }
 
 body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--canvas-bg);
+  color: var(--text-primary);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 #root {
@@ -25,7 +63,7 @@ body {
   min-height: 100vh;
 }
 
-/* Custom Teal Utilities */
+/* Warm Holistic Brand Utilities */
 .bg-teal {
   background-color: var(--teal-primary) !important;
 }
@@ -37,41 +75,107 @@ body {
 .btn-teal {
   background-color: var(--teal-primary);
   border-color: var(--teal-primary);
-  color: #ffffff;
+  color: #ffffff !important;
+  font-weight: 600;
   transition: all 0.2s ease-in-out;
 }
 
-.btn-teal:hover, .btn-teal:focus {
+.btn-teal:hover,
+.btn-teal:focus {
   background-color: var(--teal-hover);
   border-color: var(--teal-hover);
-  color: #ffffff;
-  box-shadow: 0 4px 12px var(--teal-glow);
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px rgba(200, 121, 44, 0.25);
 }
 
 .btn-outline-teal {
-  color: var(--teal-primary);
+  color: var(--teal-primary) !important;
   border-color: var(--teal-primary);
+  background-color: transparent;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
 }
 
 .btn-outline-teal:hover {
   background-color: var(--teal-primary);
-  color: #ffffff;
+  color: #ffffff !important;
+  border-color: var(--teal-primary);
 }
 
 .bg-teal-subtle {
   background-color: var(--teal-subtle) !important;
+  color: var(--teal-primary) !important;
 }
 
-/* Glassmorphism & Card polish */
+/* Polished Warm Card & Elevation */
+.card {
+  border-color: var(--border-color);
+  background-color: var(--surface-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
 .card-hover {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(36, 30, 25, 0.12) !important;
+}
+
+[data-bs-theme="dark"] .card-hover:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45) !important;
+  border-color: rgba(244, 217, 160, 0.35) !important;
+}
+
+/* Dark Mode Form Overrides for Warm Stone UI */
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+  background-color: #241e1a;
+  border-color: #383028;
+  color: #faf5ee;
+}
+
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus {
+  background-color: #241e1a;
+  border-color: var(--teal-primary);
+  color: #faf5ee;
+  box-shadow: 0 0 0 0.25rem rgba(212, 139, 59, 0.22);
+}
+
+[data-bs-theme="dark"] .form-control::placeholder {
+  color: #8c7d6e;
+}
+
+[data-bs-theme="dark"] .input-group-text {
+  background-color: #1a1613;
+  border-color: #383028;
+  color: #ad9e8f;
+}
+
+[data-bs-theme="dark"] .dropdown-menu {
+  background-color: #1e1a17;
+  border: 1px solid #332c25;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+}
+
+[data-bs-theme="dark"] .dropdown-item {
+  color: #d6cac0;
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover,
+[data-bs-theme="dark"] .dropdown-item:focus {
+  background-color: #2c2520;
+  color: #ffffff;
+}
+
+[data-bs-theme="dark"] .modal-content {
+  background-color: #1e1a17;
+  border: 1px solid #332c25;
+  color: #faf5ee;
 }
 
 .transition-all {
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }

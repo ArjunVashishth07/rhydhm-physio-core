@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   UserRound,
   Mail,
@@ -8,56 +9,76 @@ import {
   Globe,
   Moon,
   Sun,
-  Eye,
-  EyeOff,
-  ShieldCheck,
-  ArrowLeft,
+  CheckCircle2
 } from "lucide-react";
 
 import { useApp } from "../../context/AppContext";
-import doctorImage from "../../../../assets/login_page_photo.png";
+import doctorImage from "../../assets/login_page_photo.png";
+import "./LoginPage.css";
 
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/auth`;
 
-
-const SignupPage = () => {
-  const { lang, theme, setLang, toggleTheme } = useApp();
+function SignUpPage() {
+  const { lang, theme, setLang, toggleTheme, loginUser } = useApp();
   const navigate = useNavigate();
 
-  const [step, setStep] = useState("signup");
   const [formData, setFormData] = useState({
     fullName: "",
     email: "",
     mobile: "",
     password: "",
-    confirmPassword: "",
+    confirmPassword: ""
   });
 
-  const [otp, setOtp] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const isHindi = lang === "hi";
   const isDark = theme === "dark";
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-
-    setError("");
-    setSuccess("");
+  const text = {
+    clinic: "RHYDHM Physio & Fitness Center",
+    portal: isHindi ? "मरीज़ पोर्टल" : "PATIENT PORTAL",
+    welcome: isHindi ? "नया खाता बनाएँ" : "Create Account",
+    subtitle: isHindi
+      ? "अपनी देखभाल शुरू करने के लिए पंजीकरण करें"
+      : "Register to begin your clinical wellness journey",
+    fullName: isHindi ? "पूरा नाम" : "Full Name",
+    email: isHindi ? "ईमेल पता" : "Email Address",
+    mobile: isHindi ? "10-अंकों का मोबाइल नंबर" : "10-Digit Mobile Number",
+    password: isHindi ? "पासवर्ड (कम से कम 6 अक्षर)" : "Password (min 6 characters)",
+    confirmPassword: isHindi ? "पासवर्ड की पुष्टि करें" : "Confirm Password",
+    submit: isHindi ? "खाता बनाएँ" : "Create Account",
+    submitting: isHindi ? "खाता बन रहा है..." : "Creating Account...",
+    hasAccount: isHindi ? "पहले से खाता है?" : "Already have an account?",
+    login: isHindi ? "लॉगिन करें" : "Login Now",
+    quote: isHindi
+      ? "आपका स्वास्थ्य, हमारी प्राथमिकता"
+      : "Your Health, Our Priority",
+    description: isHindi
+      ? "बेहतर स्वास्थ्य और दर्द-मुक्त जीवन की ओर आपका पहला कदम।"
+      : "Your first step towards better health and a pain-free life.",
+    language: isHindi ? "हिन्दी" : "English",
   };
 
-  const handleSignup = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value
+    }));
+    setError("");
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
     setSuccess("");
 
+    // 1. Validation
     if (
       !formData.fullName.trim() ||
       !formData.email.trim() ||
@@ -65,22 +86,23 @@ const SignupPage = () => {
       !formData.password ||
       !formData.confirmPassword
     ) {
-      setError(isHindi ? "सभी फ़ील्ड भरें।" : "Please fill in all fields.");
+      setError(isHindi ? "कृपया सभी फ़ील्ड भरें।" : "Please fill in all required fields.");
       return;
     }
 
-    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
       setError(
-        isHindi ? "सही ईमेल दर्ज करें।" : "Please enter a valid email address."
+        isHindi ? "कृपया वैध ईमेल पता दर्ज करें।" : "Please enter a valid email address."
       );
       return;
     }
 
-    if (!/^\d{10}$/.test(formData.mobile)) {
+    const cleanMobile = formData.mobile.replace(/\D/g, "");
+    if (cleanMobile.length !== 10) {
       setError(
         isHindi
-          ? "10 अंकों का मोबाइल नंबर दर्ज करें।"
-          : "Enter a valid 10-digit mobile number."
+          ? "कृपया 10 अंकों का वैध मोबाइल नंबर दर्ज करें।"
+          : "Please enter a valid 10-digit mobile number."
       );
       return;
     }
@@ -89,388 +111,287 @@ const SignupPage = () => {
       setError(
         isHindi
           ? "पासवर्ड कम से कम 6 अक्षरों का होना चाहिए।"
-          : "Password must be at least 6 characters."
+          : "Password must be at least 6 characters long."
       );
       return;
     }
 
     if (formData.password !== formData.confirmPassword) {
       setError(
-        isHindi ? "पासवर्ड मेल नहीं खाते।" : "Passwords do not match."
+        isHindi ? "पासवर्ड और पुष्टि पासवर्ड मेल नहीं खाते।" : "Passwords do not match."
       );
       return;
     }
 
-    setStep("otp");
-  };
+    // 2. Submit to Backend API
+    setLoading(true);
 
-  const handleVerifyOtp = (e) => {
-    e.preventDefault();
-    setError("");
-    setSuccess("");
+    try {
+      const res = await axios.post(`${API_BASE_URL}/register`, {
+        fullName: formData.fullName.trim(),
+        email: formData.email.trim(),
+        mobile: cleanMobile,
+        password: formData.password
+      });
 
-    if (otp !== "123456") {
+      if (res.data?.success) {
+        if (res.data.user) {
+          loginUser(res.data.user);
+        }
+        if (res.data.token) {
+          localStorage.setItem("rhydhm_token", res.data.token);
+        }
+
+        setSuccess(
+          isHindi
+            ? "खाता सफलतापूर्वक बन गया! डैशबोर्ड पर भेजा जा रहा है..."
+            : "Account created successfully! Redirecting to dashboard..."
+        );
+
+        setTimeout(() => {
+          navigate("/patient-dashboard");
+        }, 1100);
+      }
+    } catch (err) {
       setError(
-        isHindi
-          ? "गलत OTP। कृपया 123456 दर्ज करें।"
-          : "Invalid OTP. Please enter 123456."
+        err.response?.data?.message ||
+        (isHindi ? "पंजीकरण में त्रुटि हुई। कृपया पुनः प्रयास करें।" : "Registration failed. Please verify details and try again.")
       );
-      return;
+    } finally {
+      setLoading(false);
     }
-
-    // Demo only: no backend account is created here.
-    const demoUser = {
-      fullName: formData.fullName,
-      email: formData.email,
-      mobile: formData.mobile,
-    };
-
-    localStorage.setItem("rhydhm_signup_demo", JSON.stringify(demoUser));
-
-    setSuccess(
-      isHindi
-        ? "OTP सफलतापूर्वक सत्यापित हुआ!"
-        : "OTP verified successfully!"
-    );
-
-    setTimeout(() => {
-      navigate("/login");
-    }, 1200);
-  };
-
-  const resendOtp = () => {
-    setOtp("");
-    setError("");
-    setSuccess(
-      isHindi
-        ? "टेस्ट OTP: 123456"
-        : "Demo OTP: 123456"
-    );
   };
 
   return (
-    <div
-      className={`auth-page ${isDark ? "auth-dark" : "auth-light"}`}
-    >
-      {/* Header */}
-      <header className="auth-header">
-        <div className="auth-brand">
+    <div className={`auth-page ${isDark ? "auth-dark" : "auth-light"}`}>
+      {/* Top Header Bar */}
+      <div className="auth-topbar">
+        <Link to="/" className="auth-brand">
           <span className="auth-brand-icon">
             <UserRound size={22} />
           </span>
-          <span>RHYDHM Physio &amp; Fitness Center</span>
-        </div>
+          <span>{text.clinic}</span>
+        </Link>
 
-        <div className="auth-header-controls">
+        <div className="auth-controls">
           <button
             type="button"
             className="auth-control-btn"
             onClick={() => setLang(isHindi ? "en" : "hi")}
+            aria-label="Change language"
           >
-            <Globe size={16} />
-            {isHindi ? "हिन्दी" : "English"}
+            <Globe size={17} />
+            {text.language}
           </button>
 
           <button
             type="button"
             className="auth-control-btn"
             onClick={toggleTheme}
+            aria-label="Change theme"
           >
-            {isDark ? <Sun size={16} /> : <Moon size={16} />}
+            {isDark ? <Sun size={17} /> : <Moon size={17} />}
             {isDark
-              ? isHindi
-                ? "लाइट"
-                : "Light"
-              : isHindi
-                ? "डार्क"
-                : "Dark"}
+              ? (isHindi ? "लाइट मोड" : "Light")
+              : (isHindi ? "डार्क मोड" : "Dark")}
           </button>
         </div>
-      </header>
+      </div>
 
-      {/* Main card */}
-      <main className="auth-card">
-        {/* Left image section */}
+      {/* Main Split Layout */}
+      <main className="auth-layout">
+        {/* LEFT: Clinical Visual Banner */}
         <section className="auth-visual">
           <img
             src={doctorImage}
-            alt="Healthcare professional"
+            alt="Physiotherapy professional at RHYDHM Clinic"
             className="auth-doctor-image"
           />
 
-          <div className="auth-visual-overlay">
-            <span className="auth-image-badge">
-              RHYDHM Physio &amp; Fitness Center
-            </span>
+          <div className="auth-image-overlay" />
 
-            <h1>
-              {isHindi
-                ? "आपका स्वास्थ्य, हमारी प्राथमिकता"
-                : "Your Health, Our Priority"}
-            </h1>
-
-            <p>
-              {isHindi
-                ? "बेहतर स्वास्थ्य और दर्द-मुक्त जीवन की ओर आपका पहला कदम।"
-                : "Your first step towards better health and a pain-free life."}
-            </p>
+          <div className="auth-visual-content">
+            <strong>
+              <span className="auth-eyebrow fs-6">
+                {text.clinic}
+              </span>
+            </strong>
+            <h1>{text.quote}</h1>
+            <p>{text.description}</p>
           </div>
         </section>
 
-        {/* Right form section */}
+        {/* RIGHT: Dedicated Registration Form */}
         <section className="auth-form-section">
-          <div className="auth-form-content">
-            {step === "signup" ? (
-              <>
-                <span className="auth-eyebrow">
-                  {isHindi ? "मरीज़ पोर्टल" : "PATIENT PORTAL"}
-                </span>
-
-                <h2>
-                  {isHindi ? "खाता बनाएँ" : "Create Account"}
-                </h2>
-
-                <p className="auth-subtitle">
-                  {isHindi
-                    ? "शुरू करने के लिए अपनी जानकारी भरें।"
-                    : "Register to begin your wellness journey."}
-                </p>
-
-                <form onSubmit={handleSignup}>
-                  <div className="auth-field">
-                    <label htmlFor="fullName">
-                      {isHindi ? "पूरा नाम" : "Full Name"}
-                    </label>
-                    <div className="auth-input-wrap">
-                      <UserRound size={17} />
-                      <input
-                        id="fullName"
-                        name="fullName"
-                        type="text"
-                        placeholder={
-                          isHindi ? "अपना पूरा नाम दर्ज करें" : "Enter your full name"
-                        }
-                        value={formData.fullName}
-                        onChange={handleChange}
-                        autoComplete="name"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="auth-field">
-                    <label htmlFor="email">
-                      {isHindi ? "ईमेल पता" : "Email Address"}
-                    </label>
-                    <div className="auth-input-wrap">
-                      <Mail size={17} />
-                      <input
-                        id="email"
-                        name="email"
-                        type="email"
-                        placeholder="Enter your email address"
-                        value={formData.email}
-                        onChange={handleChange}
-                        autoComplete="email"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="auth-field">
-                    <label htmlFor="mobile">
-                      {isHindi ? "मोबाइल नंबर" : "Mobile Number"}
-                    </label>
-                    <div className="auth-input-wrap">
-                      <Phone size={17} />
-                      <input
-                        id="mobile"
-                        name="mobile"
-                        type="tel"
-                        inputMode="numeric"
-                        maxLength={10}
-                        placeholder="Enter 10-digit mobile number"
-                        value={formData.mobile}
-                        onChange={(e) => {
-                          const value = e.target.value.replace(/\D/g, "");
-                          setFormData((prev) => ({
-                            ...prev,
-                            mobile: value,
-                          }));
-                          setError("");
-                        }}
-                        autoComplete="tel"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="auth-field">
-                    <label htmlFor="password">
-                      {isHindi ? "पासवर्ड" : "Password"}
-                    </label>
-                    <div className="auth-input-wrap">
-                      <LockKeyhole size={17} />
-                      <input
-                        id="password"
-                        name="password"
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Create a password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        autoComplete="new-password"
-                      />
-                      <button
-                        type="button"
-                        className="auth-password-toggle"
-                        onClick={() => setShowPassword(!showPassword)}
-                        aria-label="Toggle password visibility"
-                      >
-                        {showPassword ? <EyeOff size={17} /> : <Eye size={17} />}
-                      </button>
-                    </div>
-                  </div>
-
-                  <div className="auth-field">
-                    <label htmlFor="confirmPassword">
-                      {isHindi ? "पासवर्ड की पुष्टि करें" : "Confirm Password"}
-                    </label>
-                    <div className="auth-input-wrap">
-                      <LockKeyhole size={17} />
-                      <input
-                        id="confirmPassword"
-                        name="confirmPassword"
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Re-enter your password"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        autoComplete="new-password"
-                      />
-                      <button
-                        type="button"
-                        className="auth-password-toggle"
-                        onClick={() =>
-                          setShowConfirmPassword(!showConfirmPassword)
-                        }
-                        aria-label="Toggle confirm password visibility"
-                      >
-                        {showConfirmPassword ? (
-                          <EyeOff size={17} />
-                        ) : (
-                          <Eye size={17} />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-
-                  {error && <p className="auth-error">{error}</p>}
-
-                  <button type="submit" className="auth-submit-btn">
-                    {isHindi ? "OTP प्राप्त करें" : "Continue to OTP"}
-                  </button>
-                </form>
-
-                <p className="auth-switch-text">
-                  {isHindi
-                    ? "पहले से खाता है?"
-                    : "Already have an account?"}{" "}
-                  <Link to="/login">
-                    {isHindi ? "लॉगिन करें" : "Login"}
-                  </Link>
-                </p>
-              </>
-            ) : (
-              <>
-                <span className="auth-eyebrow">
-                  {isHindi ? "सुरक्षा सत्यापन" : "SECURITY VERIFICATION"}
-                </span>
-
-                <div className="auth-otp-icon">
-                  <ShieldCheck size={30} />
-                </div>
-
-                <h2>{isHindi ? "OTP सत्यापित करें" : "Verify Your OTP"}</h2>
-
-                <p className="auth-subtitle">
-                  {isHindi
-                    ? "अपना 6 अंकों का टेस्ट OTP दर्ज करें।"
-                    : "Enter the 6-digit OTP to verify your registration."}
-                </p>
-
-                <div className="auth-demo-otp">
-                  <strong>
-                    {isHindi ? "टेस्ट OTP:" : "Demo OTP:"} 
-                  </strong>
-                  <span>
-                    {isHindi
-                      ? "अभी OTP ईमेल या SMS पर नहीं भेजा जाता।"
-                      : "No email or SMS is sent in demo mode."}
-                  </span>
-                </div>
-
-                <form onSubmit={handleVerifyOtp}>
-                  <div className="auth-field">
-                    <label htmlFor="otp">
-                      {isHindi ? "6 अंकों का OTP" : "Enter OTP"}
-                    </label>
-                    <div className="auth-input-wrap">
-                      <ShieldCheck size={17} />
-                      <input
-                        id="otp"
-                        type="text"
-                        inputMode="numeric"
-                        maxLength={6}
-                        placeholder="Enter 123456"
-                        value={otp}
-                        onChange={(e) => {
-                          setOtp(e.target.value.replace(/\D/g, ""));
-                          setError("");
-                          setSuccess("");
-                        }}
-                        autoComplete="one-time-code"
-                      />
-                    </div>
-                  </div>
-
-                  {error && <p className="auth-error">{error}</p>}
-                  {success && <p className="auth-success">{success}</p>}
-
-                  <button type="submit" className="auth-submit-btn">
-                    {isHindi ? "OTP सत्यापित करें" : "Verify OTP"}
-                  </button>
-                </form>
-
-                <button
-                  type="button"
-                  className="auth-back-btn"
-                  onClick={() => {
-                    setStep("signup");
-                    setOtp("");
-                    setError("");
-                    setSuccess("");
-                  }}
-                >
-                  <ArrowLeft size={16} />
-                  {isHindi ? "वापस जाएँ" : "Back to Signup"}
-                </button>
-
-                <button
-                  type="button"
-                  className="auth-resend-btn"
-                  onClick={resendOtp}
-                >
-                  {isHindi ? "OTP फिर से दिखाएँ" : "Resend Demo OTP"}
-                </button>
-              </>
-            )}
-
-            <div className="auth-footer">
-              {isHindi
-                ? "आपकी स्वस्थ यात्रा यहाँ से शुरू होती है।"
-                : "Your wellness journey starts here."}
+          <div className="auth-form-card auth-signup-card">
+            <div className="auth-heading">
+              <span className="auth-small-label">{text.portal}</span>
+              <h2>{text.welcome}</h2>
+              <p>{text.subtitle}</p>
             </div>
+
+            <form onSubmit={handleSubmit}>
+              {/* Full Name */}
+              <div className="auth-field">
+                <label htmlFor="patient-name">
+                  {text.fullName}
+                </label>
+                <div className="auth-input-wrap">
+                  <UserRound size={18} />
+                  <input
+                    id="patient-name"
+                    name="fullName"
+                    type="text"
+                    value={formData.fullName}
+                    onChange={handleChange}
+                    placeholder={isHindi ? "उदाहरण: राहुल शर्मा" : "e.g. Rahul Sharma"}
+                    autoComplete="name"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Email Address */}
+              <div className="auth-field">
+                <label htmlFor="patient-email">
+                  {text.email}
+                </label>
+                <div className="auth-input-wrap">
+                  <Mail size={18} />
+                  <input
+                    id="patient-email"
+                    name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder={isHindi ? "ईमेल पता दर्ज करें" : "name@example.com"}
+                    autoComplete="email"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Mobile Number */}
+              <div className="auth-field">
+                <label htmlFor="patient-mobile">
+                  {text.mobile}
+                </label>
+                <div className="auth-input-wrap">
+                  <Phone size={18} />
+                  <input
+                    id="patient-mobile"
+                    name="mobile"
+                    type="tel"
+                    inputMode="numeric"
+                    maxLength={10}
+                    value={formData.mobile}
+                    onChange={(e) => {
+                      const val = e.target.value.replace(/\D/g, "");
+                      setFormData((prev) => ({ ...prev, mobile: val }));
+                      setError("");
+                    }}
+                    placeholder="97604XXXXX"
+                    autoComplete="tel"
+                    required
+                  />
+                </div>
+              </div>
+
+              {/* Password */}
+              <div className="auth-field">
+                <label htmlFor="patient-password">
+                  {text.password}
+                </label>
+                <div className="auth-input-wrap">
+                  <LockKeyhole size={18} />
+                  <input
+                    id="patient-password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    value={formData.password}
+                    onChange={handleChange}
+                    placeholder={isHindi ? "पासवर्ड दर्ज करें" : "Create password"}
+                    autoComplete="new-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="auth-show-password"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword ? (isHindi ? "छिपाएँ" : "Hide") : (isHindi ? "दिखाएँ" : "Show")}
+                  </button>
+                </div>
+              </div>
+
+              {/* Confirm Password */}
+              <div className="auth-field">
+                <label htmlFor="patient-confirm-password">
+                  {text.confirmPassword}
+                </label>
+                <div className="auth-input-wrap">
+                  <LockKeyhole size={18} />
+                  <input
+                    id="patient-confirm-password"
+                    name="confirmPassword"
+                    type={showConfirmPassword ? "text" : "password"}
+                    value={formData.confirmPassword}
+                    onChange={handleChange}
+                    placeholder={isHindi ? "पासवर्ड दोबारा दर्ज करें" : "Confirm password"}
+                    autoComplete="new-password"
+                    required
+                  />
+                  <button
+                    type="button"
+                    className="auth-show-password"
+                    onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  >
+                    {showConfirmPassword ? (isHindi ? "छिपाएँ" : "Hide") : (isHindi ? "दिखाएँ" : "Show")}
+                  </button>
+                </div>
+              </div>
+
+              {/* Error Message */}
+              {error && (
+                <div className="alert alert-danger py-2 px-3 small rounded-3 mb-3 text-start">
+                  {error}
+                </div>
+              )}
+
+              {/* Success Message */}
+              {success && (
+                <div className="alert alert-success py-2 px-3 small rounded-3 mb-3 text-start d-flex align-items-center gap-2">
+                  <CheckCircle2 size={18} className="text-success flex-shrink-0" />
+                  <span>{success}</span>
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                type="submit"
+                disabled={loading}
+                className="auth-submit fs-5 mt-2"
+              >
+                {loading ? text.submitting : text.submit}
+              </button>
+            </form>
+
+            {/* Switch to Login Link */}
+            <div className="auth-register mt-3">
+              <span className="me-1">{text.hasAccount}</span>
+              <Link to="/login" className="fw-bold">{text.login}</Link>
+            </div>
+
+            <p className="auth-footer">
+              {isHindi
+                ? "आपकी सेहत, हमारी देखभाल।"
+                : "Your wellness journey starts here."}
+            </p>
           </div>
         </section>
       </main>
     </div>
   );
-};
+}
 
-export default SignupPage;
+export default SignUpPage;

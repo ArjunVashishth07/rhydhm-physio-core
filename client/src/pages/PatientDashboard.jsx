@@ -17,13 +17,15 @@ import {
   Stethoscope,
   Home as HomeIcon,
   XCircle,
-  Award
+  Award,
+  X
 } from 'lucide-react';
+import BookingForm from '../components/BookingForm';
 
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/appointments`;
 
 export const PatientDashboard = () => {
-  const { user, openAuthModal, logoutUser, lang, t, theme } = useApp();
+  const { user, logoutUser, lang, t, theme } = useApp();
   const navigate = useNavigate();
 
   const [activeTab, setActiveTab] = useState('appointments'); // 'appointments' | 'prescriptions'
@@ -31,25 +33,28 @@ export const PatientDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [cancelLoadingId, setCancelLoadingId] = useState(null);
+  const [showBookingModal, setShowBookingModal] = useState(false);
 
-  // Authentication Guard: Redirect guest to Home and trigger AuthModal
+  // Authentication Guard: Redirect guest to /login
   useEffect(() => {
     if (!user) {
-      navigate('/');
-      setTimeout(() => {
-        openAuthModal();
-      }, 100);
+      navigate('/login');
     }
-  }, [user, navigate, openAuthModal]);
+  }, [user, navigate]);
+
+  const userPhone = user?.phone || user?.mobile || '';
 
   // Fetch patient appointments by phone number
   const fetchPatientHistory = async () => {
-    if (!user?.phone) return;
+    if (!userPhone) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     setError('');
 
     try {
-      const res = await axios.get(`${API_BASE_URL}/patient-history/${user.phone}`);
+      const res = await axios.get(`${API_BASE_URL}/patient-history/${userPhone}`);
       if (res.data && res.data.data) {
         setAppointments(res.data.data);
       }
@@ -67,10 +72,10 @@ export const PatientDashboard = () => {
   };
 
   useEffect(() => {
-    if (user?.phone) {
+    if (userPhone) {
       fetchPatientHistory();
     }
-  }, [user]);
+  }, [userPhone]);
 
   // Handle Cancel Appointment
   const handleCancelAppointment = async (id, appDate) => {
@@ -122,35 +127,45 @@ export const PatientDashboard = () => {
   );
 
   const patientDisplayName =
-    appointments.find((a) => a.patientName)?.patientName || `+91 ${user.phone}`;
+    user.fullName || appointments.find((a) => a.patientName)?.patientName || (userPhone ? `+91 ${userPhone}` : 'Patient');
 
   return (
     <div className="patient-dashboard pt-5 mt-4 pb-5 px-3 bg-body-tertiary min-vh-100 text-start">
       <div className="container max-w-5xl">
         {/* TOP GREETING BANNER */}
-        <div className="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-4 bg-teal text-white position-relative overflow-hidden" style={{ backgroundColor: '#0d9488' }}>
+        <div
+          className="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-4 text-white position-relative overflow-hidden"
+          style={{
+            background: 'linear-gradient(135deg, #423022 0%, #291d14 100%)',
+            border: '1px solid rgba(244, 217, 160, 0.22)'
+          }}
+        >
           <div className="row align-items-center">
             <div className="col-md-8">
-              <div className="badge bg-white text-teal px-3 py-1.5 rounded-pill mb-2 fw-semibold" style={{ color: '#0d9488' }}>
+              <div
+                className="badge px-3 py-1.5 rounded-pill mb-2 fw-semibold"
+                style={{ backgroundColor: '#f4d9a0', color: '#3a2717' }}
+              >
                 Patient Portal
               </div>
               <h2 className="fw-extrabold mb-1 text-white">
                 {lang === 'hi' ? 'स्वागत है,' : 'Welcome back,'} {patientDisplayName}
               </h2>
               <p className="text-white-50 mb-3 small">
-                Mobile: +91 {user.phone} • Manage your physiotherapy appointments, exercise routines, and doctor prescriptions.
+                Mobile: +91 {userPhone} • Manage your physiotherapy appointments, exercise routines, and doctor prescriptions.
               </p>
 
               {/* Action Buttons */}
               <div className="d-flex flex-wrap gap-2">
-                <a
-                  href="/#booking-section"
-                  className="btn btn-light rounded-pill fw-bold text-teal px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2"
-                  style={{ color: '#0d9488' }}
+                <button
+                  type="button"
+                  onClick={() => setShowBookingModal(true)}
+                  className="btn rounded-pill fw-bold px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2"
+                  style={{ backgroundColor: '#f4d9a0', color: '#3a2717', border: 'none' }}
                 >
                   <Plus size={18} />
                   <span>{t('bookAppointment')}</span>
-                </a>
+                </button>
                 <button
                   onClick={fetchPatientHistory}
                   className="btn btn-outline-light rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1.5"
@@ -212,7 +227,6 @@ export const PatientDashboard = () => {
               className={`btn rounded-pill px-4 py-2 fw-bold text-nowrap transition-all ${
                 activeTab === 'appointments' ? 'btn-teal text-white shadow-sm' : 'btn-ghost text-secondary'
               }`}
-              style={activeTab === 'appointments' ? { backgroundColor: '#0d9488', borderColor: '#0d9488' } : {}}
             >
               <Calendar size={18} className="me-1.5" />
               {lang === 'hi' ? 'मेरी अपॉइंटमेंट्स' : 'My Appointments'} ({totalSessions})
@@ -222,7 +236,6 @@ export const PatientDashboard = () => {
               className={`btn rounded-pill px-4 py-2 fw-bold text-nowrap transition-all ${
                 activeTab === 'prescriptions' ? 'btn-teal text-white shadow-sm' : 'btn-ghost text-secondary'
               }`}
-              style={activeTab === 'prescriptions' ? { backgroundColor: '#0d9488', borderColor: '#0d9488' } : {}}
             >
               <FileText size={18} className="me-1.5" />
               {lang === 'hi' ? 'पर्चा और व्यायाम' : 'Prescriptions & Exercises'} ({prescriptionRecords.length})
@@ -255,19 +268,19 @@ export const PatientDashboard = () => {
               </div>
             ) : appointments.length === 0 ? (
               <div className="card border-0 shadow-sm rounded-4 p-5 text-center my-3">
-                <Calendar size={48} className="text-teal mb-3 opacity-50 mx-auto" style={{ color: '#0d9488' }} />
+                <Calendar size={48} className="text-teal mb-3 opacity-50 mx-auto" />
                 <h5 className="fw-bold mb-2">No Appointments Found</h5>
                 <p className="text-muted small max-w-md mx-auto mb-4" style={{ maxWidth: '450px' }}>
                   You don't have any booked appointments yet. Book a consultation with Dr. Neha Sharma (PT) for personalized rehabilitation.
                 </p>
-                <a
-                  href="/#booking-section"
+                <button
+                  type="button"
+                  onClick={() => setShowBookingModal(true)}
                   className="btn btn-teal text-white rounded-pill px-4 py-2.5 fw-bold d-inline-flex align-items-center gap-2 mx-auto"
-                  style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
                 >
                   <Plus size={18} />
                   <span>Book Appointment Now</span>
-                </a>
+                </button>
               </div>
             ) : (
               <div className="row g-3">
@@ -278,10 +291,10 @@ export const PatientDashboard = () => {
                       <div className="card border-0 shadow-sm rounded-4 p-4 h-100 card-hover">
                         <div className="d-flex justify-content-between align-items-start mb-3">
                           <div>
-                            <span className="badge bg-teal-subtle text-teal fw-semibold mb-1" style={{ color: '#0d9488' }}>
+                            <span className="badge bg-teal-subtle text-teal fw-semibold mb-1">
                               {app.primaryIssue}
                             </span>
-                            <h5 className="fw-bold text-dark mb-0">{app.patientName}</h5>
+                            <h5 className="fw-bold mb-0">{app.patientName}</h5>
                           </div>
                           {/* Real-time Status Chip */}
                           <span
@@ -294,7 +307,6 @@ export const PatientDashboard = () => {
                                 ? 'bg-danger'
                                 : 'bg-warning text-dark'
                             }`}
-                            style={app.status === 'Completed' ? { backgroundColor: '#0d9488' } : {}}
                           >
                             {app.status || 'Pending'}
                           </span>
@@ -304,13 +316,13 @@ export const PatientDashboard = () => {
                         <div className="row g-2 small text-muted mb-3">
                           <div className="col-6">
                             <div className="d-flex align-items-center gap-1.5">
-                              <Calendar size={15} className="text-teal" style={{ color: '#0d9488' }} />
+                              <Calendar size={15} className="text-teal" />
                               <span><strong>Date:</strong> {app.appointmentDate}</span>
                             </div>
                           </div>
                           <div className="col-6">
                             <div className="d-flex align-items-center gap-1.5">
-                              <Clock size={15} className="text-teal" style={{ color: '#0d9488' }} />
+                              <Clock size={15} className="text-teal" />
                               <span><strong>Slot:</strong> {app.timeSlot}</span>
                             </div>
                           </div>
@@ -319,7 +331,7 @@ export const PatientDashboard = () => {
                               {isHomeVisit ? (
                                 <HomeIcon size={15} className="text-warning" />
                               ) : (
-                                <MapPin size={15} className="text-teal" style={{ color: '#0d9488' }} />
+                                <MapPin size={15} className="text-teal" />
                               )}
                               <span>
                                 <strong>Mode:</strong> {isHomeVisit ? 'Home Visit' : 'Clinic Visit'}
@@ -368,7 +380,7 @@ export const PatientDashboard = () => {
           <div>
             {prescriptionRecords.length === 0 ? (
               <div className="card border-0 shadow-sm rounded-4 p-5 text-center my-3">
-                <FileText size={48} className="text-teal mb-3 opacity-50 mx-auto" style={{ color: '#0d9488' }} />
+                <FileText size={48} className="text-teal mb-3 opacity-50 mx-auto" />
                 <h5 className="fw-bold mb-2">No Digital Prescriptions Available Yet</h5>
                 <p className="text-muted small max-w-md mx-auto mb-0" style={{ maxWidth: '450px' }}>
                   Once Dr. Neha Sharma (PT) prescribes custom rehabilitation exercises during your consultation, your digital prescription notes will appear here.
@@ -382,7 +394,7 @@ export const PatientDashboard = () => {
                     <div className="d-flex justify-content-between align-items-start mb-3 border-bottom pb-3 flex-wrap gap-2">
                       <div>
                         <div className="d-flex align-items-center gap-2 mb-1">
-                          <Stethoscope size={20} className="text-teal" style={{ color: '#0d9488' }} />
+                          <Stethoscope size={20} className="text-teal" />
                           <h5 className="fw-bold mb-0">Dr. Neha Sharma (PT) — Prescription</h5>
                         </div>
                         <small className="text-muted">
@@ -390,7 +402,7 @@ export const PatientDashboard = () => {
                         </small>
                       </div>
                       <div className="text-end">
-                        <span className="badge bg-body-tertiary text-dark border">
+                        <span className="badge bg-body-tertiary text-body border">
                           <Calendar size={13} className="me-1" />
                           {app.appointmentDate}
                         </span>
@@ -400,7 +412,7 @@ export const PatientDashboard = () => {
                     {/* Prescribed Exercises List */}
                     {app.sessionNotes.exercisesGiven?.length > 0 && (
                       <div className="mb-4">
-                        <h6 className="fw-bold text-teal mb-2 d-flex align-items-center gap-1.5" style={{ color: '#0d9488' }}>
+                        <h6 className="fw-bold text-teal mb-2 d-flex align-items-center gap-1.5">
                           <CheckCircle2 size={18} />
                           Prescribed Exercise Routine:
                         </h6>
@@ -410,19 +422,19 @@ export const PatientDashboard = () => {
                               <div
                                 className="p-3 rounded-3 d-flex align-items-center gap-2.5 transition-all"
                                 style={{
-                                  backgroundColor: theme === 'dark' ? '#1e293b' : '#ffffff',
-                                  border: theme === 'dark' ? '1px solid #334155' : '1px solid #e2e8f0'
+                                  backgroundColor: theme === 'dark' ? '#231e1a' : '#ffffff',
+                                  border: theme === 'dark' ? '1px solid #383028' : '1px solid #e8dfd3'
                                 }}
                               >
                                 <span
                                   className="badge rounded-circle text-white p-2 d-flex align-items-center justify-content-center flex-shrink-0"
-                                  style={{ width: '26px', height: '26px', backgroundColor: '#0d9488' }}
+                                  style={{ width: '26px', height: '26px', backgroundColor: 'var(--teal-primary)' }}
                                 >
                                   {idx + 1}
                                 </span>
                                 <span
                                   className="fw-semibold small"
-                                  style={{ color: theme === 'dark' ? '#f1f5f9' : '#0f172a' }}
+                                  style={{ color: theme === 'dark' ? '#faf5ee' : '#241e19' }}
                                 >
                                   {ex}
                                 </span>
@@ -438,19 +450,19 @@ export const PatientDashboard = () => {
                       <div
                         className="mb-3 p-3 rounded-3"
                         style={{
-                          backgroundColor: theme === 'dark' ? '#1e293b' : '#f8fafc',
-                          border: theme === 'dark' ? '1px solid #334155' : '1px solid #e2e8f0'
+                          backgroundColor: theme === 'dark' ? '#231e1a' : '#f7f4ef',
+                          border: theme === 'dark' ? '1px solid #383028' : '1px solid #e8dfd3'
                         }}
                       >
                         <strong
                           className="d-block small mb-1"
-                          style={{ color: theme === 'dark' ? '#94a3b8' : '#475569' }}
+                          style={{ color: theme === 'dark' ? '#ad9e8f' : '#6e6154' }}
                         >
                           Doctor Remarks & Advice:
                         </strong>
                         <p
                           className="mb-0 small fw-medium"
-                          style={{ color: theme === 'dark' ? '#e2e8f0' : '#334155' }}
+                          style={{ color: theme === 'dark' ? '#faf5ee' : '#241e19' }}
                         >
                           {app.sessionNotes.doctorRemarks}
                         </p>
@@ -460,11 +472,9 @@ export const PatientDashboard = () => {
                     {/* Next Follow-Up */}
                     {app.sessionNotes.nextFollowUp && (
                       <div
-                        className="d-inline-flex align-items-center gap-2 p-2 px-3 rounded-pill fw-semibold small"
+                        className="d-inline-flex align-items-center gap-2 p-2 px-3 rounded-pill fw-semibold small bg-teal-subtle text-teal"
                         style={{
-                          backgroundColor: theme === 'dark' ? 'rgba(13, 148, 136, 0.2)' : 'rgba(13, 148, 136, 0.12)',
-                          color: theme === 'dark' ? '#2dd4bf' : '#0d9488',
-                          border: theme === 'dark' ? '1px solid rgba(45, 212, 191, 0.3)' : '1px solid rgba(13, 148, 136, 0.2)',
+                          border: '1px solid var(--teal-border)',
                           width: 'fit-content'
                         }}
                       >
@@ -476,6 +486,39 @@ export const PatientDashboard = () => {
                 ))}
               </div>
             )}
+          </div>
+        )}
+        {/* BOOKING MODAL */}
+        {showBookingModal && (
+          <div
+            className="modal fade show d-block"
+            tabIndex="-1"
+            style={{
+              backgroundColor: 'rgba(15, 23, 42, 0.75)',
+              backdropFilter: 'blur(6px)',
+              WebkitBackdropFilter: 'blur(6px)',
+              zIndex: 1060
+            }}
+            onClick={() => setShowBookingModal(false)}
+          >
+            <div
+              className="modal-dialog modal-dialog-centered modal-lg"
+              onClick={(e) => e.stopPropagation()}
+            >
+              <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden position-relative">
+                <button
+                  type="button"
+                  className="btn-close position-absolute top-0 end-0 m-3 z-3 bg-white p-2 rounded-circle shadow-sm"
+                  onClick={() => setShowBookingModal(false)}
+                  aria-label="Close"
+                ></button>
+                <BookingForm
+                  onBookingSuccess={() => {
+                    fetchPatientHistory();
+                  }}
+                />
+              </div>
+            </div>
           </div>
         )}
       </div>

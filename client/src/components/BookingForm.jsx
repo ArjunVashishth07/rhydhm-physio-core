@@ -6,7 +6,7 @@ import { Calendar, Clock, User, Phone, Activity, CheckCircle, AlertCircle, Messa
 
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/appointments`;
 
-export const BookingForm = () => {
+export const BookingForm = ({ onBookingSuccess } = {}) => {
   const { t, lang, user, openAuthModal } = useApp();
 
   // Today's date in YYYY-MM-DD format
@@ -36,10 +36,14 @@ export const BookingForm = () => {
   const [bookingSuccess, setBookingSuccess] = useState(null);
   const [bookingError, setBookingError] = useState('');
 
-  // Auto-fill phone when logged in
+  // Auto-fill phone and name when logged in
   useEffect(() => {
-    if (user && user.phone && !phone) {
-      setPhone(user.phone);
+    const userPhone = user?.phone || user?.mobile;
+    if (userPhone && !phone) {
+      setPhone(userPhone);
+    }
+    if (user?.fullName && !patientName) {
+      setPatientName(user.fullName);
     }
   }, [user]);
 
@@ -86,7 +90,8 @@ export const BookingForm = () => {
 
   // Core Booking Execution Helper
   const executeBooking = async (activePhone) => {
-    const targetPhone = activePhone || phone || (user ? user.phone : '');
+    const userActivePhone = user?.phone || user?.mobile || '';
+    const targetPhone = activePhone || phone || userActivePhone;
 
     const payload = {
       patientName,
@@ -111,6 +116,10 @@ export const BookingForm = () => {
       if (res.status === 201 || res.data) {
         const appointmentData = res.data?.appointment || res.data?.data || payload;
         setBookingSuccess(appointmentData);
+
+        if (onBookingSuccess && typeof onBookingSuccess === 'function') {
+          onBookingSuccess(appointmentData);
+        }
 
         // Reset form inputs except date
         setPatientName('');
@@ -178,7 +187,13 @@ export const BookingForm = () => {
 
   return (
     <div className="card border-0 shadow-lg rounded-4 overflow-hidden" id="booking-form">
-      <div className="card-header bg-teal text-white p-4 text-center" style={{ backgroundColor: '#0d9488' }}>
+      <div
+        className="card-header text-white p-4 text-center"
+        style={{
+          background: 'linear-gradient(135deg, #423022 0%, #291d14 100%)',
+          borderBottom: '1px solid rgba(244, 217, 160, 0.2)'
+        }}
+      >
         <h3 className="fw-bold mb-1 d-flex align-items-center justify-content-center gap-2">
           <Calendar size={26} />
           {t('bookAppointment')}
@@ -329,9 +344,9 @@ export const BookingForm = () => {
                         }`}
                         htmlFor={`gender-${g}`}
                         style={{
-                          backgroundColor: isSelected ? '#0d9488' : 'transparent',
-                          color: isSelected ? '#ffffff' : '#0f766e',
-                          borderColor: '#0d9488',
+                          backgroundColor: isSelected ? 'var(--teal-primary)' : 'transparent',
+                          color: isSelected ? '#ffffff' : 'var(--teal-primary)',
+                          borderColor: 'var(--teal-primary)',
                           borderWidth: '1px',
                           borderStyle: 'solid'
                         }}
@@ -352,7 +367,7 @@ export const BookingForm = () => {
             </label>
             <div className="input-group">
               <span className="input-group-text bg-body-tertiary">
-                <Activity size={18} className="text-teal" style={{ color: '#0d9488' }} />
+                <Activity size={18} className="text-teal" />
               </span>
               <select
                 className="form-select fw-semibold"
@@ -465,7 +480,6 @@ export const BookingForm = () => {
             type="submit"
             disabled={submitting}
             className="btn btn-teal btn-lg w-100 rounded-pill py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 mt-4"
-            style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
           >
             {submitting ? (
               <>

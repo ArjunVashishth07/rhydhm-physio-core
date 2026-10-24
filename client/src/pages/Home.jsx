@@ -1,8 +1,8 @@
-import React, { useState } from 'react';
-import axios from 'axios';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { clinicDetails } from '../data/clinicData';
-import BookingForm from '../components/BookingForm';
+import WelcomeAuthModal from '../components/WelcomeAuthModal';
 import {
   Activity,
   Award,
@@ -17,49 +17,19 @@ import {
   Dumbbell,
   Sparkles,
   Home as HomeIcon,
-  Search,
   CheckCircle2,
-  FileText,
-  UserCheck
+  ArrowRight
 } from 'lucide-react';
 
-const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/appointments`;
-
 export const Home = () => {
-  const { t, lang } = useApp();
+  const { t, lang, user } = useApp();
+  const navigate = useNavigate();
 
-  // Patient History Lookup State
-  const [historyPhone, setHistoryPhone] = useState('');
-  const [historyLoading, setHistoryLoading] = useState(false);
-  const [historyResults, setHistoryResults] = useState(null);
-  const [historyError, setHistoryError] = useState('');
-
-  const handleHistorySearch = async (e) => {
-    e.preventDefault();
-    if (!historyPhone || historyPhone.length < 10) {
-      setHistoryError(lang === 'hi' ? 'कृपया 10-अंकों का मोबाइल नंबर दर्ज करें' : 'Please enter a valid 10-digit phone number');
-      return;
-    }
-
-    setHistoryLoading(true);
-    setHistoryError('');
-    setHistoryResults(null);
-
-    try {
-      const res = await axios.get(`${API_BASE_URL}/patient-history/${historyPhone}`);
-      if (res.data && res.data.data) {
-        setHistoryResults(res.data.data);
-      }
-    } catch (err) {
-      console.error('History Lookup Error:', err);
-      setHistoryError(
-        err.response?.data?.message ||
-          (lang === 'hi'
-            ? 'इतिहास खोजने में विफलता हुई।'
-            : 'Could not retrieve history for this phone number.')
-      );
-    } finally {
-      setHistoryLoading(false);
+  const handleConsultationCTA = () => {
+    if (user) {
+      navigate('/patient-dashboard');
+    } else {
+      navigate('/login');
     }
   };
 
@@ -104,18 +74,24 @@ export const Home = () => {
 
   return (
     <div className="home-page pb-5">
+      {/* Welcome / Sign-in Modal on initial site load */}
+      <WelcomeAuthModal />
+
       {/* HERO SECTION */}
-      <section className="hero-section text-center py-5 px-3 position-relative overflow-hidden" style={{
-        background: 'linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, rgba(13, 148, 136, 0.02) 100%)',
-        borderBottom: '1px solid rgba(13, 148, 136, 0.1)'
-      }}>
+      <section
+        className="hero-section text-center py-5 px-3 position-relative overflow-hidden"
+        style={{
+          background: 'linear-gradient(135deg, rgba(200, 121, 44, 0.09) 0%, rgba(91, 70, 50, 0.05) 100%)',
+          borderBottom: '1px solid rgba(200, 121, 44, 0.18)'
+        }}
+      >
         <div className="container py-4">
           <div className="badge bg-teal-subtle text-teal rounded-pill px-3 py-2 mb-3 fw-semibold d-inline-flex align-items-center gap-2">
             <Award size={16} />
             <span>{clinicDetails.designation}</span>
           </div>
 
-          <h1 className="display-4 fw-extrabold mb-3 text-teal" style={{ color: '#0d9488', letterSpacing: '-0.03em' }}>
+          <h1 className="display-4 fw-extrabold mb-3 text-teal" style={{ letterSpacing: '-0.03em' }}>
             {t('brand')}
           </h1>
 
@@ -128,14 +104,15 @@ export const Home = () => {
           </p>
 
           <div className="d-flex flex-wrap justify-content-center gap-3 mb-4">
-            <a
-              href="#booking-section"
+            <button
+              type="button"
+              onClick={handleConsultationCTA}
               className="btn btn-teal btn-lg rounded-pill px-4 py-3 fw-bold shadow d-flex align-items-center gap-2"
-              style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
             >
               <Calendar size={20} />
-              <span>{t('bookAppointment')}</span>
-            </a>
+              <span>{user ? (lang === 'hi' ? 'अपॉइंटमेंट बुक करें (डैशबोर्ड)' : 'Book Appointment (Dashboard)') : t('bookAppointment')}</span>
+              <ArrowRight size={18} />
+            </button>
 
             <a
               href={`tel:${clinicDetails.contacts[0]}`}
@@ -237,156 +214,24 @@ export const Home = () => {
             {servicesList.map((service, index) => {
               const IconComp = service.icon;
               return (
-                <div key={index} className="col-md-6 col-lg-4 ">
-                  <div className="card h-100 border shadow-sm rounded-4 p-4 card-hover text-start">
+                <div key={index} className="col-md-6 col-lg-4">
+                  <div className="card h-100 border shadow-sm rounded-4 p-4 card-hover text-start d-flex flex-column">
                     <div className="p-3 rounded-3 bg-teal-subtle text-teal d-inline-flex mb-3" style={{ width: 'fit-content' }}>
                       <IconComp size={26} />
                     </div>
-                    <h5 className="fw-bold mb-2 ">{service.title}</h5>
-                    <p className="text-muted small mb-3">{service.desc}</p>
-                    <a href="#booking-section" className="text-teal text-decoration-none fw-semibold small d-inline-flex align-items-center gap-1 mt-auto">
+                    <h5 className="fw-bold mb-2">{service.title}</h5>
+                    <p className="text-muted small mb-3 flex-grow-1">{service.desc}</p>
+                    <button
+                      type="button"
+                      onClick={handleConsultationCTA}
+                      className="btn btn-link p-0 text-teal text-decoration-none fw-semibold small d-inline-flex align-items-center gap-1 mt-auto text-start"
+                    >
                       <span>{t('bookAppointment')}</span> &rarr;
-                    </a>
+                    </button>
                   </div>
                 </div>
               );
             })}
-          </div>
-        </div>
-      </section>
-
-      {/* BOOKING SECTION */}
-      <section className="py-5 bg-body-tertiary" id="booking-section">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-lg-9 col-xl-8">
-              <BookingForm />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* PATIENT HISTORY & PRESCRIPTIONS LOOKUP SECTION */}
-      <section className="py-5" id="patient-history">
-        <div className="container">
-          <div className="row justify-content-center">
-            <div className="col-lg-8">
-              <div className="card border-0 shadow-sm rounded-4 p-4 p-md-5 text-start">
-                <div className="d-flex align-items-center gap-3 mb-3">
-                  <div className="p-3 rounded-circle bg-teal-subtle text-teal">
-                    <UserCheck size={28} />
-                  </div>
-                  <div>
-                    <h4 className="fw-bold mb-0">{t('patientHistory')}</h4>
-                    <p className="text-muted small mb-0">{t('enterPhonePrompt')}</p>
-                  </div>
-                </div>
-
-                <form onSubmit={handleHistorySearch} className="row g-2 mb-4">
-                  <div className="col-sm-8">
-                    <div className="input-group">
-                      <span className="input-group-text bg-body-tertiary">
-                        <Phone size={18} className="text-muted" />
-                      </span>
-                      <input
-                        type="tel"
-                        className="form-control"
-                        placeholder="Enter phone number (e.g. 9760421410)"
-                        value={historyPhone}
-                        onChange={(e) => setHistoryPhone(e.target.value)}
-                        required
-                      />
-                    </div>
-                  </div>
-                  <div className="col-sm-4">
-                    <button
-                      type="submit"
-                      disabled={historyLoading}
-                      className="btn btn-teal w-100 fw-bold d-flex align-items-center justify-content-center gap-2 py-2"
-                      style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
-                    >
-                      {historyLoading ? (
-                        <div className="spinner-border spinner-border-sm" role="status"></div>
-                      ) : (
-                        <>
-                          <Search size={18} />
-                          <span>{t('searchHistory')}</span>
-                        </>
-                      )}
-                    </button>
-                  </div>
-                </form>
-
-                {historyError && (
-                  <div className="alert alert-warning small mb-3">
-                    {historyError}
-                  </div>
-                )}
-
-                {historyResults && (
-                  <div>
-                    {historyResults.length === 0 ? (
-                      <div className="alert alert-info small mb-0">
-                        {lang === 'hi' ? 'इस नंबर के लिए कोई पुराना अपॉइंटमेंट रिकॉर्ड नहीं मिला।' : 'No past appointment records found for this phone number.'}
-                      </div>
-                    ) : (
-                      <div className="d-flex flex-column gap-3">
-                        <h6 className="fw-bold text-teal mb-0">
-                          {lang === 'hi' ? `कुल अपॉइंटमेंट (${historyResults.length})` : `Total Appointments Found (${historyResults.length})`}
-                        </h6>
-                        {historyResults.map((app) => (
-                          <div key={app._id} className="border rounded-3 p-3 bg-body shadow-xs">
-                            <div className="d-flex justify-content-between align-items-start mb-2 flex-wrap gap-2">
-                              <div>
-                                <span className="fw-bold text-dark">{app.patientName}</span>
-                                <span className="badge bg-secondary-subtle text-body ms-2">{app.primaryIssue}</span>
-                              </div>
-                              <span className={`badge ${app.status === 'Completed' ? 'bg-success' : app.status === 'Confirmed' ? 'bg-primary' : 'bg-warning text-dark'}`}>
-                                {app.status}
-                              </span>
-                            </div>
-
-                            <div className="row g-2 small text-muted mb-2">
-                              <div className="col-sm-6">
-                                <Calendar size={14} className="me-1" />
-                                <strong>Date:</strong> {app.appointmentDate}
-                              </div>
-                              <div className="col-sm-6">
-                                <Clock size={14} className="me-1" />
-                                <strong>Slot:</strong> {app.timeSlot}
-                              </div>
-                            </div>
-
-                            {/* Prescribed Exercises & Doctor Notes */}
-                            {app.sessionNotes && (app.sessionNotes.exercisesGiven?.length > 0 || app.sessionNotes.doctorRemarks) && (
-                              <div className="p-2.5 rounded bg-body-tertiary border mt-2 small">
-                                <div className="fw-bold text-teal d-flex align-items-center gap-1 mb-1">
-                                  <FileText size={14} />
-                                  Prescribed Exercises & Remarks:
-                                </div>
-                                {app.sessionNotes.exercisesGiven?.length > 0 && (
-                                  <ul className="mb-1 ps-3">
-                                    {app.sessionNotes.exercisesGiven.map((ex, i) => (
-                                      <li key={i}>{ex}</li>
-                                    ))}
-                                  </ul>
-                                )}
-                                {app.sessionNotes.doctorRemarks && (
-                                  <div><strong>Doctor Remarks:</strong> {app.sessionNotes.doctorRemarks}</div>
-                                )}
-                                {app.sessionNotes.nextFollowUp && (
-                                  <div><strong>Next Follow-up:</strong> {app.sessionNotes.nextFollowUp}</div>
-                                )}
-                              </div>
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            </div>
           </div>
         </div>
       </section>
@@ -403,7 +248,7 @@ export const Home = () => {
                 <div className="d-flex align-items-start gap-3 mb-3">
                   <MapPin size={22} className="text-teal flex-shrink-0 mt-1" />
                   <div>
-                    <strong className="d-block text-dark">{t('addressLabel')}</strong>
+                    <strong className="d-block text-body">{t('addressLabel')}</strong>
                     <span className="text-muted small">{t('address')}</span>
                   </div>
                 </div>
@@ -411,7 +256,7 @@ export const Home = () => {
                 <div className="d-flex align-items-start gap-3 mb-3">
                   <Clock size={22} className="text-teal flex-shrink-0 mt-1" />
                   <div>
-                    <strong className="d-block text-dark">{t('timingsLabel')}</strong>
+                    <strong className="d-block text-body">{t('timingsLabel')}</strong>
                     <span className="text-muted small">{t('timings')} (Monday – Saturday)</span>
                   </div>
                 </div>
@@ -419,7 +264,7 @@ export const Home = () => {
                 <div className="d-flex align-items-start gap-3">
                   <Phone size={22} className="text-teal flex-shrink-0 mt-1" />
                   <div>
-                    <strong className="d-block text-dark">Phone Numbers</strong>
+                    <strong className="d-block text-body">Phone Numbers</strong>
                     <div className="d-flex gap-2 flex-wrap mt-1">
                       {clinicDetails.contacts.map((c, i) => (
                         <a key={i} href={`tel:${c}`} className="btn btn-sm btn-outline-teal rounded-pill px-3">
@@ -434,22 +279,35 @@ export const Home = () => {
 
             {/* Doctor Info */}
             <div className="col-md-6 text-start">
-              <div className="card h-100 border-0 shadow-sm rounded-4 p-4 bg-teal text-white" style={{ backgroundColor: '#0d9488' }}>
+              <div
+                className="card h-100 border-0 shadow-sm rounded-4 p-4 text-white"
+                style={{
+                  background: 'linear-gradient(135deg, #423022 0%, #291d14 100%)',
+                  border: '1px solid rgba(244, 217, 160, 0.22)'
+                }}
+              >
                 <div className="d-flex align-items-center gap-3 mb-3">
-                  <div className="p-3 rounded-circle bg-white text-teal">
-                    <Stethoscope size={30} />
+                  <div
+                    className="p-3 rounded-circle d-flex align-items-center justify-content-center"
+                    style={{ backgroundColor: '#f4d9a0', color: '#3a2717' }}
+                  >
+                    <Stethoscope size={28} />
                   </div>
                   <div>
                     <h4 className="fw-bold mb-0 text-white">{t('doctor')}</h4>
-                    <p className="text-white-50 mb-0">{t('qualifications')}</p>
+                    <p className="mb-0" style={{ color: '#f4d9a0' }}>{t('qualifications')}</p>
                   </div>
                 </div>
-                <p className="text-white-50 small mb-3">
+                <p className="small mb-3" style={{ color: 'rgba(250, 245, 238, 0.85)' }}>
                   {t('designation')} with extensive clinical experience treating musculoskeletal, spinal, and neurological conditions using advanced evidence-based modalities.
                 </p>
-                <div className="mt-auto pt-3 border-top border-white-50 d-flex justify-content-between align-items-center flex-wrap gap-2">
-                  <span className="small text-white-50">Need assistance? Call directly</span>
-                  <a href={`tel:${clinicDetails.contacts[0]}`} className="btn btn-light btn-sm rounded-pill fw-bold text-teal px-3">
+                <div className="mt-auto pt-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2" style={{ borderColor: 'rgba(244, 217, 160, 0.25)' }}>
+                  <span className="small" style={{ color: 'rgba(250, 245, 238, 0.75)' }}>Need assistance? Call directly</span>
+                  <a
+                    href={`tel:${clinicDetails.contacts[0]}`}
+                    className="btn btn-sm rounded-pill fw-bold px-3 shadow-sm"
+                    style={{ backgroundColor: '#f4d9a0', color: '#3a2717', border: 'none' }}
+                  >
                     {clinicDetails.contacts[0]}
                   </a>
                 </div>

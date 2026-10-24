@@ -1,17 +1,23 @@
 
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import { UserRound, LockKeyhole, Moon, Sun, Globe } from "lucide-react";
-import doctorImage from "../../../../assets/login_page_photo.png";
+import doctorImage from "../../assets/login_page_photo.png";
 import "./LoginPage.css";
 import { useApp } from "../../context/AppContext";
 
+const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/auth`;
+
 function LoginPage() {
-  const { lang, theme, t, setLang, toggleTheme } = useApp();
+  const { lang, theme, setLang, toggleTheme, loginUser } = useApp();
+  const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const isHindi = lang === "hi";
   const isDark = theme === "dark";
@@ -39,15 +45,31 @@ function LoginPage() {
     language: isHindi ? "हिन्दी" : "English",
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
 
-    // Connect your existing login API here.
-    console.log({ email, password });
+    try {
+      const res = await axios.post(`${API_BASE_URL}/login`, { email, password });
+      if (res.data?.success) {
+        loginUser(res.data.user);
+        if (res.data.token) {
+          localStorage.setItem('rhydhm_token', res.data.token);
+        }
+        navigate("/patient-dashboard");
+      }
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+        (isHindi
+          ? "लॉगिन विफल रहा। कृपया अपनी जानकारी जांचें।"
+          : "Login failed. Please check your credentials.")
+      );
+    } finally {
+      setLoading(false);
+    }
   };
-function goToDashboard() {
-  alert('ok')
-}
   return (
     <div className={`auth-page ${isDark ? "auth-dark" : "auth-light"}`}>
       <div className="auth-topbar">
@@ -191,8 +213,14 @@ function goToDashboard() {
                 </Link>
               </div>
 
-              <button type="submit" className="auth-submit fs-5" onClick={goToDashboard}>
-                {text.login}
+              {error && (
+                <div className="alert alert-danger py-2 px-3 small rounded-3 mb-3 text-start">
+                  {error}
+                </div>
+              )}
+
+              <button type="submit" disabled={loading} className="auth-submit fs-5">
+                {loading ? (isHindi ? "लॉगिन हो रहा है..." : "Logging in...") : text.login}
               </button>
             </form>
 
