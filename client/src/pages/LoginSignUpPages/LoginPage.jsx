@@ -1,0 +1,218 @@
+
+import { useState } from "react";
+import { Link } from "react-router-dom";
+import { UserRound, LockKeyhole, Moon, Sun, Globe } from "lucide-react";
+import doctorImage from "../../../../assets/login_page_photo.png";
+import "./LoginPage.css";
+import { useApp } from "../../context/AppContext";
+
+function LoginPage() {
+  const { lang, theme, t, setLang, toggleTheme } = useApp();
+
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
+
+  const isHindi = lang === "hi";
+  const isDark = theme === "dark";
+
+  const text = {
+    welcome: isHindi ? "वापस स्वागत है!" : "Welcome Back!",
+    subtitle: isHindi
+      ? "अपने अकाउंट में लॉगिन करें"
+      : "Login to your patient account",
+    email: isHindi ? "ईमेल या मोबाइल नंबर" : "Email or Mobile Number",
+    password: isHindi ? "पासवर्ड" : "Password",
+    forgot: isHindi ? "पासवर्ड भूल गए?" : "Forgot Password?",
+    login: isHindi ? "लॉगिन करें" : "Login",
+    register: isHindi ? "रजिस्टर करें" : "Register Now",
+    account: isHindi
+      ? "अकाउंट नहीं है?"
+      : "Don't have an account?",
+    quote: isHindi
+      ? "आपका स्वास्थ्य, हमारी प्राथमिकता"
+      : "Your Health, Our Priority",
+    description: isHindi
+      ? "बेहतर स्वास्थ्य और दर्द-मुक्त जीवन की ओर आपका पहला कदम।"
+      : "Your first step towards better health and a pain-free life.",
+    clinic: "RHYDHM Physio & Fitness Center",
+    language: isHindi ? "हिन्दी" : "English",
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    // Connect your existing login API here.
+    console.log({ email, password });
+  };
+function goToDashboard() {
+  alert('ok')
+}
+  return (
+    <div className={`auth-page ${isDark ? "auth-dark" : "auth-light"}`}>
+      <div className="auth-topbar">
+        <Link to="/" className="auth-brand">
+          <span className="auth-brand-icon">
+            <UserRound size={22} />
+          </span>
+          <span>{text.clinic}</span>
+        </Link>
+
+        <div className="auth-controls">
+          <button
+            type="button"
+            className="auth-control-btn"
+            onClick={() => setLang(isHindi ? "en" : "hi")}
+            aria-label="Change language"
+          >
+            <Globe size={17} />
+            {text.language}
+          </button>
+
+          <button
+            type="button"
+            className="auth-control-btn"
+            onClick={() =>
+              toggleTheme(isDark ? "light" : "dark")
+            }
+            aria-label="Change theme"
+          >
+            {isDark ? <Sun size={17} /> : <Moon size={17} />}
+            {isDark
+              ? (isHindi ? "लाइट मोड" : "Light")
+              : (isHindi ? "डार्क मोड" : "Dark")}
+          </button>
+        </div>
+      </div>
+
+      <main className="auth-layout">
+        {/* LEFT: Image and welcome message */}
+        <section className="auth-visual">
+          <img
+            src={doctorImage}
+            alt="Physiotherapist at RHYDHМ Physio and Fitness Center"
+            className="auth-doctor-image"
+          />
+
+          <div className="auth-image-overlay" />
+
+          <div className="auth-visual-content">
+            <strong>
+              <span className="auth-eyebrow fs-6">
+              {text.clinic}
+            </span>
+
+            </strong>
+            <h1>{text.quote}</h1>
+            <p>{text.description}</p>
+          </div>
+        </section>
+
+        {/* RIGHT: Login form */}
+        <section className="auth-form-section">
+          <div className="auth-form-card">
+            <div className="auth-heading">
+              <span className="auth-small-label">
+                {isHindi ? "PATIENT PORTAL" : "PATIENT PORTAL"}
+              </span>
+
+              <h2>{text.welcome}</h2>
+              <p>{text.subtitle}</p>
+            </div>
+
+            <form onSubmit={handleSubmit}>
+              <div className="auth-field">
+                <strong>
+                  <label htmlFor="patient-email" className="fs-4">
+                  {text.email}
+                </label>
+                </strong>
+
+                <div className="auth-input-wrap">
+                  <UserRound size={19} />
+                  
+                    <input
+                    id="patient-email"
+                    type="text"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    placeholder={
+                      isHindi
+                        ? "ईमेल या मोबाइल नंबर दर्ज करें"
+                        : "Enter email or mobile number"
+                    }
+                    autoComplete="username"
+                    required
+                    className="fs-5"
+                  />
+                 
+                </div>
+              </div>
+
+              <div className="auth-field">
+                <strong>
+                  <label htmlFor="patient-password" className="fs-4">
+                  {text.password}
+                </label>
+                </strong>
+
+                <div className="auth-input-wrap">
+                  <LockKeyhole size={19} />
+                  <input
+                    id="patient-password"
+                    type={showPassword ? "text" : "password"}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    placeholder={
+                      isHindi
+                        ? "अपना पासवर्ड दर्ज करें"
+                        : "Enter your password"
+                    }
+                    autoComplete="current-password"
+                    required
+                    className="fs-5"
+                  />
+
+                  <button
+                    type="button"
+                    className="auth-show-password fs-6"
+                    onClick={() => setShowPassword(!showPassword)}
+                  >
+                    {showPassword
+                      ? (isHindi ? "छिपाएँ" : "Hide")
+                      : (isHindi ? "दिखाएँ" : "Show")}
+                  </button>
+                </div>
+              </div>
+
+              <div className="auth-forgot-row">
+                <Link to="/forgot-password" className="fs-6">
+                  {text.forgot}
+                </Link>
+              </div>
+
+              <button type="submit" className="auth-submit fs-5" onClick={goToDashboard}>
+                {text.login}
+              </button>
+            </form>
+
+            <strong>
+              <div className="auth-register">
+              <span className="me-1">{text.account}</span>
+              <Link to="/register">{text.register}</Link>
+            </div>
+            </strong>
+
+            <p className="auth-footer">
+              {isHindi
+                ? "आपकी सेहत, हमारी देखभाल।"
+                : "Your wellness journey starts here."}
+            </p>
+          </div>
+        </section>
+      </main>
+    </div>
+  );
+}
+
+export default LoginPage;

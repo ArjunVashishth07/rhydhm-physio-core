@@ -6,14 +6,21 @@ import AdminDashboard from './pages/AdminDashboard';
 import PatientDashboard from './pages/PatientDashboard';
 import Footer from './components/Footer';
 import AuthModal from './components/AuthModal';
+import LoginPage from './pages/LoginSignUpPages/LoginPage';
+import SignUpPage from './pages/LoginSignUpPages/SignUpPage';
 
 function App() {
   return (
     <BrowserRouter>
       <div className="d-flex flex-column min-vh-100">
+        {/* <Routes>
+          <Route path='/' element={<LoginPage></LoginPage>}></Route>
+          <Route path='/register' element={<SignUpPage></SignUpPage>}></Route>
+        </Routes> */}
         <Navbar />
         <main className="flex-grow-1">
           <Routes>
+            
             <Route path="/" element={<Home />} />
             <Route path="/admin" element={<AdminDashboard />} />
             <Route path="/patient-dashboard" element={<PatientDashboard />} />
