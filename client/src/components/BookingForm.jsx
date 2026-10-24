@@ -6,8 +6,8 @@ import { Calendar, Clock, User, Phone, Activity, CheckCircle, AlertCircle, Messa
 
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/appointments`;
 
-export const BookingForm = () => {
-  const { t, lang } = useApp();
+export const BookingForm = ({ onBookingSuccess } = {}) => {
+  const { t, lang, user, openAuthModal } = useApp();
 
   // Today's date in YYYY-MM-DD format
   const getTodayString = () => {
@@ -35,6 +35,17 @@ export const BookingForm = () => {
   const [submitting, setSubmitting] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(null);
   const [bookingError, setBookingError] = useState('');
+
+  // Auto-fill phone and name when logged in
+  useEffect(() => {
+    const userPhone = user?.phone || user?.mobile;
+    if (userPhone && !phone) {
+      setPhone(userPhone);
+    }
+    if (user?.fullName && !patientName) {
+      setPatientName(user.fullName);
+    }
+  }, [user]);
 
   // Fetch available time slots whenever date changes
   useEffect(() => {
@@ -77,22 +88,14 @@ export const BookingForm = () => {
     }
   };
 
-  // Submit Handler
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setBookingError('');
-    setBookingSuccess(null);
-
-    if (!timeSlot) {
-      const msg = lang === 'hi' ? 'कृपया एक समय स्लॉट चुनें' : 'Please select an appointment time slot.';
-      setBookingError(msg);
-      alert(msg);
-      return;
-    }
+  // Core Booking Execution Helper
+  const executeBooking = async (activePhone) => {
+    const userActivePhone = user?.phone || user?.mobile || '';
+    const targetPhone = activePhone || phone || userActivePhone;
 
     const payload = {
       patientName,
-      phone,
+      phone: targetPhone,
       age: Number(age),
       gender,
       primaryIssue,
@@ -114,9 +117,13 @@ export const BookingForm = () => {
         const appointmentData = res.data?.appointment || res.data?.data || payload;
         setBookingSuccess(appointmentData);
 
+        if (onBookingSuccess && typeof onBookingSuccess === 'function') {
+          onBookingSuccess(appointmentData);
+        }
+
         // Reset form inputs except date
         setPatientName('');
-        setPhone('');
+        if (!user) setPhone('');
         setAge('');
         setSymptoms([]);
         setTimeSlot('');
@@ -133,6 +140,32 @@ export const BookingForm = () => {
     } finally {
       setSubmitting(false);
     }
+  };
+
+  // Submit Handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setBookingError('');
+    setBookingSuccess(null);
+
+    if (!timeSlot) {
+      const msg = lang === 'hi' ? 'कृपया एक समय स्लॉट चुनें' : 'Please select an appointment time slot.';
+      setBookingError(msg);
+      alert(msg);
+      return;
+    }
+
+    // If guest, pause and prompt OTP modal
+    if (!user) {
+      openAuthModal((loggedInUser) => {
+        const finalPhone = loggedInUser?.phone || phone;
+        executeBooking(finalPhone);
+      });
+      return;
+    }
+
+    // Logged in user, submit directly
+    executeBooking(user.phone || phone);
   };
 
   // Generate WhatsApp Share Link
@@ -154,7 +187,9 @@ export const BookingForm = () => {
 
   return (
     <div className="card border-0 shadow-lg rounded-4 overflow-hidden" id="booking-form">
-      <div className="card-header bg-teal text-white p-4 text-center" style={{ backgroundColor: '#0d9488' }}>
+      <div
+        className="card-header text-white p-4 text-center clinical-banner border-0"
+      >
         <h3 className="fw-bold mb-1 d-flex align-items-center justify-content-center gap-2">
           <Calendar size={26} />
           {t('bookAppointment')}
@@ -305,9 +340,9 @@ export const BookingForm = () => {
                         }`}
                         htmlFor={`gender-${g}`}
                         style={{
-                          backgroundColor: isSelected ? '#0d9488' : 'transparent',
-                          color: isSelected ? '#ffffff' : '#0f766e',
-                          borderColor: '#0d9488',
+                          backgroundColor: isSelected ? 'var(--teal-primary)' : 'transparent',
+                          color: isSelected ? '#ffffff' : 'var(--teal-primary)',
+                          borderColor: 'var(--teal-primary)',
                           borderWidth: '1px',
                           borderStyle: 'solid'
                         }}
@@ -328,7 +363,7 @@ export const BookingForm = () => {
             </label>
             <div className="input-group">
               <span className="input-group-text bg-body-tertiary">
-                <Activity size={18} className="text-teal" style={{ color: '#0d9488' }} />
+                <Activity size={18} className="text-teal" />
               </span>
               <select
                 className="form-select fw-semibold"
@@ -441,7 +476,6 @@ export const BookingForm = () => {
             type="submit"
             disabled={submitting}
             className="btn btn-teal btn-lg w-100 rounded-pill py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2 mt-4"
-            style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
           >
             {submitting ? (
               <>

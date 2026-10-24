@@ -117,3 +117,29 @@ exports.getPatientHistoryByPhone = async (req, res) => {
     });
   }
 };
+
+// @desc    Cancel an appointment by patient
+// @route   PUT /api/appointments/:id/cancel
+exports.cancelAppointment = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const updated = await Appointment.findByIdAndUpdate(
+      id,
+      { status: 'Cancelled' },
+      { new: true }
+    );
+    if (!updated) {
+      return res.status(404).json({ success: false, message: 'Appointment not found' });
+    }
+    return res.status(200).json({
+      success: true,
+      message: 'Appointment cancelled successfully',
+      appointment: updated
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Failed to cancel appointment'
+    });
+  }
+};

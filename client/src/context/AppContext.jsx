@@ -12,6 +12,19 @@ export const AppProvider = ({ children }) => {
     return localStorage.getItem('rhydhm_lang') || 'en';
   });
 
+  // User Authentication State (Persisted in localStorage)
+  const [user, setUser] = useState(() => {
+    try {
+      const savedUser = localStorage.getItem('rhydhm_user');
+      return savedUser ? JSON.parse(savedUser) : null;
+    } catch {
+      return null;
+    }
+  });
+
+  const [isAuthModalOpen, setIsAuthModalOpen] = useState(false);
+  const [pendingCallback, setPendingCallback] = useState(null);
+
   useEffect(() => {
     document.documentElement.setAttribute('data-bs-theme', theme);
     document.documentElement.setAttribute('data-theme', theme);
@@ -25,6 +38,35 @@ export const AppProvider = ({ children }) => {
 
   const toggleTheme = () => {
     setTheme((prevTheme) => (prevTheme === 'light' ? 'dark' : 'light'));
+  };
+
+  const openAuthModal = (callback = null) => {
+    if (callback && typeof callback === 'function') {
+      setPendingCallback(() => callback);
+    } else {
+      setPendingCallback(null);
+    }
+    setIsAuthModalOpen(true);
+  };
+
+  const closeAuthModal = () => {
+    setIsAuthModalOpen(false);
+    setPendingCallback(null);
+  };
+
+  const loginUser = (userData) => {
+    setUser(userData);
+    localStorage.setItem('rhydhm_user', JSON.stringify(userData));
+    setIsAuthModalOpen(false);
+    if (pendingCallback) {
+      pendingCallback(userData);
+      setPendingCallback(null);
+    }
+  };
+
+  const logoutUser = () => {
+    setUser(null);
+    localStorage.removeItem('rhydhm_user');
   };
 
   const t = (key) => {
@@ -46,7 +88,13 @@ export const AppProvider = ({ children }) => {
         toggleTheme,
         lang,
         setLang,
-        t
+        t,
+        user,
+        isAuthModalOpen,
+        openAuthModal,
+        closeAuthModal,
+        loginUser,
+        logoutUser
       }}
     >
       {children}

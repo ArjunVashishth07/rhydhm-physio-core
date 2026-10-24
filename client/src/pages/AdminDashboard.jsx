@@ -233,8 +233,12 @@ export const AdminDashboard = () => {
         <div className="row justify-content-center">
           <div className="col-md-5 col-lg-4">
             <div className="card border-0 shadow-lg rounded-4 overflow-hidden">
-              <div className="card-header bg-teal text-white text-center py-4" style={{ backgroundColor: '#0d9488' }}>
-                <div className="p-3 bg-white text-teal rounded-circle d-inline-flex mb-2" style={{ color: '#0d9488' }}>
+              <div
+                className="card-header text-white text-center py-4 clinical-banner border-0"
+              >
+                <div
+                  className="p-3 rounded-circle d-inline-flex mb-2 clinical-modal-icon"
+                >
                   <Lock size={28} />
                 </div>
                 <h4 className="fw-bold mb-0">Doctor Admin Portal</h4>
@@ -259,7 +263,6 @@ export const AdminDashboard = () => {
                   <button
                     type="submit"
                     className="btn btn-teal w-100 btn-lg rounded-pill fw-bold text-white shadow-sm"
-                    style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
                   >
                     Unlock Portal
                   </button>
@@ -367,7 +370,6 @@ export const AdminDashboard = () => {
                     className={`btn btn-sm rounded-pill px-3.5 py-2 fw-semibold d-inline-flex align-items-center gap-2 transition-all ${
                       activeFilter === tab ? 'btn-teal text-white shadow-sm' : 'btn-outline-secondary'
                     }`}
-                    style={activeFilter === tab ? { backgroundColor: '#0d9488', borderColor: '#0d9488' } : {}}
                   >
                     <span>{tab}</span>
                     <span className="badge rounded-pill bg-white text-dark opacity-90 px-2 py-1">
@@ -384,11 +386,11 @@ export const AdminDashboard = () => {
             <div className="col-md-5">
               <div className="input-group">
                 <span className="input-group-text bg-body border-end-0">
-                  <Search size={18} className="text-muted" />
+                  <Search size={18} className="text-secondary" />
                 </span>
                 <input
                   type="text"
-                  className="form-control border-start-0 ps-0"
+                  className="form-control border-start-0 ps-0 text-body bg-body"
                   placeholder="Search patient name, phone, condition..."
                   value={searchTerm}
                   onChange={(e) => setSearchTerm(e.target.value)}
@@ -435,26 +437,26 @@ export const AdminDashboard = () => {
                     <tr key={app._id}>
                       {/* Name & Phone */}
                       <td className="ps-4 py-3">
-                        <div className="fw-bold text-white fs-6">{app.patientName || 'Anonymous Patient'}</div>
-                        <div className="text-muted small">
-                          <Phone size={14} className="me-1 text-teal" style={{ color: '#0d9488' }} />
+                        <div className="fw-semibold fs-6 text-body">{app.patientName || 'Anonymous Patient'}</div>
+                        <div className="text-secondary small">
+                          <Phone size={14} className="me-1 text-teal" />
                           {app.phone}
                         </div>
                       </td>
 
                       {/* Age & Gender */}
                       <td>
-                        <span className="fw-semibold">{app.age} yrs</span>
-                        <small className="text-muted d-block">{app.gender}</small>
+                        <span className="fw-semibold text-body">{app.age} yrs</span>
+                        <small className="text-secondary d-block">{app.gender}</small>
                       </td>
 
                       {/* Condition */}
                       <td>
-                        <span className="badge bg-teal-subtle text-teal fw-semibold" style={{ color: '#0d9488' }}>
+                        <span className="badge bg-teal-subtle text-teal fw-semibold">
                           {app.primaryIssue}
                         </span>
                         {app.symptoms?.length > 0 && (
-                          <small className="text-muted d-block text-truncate mt-0.5" style={{ maxWidth: '220px' }}>
+                          <small className="text-secondary d-block text-truncate mt-0.5" style={{ maxWidth: '220px' }}>
                             {app.symptoms.join(', ')}
                           </small>
                         )}
@@ -462,8 +464,8 @@ export const AdminDashboard = () => {
 
                       {/* Date & Slot */}
                       <td>
-                        <div className="fw-semibold">{app.appointmentDate}</div>
-                        <small className="text-muted">{app.timeSlot}</small>
+                        <div className="fw-semibold text-body">{app.appointmentDate}</div>
+                        <small className="text-secondary">{app.timeSlot}</small>
                       </td>
 
                       {/* Status Badge */}
@@ -488,7 +490,6 @@ export const AdminDashboard = () => {
                         <button
                           onClick={() => handleOpenModal(app)}
                           className="btn btn-teal btn-sm rounded-pill px-3 py-1.5 fw-semibold text-white shadow-xs"
-                          style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
                         >
                           <FileText size={15} className="me-1" />
                           Manage / Prescribe
@@ -516,7 +517,9 @@ export const AdminDashboard = () => {
           <div className="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
             <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
               {/* Modal Header */}
-              <div className="modal-header bg-teal text-white p-4" style={{ backgroundColor: '#0d9488' }}>
+              <div
+                className="modal-header text-white p-4 clinical-modal-header"
+              >
                 <div>
                   <h4 className="modal-title fw-bold mb-0">{selectedApp.patientName}</h4>
                   <small className="text-white-50">
@@ -605,7 +608,6 @@ export const AdminDashboard = () => {
                         type="button"
                         onClick={handleAddExercise}
                         className="btn btn-teal text-white fw-semibold"
-                        style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
                       >
                         <Plus size={18} /> Add
                       </button>
@@ -663,7 +665,6 @@ export const AdminDashboard = () => {
                     type="submit"
                     disabled={savingPrescription}
                     className="btn btn-teal text-white w-100 py-2.5 fw-bold rounded-pill shadow-sm d-flex align-items-center justify-content-center gap-2"
-                    style={{ backgroundColor: '#0d9488', borderColor: '#0d9488' }}
                   >
                     {savingPrescription ? (
                       <div className="spinner-border spinner-border-sm" role="status"></div>

@@ -1,23 +1,99 @@
 :root {
+  /* Classic Medical Light Theme (Crisp White + Teal Green) */
   --teal-primary: #0d9488;
   --teal-hover: #0f766e;
   --teal-subtle: rgba(13, 148, 136, 0.1);
+  --teal-border: rgba(13, 148, 136, 0.25);
   --teal-glow: rgba(13, 148, 136, 0.25);
+
+  --canvas-bg: #ffffff;
+  --surface-card: #ffffff;
+  --border-color: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-muted: #64748b;
+
+  /* Theme-adaptive surfaces & banners */
+  --banner-bg: #0d9488;
+  --banner-gradient: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  --banner-border: rgba(13, 148, 136, 0.25);
+  --banner-text: #ffffff;
+  --banner-badge-bg: #ffffff;
+  --banner-badge-color: #0d9488;
+  --banner-btn-bg: #ffffff;
+  --banner-btn-color: #0d9488;
+
+  --hero-gradient: linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, rgba(13, 148, 136, 0.02) 100%);
+  --hero-border: rgba(13, 148, 136, 0.12);
+
+  --modal-header-gradient: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  --modal-icon-bg: #ffffff;
+  --modal-icon-color: #0d9488;
+
+  --footer-bg: #1e293b;
+  --footer-text: #94a3b8;
+  --footer-border: rgba(255, 255, 255, 0.08);
+
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
-[data-bs-theme="dark"] {
-  --teal-primary: #14b8a6;
-  --teal-hover: #0d9488;
-  --teal-subtle: rgba(20, 184, 166, 0.15);
-  --teal-glow: rgba(20, 184, 166, 0.3);
+[data-bs-theme="dark"],
+[data-theme="dark"] {
+  --bs-body-bg: #141210 !important;
+  --bs-body-color: #faf5ee !important;
+  --bs-tertiary-bg: #1c1815 !important;
+  --bs-secondary-bg: #231e1a !important;
+  --bs-card-bg: #1e1a17 !important;
+  --bs-border-color: #332c25 !important;
+  --bs-border-color-translucent: rgba(244, 217, 160, 0.12) !important;
+  --bs-secondary-color: #ad9e8f !important;
+
+  /* Option B: Warm Osteopathy & Holistic Rehab for Dark Mode */
+  --amber-primary: #d48b3b;
+  --amber-hover: #e09b4c;
+  --gold-champagne: #f4d9a0;
+  --mocha-brown: #5b4632;
+
+  --teal-primary: #d48b3b;
+  --teal-hover: #e09b4c;
+  --teal-subtle: rgba(212, 139, 59, 0.15);
+  --teal-border: rgba(244, 217, 160, 0.25);
+  --teal-glow: rgba(212, 139, 59, 0.3);
+
+  --canvas-bg: #141210;
+  --surface-card: #1e1a17;
+  --border-color: #332c25;
+  --text-primary: #faf5ee;
+  --text-muted: #ad9e8f;
+
+  /* Option B Warm Surfaces & Banners in Dark Mode */
+  --banner-bg: #2e2116;
+  --banner-gradient: linear-gradient(135deg, #423022 0%, #291d14 100%);
+  --banner-border: rgba(244, 217, 160, 0.22);
+  --banner-text: #ffffff;
+  --banner-badge-bg: #f4d9a0;
+  --banner-badge-color: #3a2717;
+  --banner-btn-bg: #f4d9a0;
+  --banner-btn-color: #3a2717;
+
+  --hero-gradient: linear-gradient(135deg, rgba(200, 121, 44, 0.09) 0%, rgba(91, 70, 50, 0.05) 100%);
+  --hero-border: rgba(200, 121, 44, 0.18);
+
+  --modal-header-gradient: linear-gradient(135deg, #423022 0%, #291d14 100%);
+  --modal-icon-bg: #f4d9a0;
+  --modal-icon-color: #3a2717;
+
+  --footer-bg: #0e0c0b;
+  --footer-text: #ad9e8f;
+  --footer-border: rgba(244, 217, 160, 0.12);
 }
 
 body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
-  transition: background-color 0.3s ease, color 0.3s ease;
+  background-color: var(--canvas-bg);
+  color: var(--text-primary);
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
 #root {
@@ -37,41 +113,136 @@ body {
 .btn-teal {
   background-color: var(--teal-primary);
   border-color: var(--teal-primary);
-  color: #ffffff;
+  color: #ffffff !important;
+  font-weight: 600;
   transition: all 0.2s ease-in-out;
 }
 
-.btn-teal:hover, .btn-teal:focus {
+.btn-teal:hover,
+.btn-teal:focus {
   background-color: var(--teal-hover);
   border-color: var(--teal-hover);
-  color: #ffffff;
-  box-shadow: 0 4px 12px var(--teal-glow);
+  color: #ffffff !important;
+  box-shadow: 0 4px 14px var(--teal-glow);
 }
 
 .btn-outline-teal {
-  color: var(--teal-primary);
+  color: var(--teal-primary) !important;
   border-color: var(--teal-primary);
+  background-color: transparent;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
 }
 
 .btn-outline-teal:hover {
   background-color: var(--teal-primary);
-  color: #ffffff;
+  color: #ffffff !important;
+  border-color: var(--teal-primary);
 }
 
 .bg-teal-subtle {
   background-color: var(--teal-subtle) !important;
+  color: var(--teal-primary) !important;
 }
 
-/* Glassmorphism & Card polish */
+/* Theme-Adaptive Clinical Banners */
+.clinical-banner {
+  background: var(--banner-gradient) !important;
+  border: 1px solid var(--banner-border) !important;
+  color: var(--banner-text) !important;
+}
+
+.clinical-banner-badge {
+  background-color: var(--banner-badge-bg) !important;
+  color: var(--banner-badge-color) !important;
+}
+
+.clinical-banner-btn {
+  background-color: var(--banner-btn-bg) !important;
+  color: var(--banner-btn-color) !important;
+  border: none !important;
+}
+
+.clinical-modal-header {
+  background: var(--modal-header-gradient) !important;
+  border-bottom: 1px solid var(--banner-border) !important;
+  color: #ffffff !important;
+}
+
+.clinical-modal-icon {
+  background-color: var(--modal-icon-bg) !important;
+  color: var(--modal-icon-color) !important;
+}
+
+/* Polished Warm Card & Elevation */
+.card {
+  border-color: var(--border-color);
+  background-color: var(--surface-card);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+
 .card-hover {
-  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
 }
 
 .card-hover:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1) !important;
+  transform: translateY(-3px);
+  box-shadow: 0 10px 22px rgba(36, 30, 25, 0.12) !important;
+}
+
+[data-bs-theme="dark"] .card-hover:hover {
+  box-shadow: 0 10px 24px rgba(0, 0, 0, 0.45) !important;
+  border-color: rgba(244, 217, 160, 0.35) !important;
+}
+
+/* Dark Mode Form Overrides for Warm Stone UI */
+[data-bs-theme="dark"] .form-control,
+[data-bs-theme="dark"] .form-select {
+  background-color: #241e1a;
+  border-color: #383028;
+  color: #faf5ee;
+}
+
+[data-bs-theme="dark"] .form-control:focus,
+[data-bs-theme="dark"] .form-select:focus {
+  background-color: #241e1a;
+  border-color: var(--teal-primary);
+  color: #faf5ee;
+  box-shadow: 0 0 0 0.25rem rgba(212, 139, 59, 0.22);
+}
+
+[data-bs-theme="dark"] .form-control::placeholder {
+  color: #8c7d6e;
+}
+
+[data-bs-theme="dark"] .input-group-text {
+  background-color: #1a1613;
+  border-color: #383028;
+  color: #ad9e8f;
+}
+
+[data-bs-theme="dark"] .dropdown-menu {
+  background-color: #1e1a17;
+  border: 1px solid #332c25;
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.55);
+}
+
+[data-bs-theme="dark"] .dropdown-item {
+  color: #d6cac0;
+}
+
+[data-bs-theme="dark"] .dropdown-item:hover,
+[data-bs-theme="dark"] .dropdown-item:focus {
+  background-color: #2c2520;
+  color: #ffffff;
+}
+
+[data-bs-theme="dark"] .modal-content {
+  background-color: #1e1a17;
+  border: 1px solid #332c25;
+  color: #faf5ee;
 }
 
 .transition-all {
-  transition: all 0.3s ease;
+  transition: all 0.25s ease;
 }
