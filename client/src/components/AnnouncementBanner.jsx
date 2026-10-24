@@ -13,16 +13,17 @@ import './AnnouncementBanner.css';
 
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/announcements`;
 
-export const AnnouncementBanner = () => {
+export const AnnouncementBanner = ({ previewItems = null }) => {
   const { user } = useApp();
   const [announcements, setAnnouncements] = useState([]);
   
   // Pure local in-memory dismissal state (resets on F5 refresh or re-login)
   const [dismissedIds, setDismissedIds] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!previewItems);
 
-  // Fetch active announcements targeted to this patient
+  // Fetch active announcements targeted to this patient (skipped if previewItems is provided)
   const fetchAnnouncements = async () => {
+    if (previewItems) return;
     try {
       setLoading(true);
       const token = localStorage.getItem('rhydhm_token');
@@ -54,15 +55,20 @@ export const AnnouncementBanner = () => {
   };
 
   useEffect(() => {
+    if (previewItems) {
+      setAnnouncements(previewItems);
+      setLoading(false);
+      return;
+    }
     fetchAnnouncements();
-  }, [user]);
+  }, [user, previewItems]);
 
   // Filter out in-memory dismissed announcements
   const visibleAnnouncements = announcements.filter(
     (item) => !dismissedIds.includes(item._id)
   );
 
-  // Handle in-memory dismissal for current tab view (never persisted to localStorage/sessionStorage)
+  // Handle in-memory dismissal for current tab view (never stored in localStorage/sessionStorage)
   const handleDismiss = (id) => {
     setDismissedIds((prev) => [...prev, id]);
   };
@@ -110,7 +116,7 @@ export const AnnouncementBanner = () => {
               </div>
 
               {/* Announcement Content */}
-              <div className="flex-grow-1 min-w-0">
+              <div className="flex-grow-1 min-w-0 text-start">
                 <div className="d-flex align-items-center gap-2 mb-1.5 flex-wrap">
                   {/* Type Badge */}
                   <span className="banner-badge">
@@ -124,7 +130,9 @@ export const AnnouncementBanner = () => {
                   {item.targetType === 'individual' && (
                     <span className="badge banner-direct-notice-badge rounded-pill px-2.5 py-1 d-inline-flex align-items-center gap-1 small fw-semibold">
                       <UserCheck size={12} />
-                      <span>Direct Notice</span>
+                      <span>
+                        Direct Notice {item.targetPatientName ? `• ${item.targetPatientName}` : ''}
+                      </span>
                     </span>
                   )}
 
