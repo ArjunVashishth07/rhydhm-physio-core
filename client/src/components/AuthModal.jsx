@@ -113,16 +113,11 @@ export const AuthModal = () => {
         <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden text-start">
           {/* Modal Header */}
           <div
-            className="modal-header text-white p-4 position-relative"
-            style={{
-              background: 'linear-gradient(135deg, #423022 0%, #291d14 100%)',
-              borderBottom: '1px solid rgba(244, 217, 160, 0.2)'
-            }}
+            className="modal-header text-white p-4 position-relative clinical-modal-header"
           >
             <div className="d-flex align-items-center gap-3">
               <div
-                className="p-2.5 rounded-circle d-flex align-items-center justify-content-center shadow-xs"
-                style={{ backgroundColor: '#f4d9a0', color: '#3a2717' }}
+                className="p-2.5 rounded-circle d-flex align-items-center justify-content-center shadow-xs clinical-modal-icon"
               >
                 <ShieldCheck size={26} />
               </div>

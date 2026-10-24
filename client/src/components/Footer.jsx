@@ -10,9 +10,9 @@ export const Footer = () => {
     <footer
       className="py-5 mt-auto transition-all"
       style={{
-        backgroundColor: theme === 'dark' ? '#0e0c0b' : '#1e1915',
-        color: '#ad9e8f',
-        borderTop: '1px solid rgba(244, 217, 160, 0.12)'
+        backgroundColor: 'var(--footer-bg)',
+        color: 'var(--footer-text)',
+        borderTop: '1px solid var(--footer-border)'
       }}
     >
       <div className="container text-start">
@@ -25,10 +25,10 @@ export const Footer = () => {
               </div>
               <h5 className="fw-bold text-white mb-0">{t('brand')}</h5>
             </div>
-            <p className="small mb-3" style={{ maxWidth: '400px', color: '#ad9e8f' }}>
+            <p className="small mb-3" style={{ maxWidth: '400px', color: 'var(--footer-text)' }}>
               {t('doctor')} ({t('qualifications')}) — {t('designation')}
             </p>
-            <p className="small mb-0" style={{ color: '#ad9e8f' }}>
+            <p className="small mb-0" style={{ color: 'var(--footer-text)' }}>
               Dedicated to non-surgical spine care, osteopathy, and personalized rehabilitation.
             </p>
           </div>
@@ -80,13 +80,13 @@ export const Footer = () => {
           </div>
         </div>
 
-        <hr className="my-4" style={{ borderColor: 'rgba(244, 217, 160, 0.12)' }} />
+        <hr className="my-4" style={{ borderColor: 'var(--footer-border)' }} />
 
         <div className="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-2 small">
           <span>
             © {new Date().getFullYear()} {t('brand')}. All rights reserved.
           </span>
-          <span className="d-flex align-items-center gap-1" style={{ color: '#ad9e8f' }}>
+          <span className="d-flex align-items-center gap-1" style={{ color: 'var(--footer-text)' }}>
             Carefully crafted for better patient recovery <Heart size={14} className="text-danger fill-danger" />
           </span>
         </div>

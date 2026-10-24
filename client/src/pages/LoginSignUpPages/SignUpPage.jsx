@@ -6,9 +6,6 @@ import {
   Mail,
   Phone,
   LockKeyhole,
-  Globe,
-  Moon,
-  Sun,
   CheckCircle2
 } from "lucide-react";
 
@@ -19,7 +16,7 @@ import "./LoginPage.css";
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/auth`;
 
 function SignUpPage() {
-  const { lang, theme, setLang, toggleTheme, loginUser } = useApp();
+  const { lang, theme, loginUser } = useApp();
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -164,40 +161,6 @@ function SignUpPage() {
 
   return (
     <div className={`auth-page ${isDark ? "auth-dark" : "auth-light"}`}>
-      {/* Top Header Bar */}
-      <div className="auth-topbar">
-        <Link to="/" className="auth-brand">
-          <span className="auth-brand-icon">
-            <UserRound size={22} />
-          </span>
-          <span>{text.clinic}</span>
-        </Link>
-
-        <div className="auth-controls">
-          <button
-            type="button"
-            className="auth-control-btn"
-            onClick={() => setLang(isHindi ? "en" : "hi")}
-            aria-label="Change language"
-          >
-            <Globe size={17} />
-            {text.language}
-          </button>
-
-          <button
-            type="button"
-            className="auth-control-btn"
-            onClick={toggleTheme}
-            aria-label="Change theme"
-          >
-            {isDark ? <Sun size={17} /> : <Moon size={17} />}
-            {isDark
-              ? (isHindi ? "लाइट मोड" : "Light")
-              : (isHindi ? "डार्क मोड" : "Dark")}
-          </button>
-        </div>
-      </div>
-
       {/* Main Split Layout */}
       <main className="auth-layout">
         {/* LEFT: Clinical Visual Banner */}

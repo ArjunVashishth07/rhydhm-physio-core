@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
-import { UserRound, LockKeyhole, Moon, Sun, Globe } from "lucide-react";
+import { UserRound, LockKeyhole } from "lucide-react";
 import doctorImage from "../../assets/login_page_photo.png";
 import "./LoginPage.css";
 import { useApp } from "../../context/AppContext";
@@ -10,7 +10,7 @@ import { useApp } from "../../context/AppContext";
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/auth`;
 
 function LoginPage() {
-  const { lang, theme, setLang, toggleTheme, loginUser } = useApp();
+  const { lang, theme, loginUser } = useApp();
   const navigate = useNavigate();
 
   const [email, setEmail] = useState("");
@@ -72,41 +72,6 @@ function LoginPage() {
   };
   return (
     <div className={`auth-page ${isDark ? "auth-dark" : "auth-light"}`}>
-      <div className="auth-topbar">
-        <Link to="/" className="auth-brand">
-          <span className="auth-brand-icon">
-            <UserRound size={22} />
-          </span>
-          <span>{text.clinic}</span>
-        </Link>
-
-        <div className="auth-controls">
-          <button
-            type="button"
-            className="auth-control-btn"
-            onClick={() => setLang(isHindi ? "en" : "hi")}
-            aria-label="Change language"
-          >
-            <Globe size={17} />
-            {text.language}
-          </button>
-
-          <button
-            type="button"
-            className="auth-control-btn"
-            onClick={() =>
-              toggleTheme(isDark ? "light" : "dark")
-            }
-            aria-label="Change theme"
-          >
-            {isDark ? <Sun size={17} /> : <Moon size={17} />}
-            {isDark
-              ? (isHindi ? "लाइट मोड" : "Light")
-              : (isHindi ? "डार्क मोड" : "Dark")}
-          </button>
-        </div>
-      </div>
-
       <main className="auth-layout">
         {/* LEFT: Image and welcome message */}
         <section className="auth-visual">

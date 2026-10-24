@@ -134,17 +134,12 @@ export const PatientDashboard = () => {
       <div className="container max-w-5xl">
         {/* TOP GREETING BANNER */}
         <div
-          className="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-4 text-white position-relative overflow-hidden"
-          style={{
-            background: 'linear-gradient(135deg, #423022 0%, #291d14 100%)',
-            border: '1px solid rgba(244, 217, 160, 0.22)'
-          }}
+          className="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-4 text-white position-relative overflow-hidden clinical-banner"
         >
           <div className="row align-items-center">
             <div className="col-md-8">
               <div
-                className="badge px-3 py-1.5 rounded-pill mb-2 fw-semibold"
-                style={{ backgroundColor: '#f4d9a0', color: '#3a2717' }}
+                className="badge px-3 py-1.5 rounded-pill mb-2 fw-semibold clinical-banner-badge"
               >
                 Patient Portal
               </div>
@@ -160,8 +155,7 @@ export const PatientDashboard = () => {
                 <button
                   type="button"
                   onClick={() => setShowBookingModal(true)}
-                  className="btn rounded-pill fw-bold px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2"
-                  style={{ backgroundColor: '#f4d9a0', color: '#3a2717', border: 'none' }}
+                  className="btn rounded-pill fw-bold px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2 clinical-banner-btn"
                 >
                   <Plus size={18} />
                   <span>{t('bookAppointment')}</span>

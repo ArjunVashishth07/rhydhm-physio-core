@@ -234,15 +234,10 @@ export const AdminDashboard = () => {
           <div className="col-md-5 col-lg-4">
             <div className="card border-0 shadow-lg rounded-4 overflow-hidden">
               <div
-                className="card-header text-white text-center py-4"
-                style={{
-                  background: 'linear-gradient(135deg, #423022 0%, #291d14 100%)',
-                  borderBottom: '1px solid rgba(244, 217, 160, 0.2)'
-                }}
+                className="card-header text-white text-center py-4 clinical-banner border-0"
               >
                 <div
-                  className="p-3 rounded-circle d-inline-flex mb-2"
-                  style={{ backgroundColor: '#f4d9a0', color: '#3a2717' }}
+                  className="p-3 rounded-circle d-inline-flex mb-2 clinical-modal-icon"
                 >
                   <Lock size={28} />
                 </div>
@@ -523,11 +518,7 @@ export const AdminDashboard = () => {
             <div className="modal-content border-0 shadow-lg rounded-4 overflow-hidden">
               {/* Modal Header */}
               <div
-                className="modal-header text-white p-4"
-                style={{
-                  background: 'linear-gradient(135deg, #423022 0%, #291d14 100%)',
-                  borderBottom: '1px solid rgba(244, 217, 160, 0.2)'
-                }}
+                className="modal-header text-white p-4 clinical-modal-header"
               >
                 <div>
                   <h4 className="modal-title fw-bold mb-0">{selectedApp.patientName}</h4>

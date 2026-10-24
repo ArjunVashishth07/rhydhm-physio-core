@@ -1,22 +1,38 @@
 :root {
-  /* Option B: Warm Osteopathy & Holistic Rehab Palette */
-  --amber-primary: #c8792c;
-  --amber-hover: #b2651e;
-  --gold-champagne: #f4d9a0;
-  --mocha-brown: #5b4632;
+  /* Classic Medical Light Theme (Crisp White + Teal Green) */
+  --teal-primary: #0d9488;
+  --teal-hover: #0f766e;
+  --teal-subtle: rgba(13, 148, 136, 0.1);
+  --teal-border: rgba(13, 148, 136, 0.25);
+  --teal-glow: rgba(13, 148, 136, 0.25);
 
-  /* Aliasing teal utilities to the warm palette for seamless global styling */
-  --teal-primary: #c8792c;
-  --teal-hover: #b2651e;
-  --teal-subtle: rgba(200, 121, 44, 0.12);
-  --teal-border: rgba(200, 121, 44, 0.28);
-  --sage-accent: #f4d9a0;
-
-  --canvas-bg: #faf8f5;
+  --canvas-bg: #ffffff;
   --surface-card: #ffffff;
-  --border-color: #e8dfd3;
-  --text-primary: #241e19;
-  --text-muted: #6e6154;
+  --border-color: #e2e8f0;
+  --text-primary: #0f172a;
+  --text-muted: #64748b;
+
+  /* Theme-adaptive surfaces & banners */
+  --banner-bg: #0d9488;
+  --banner-gradient: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  --banner-border: rgba(13, 148, 136, 0.25);
+  --banner-text: #ffffff;
+  --banner-badge-bg: #ffffff;
+  --banner-badge-color: #0d9488;
+  --banner-btn-bg: #ffffff;
+  --banner-btn-color: #0d9488;
+
+  --hero-gradient: linear-gradient(135deg, rgba(13, 148, 136, 0.08) 0%, rgba(13, 148, 136, 0.02) 100%);
+  --hero-border: rgba(13, 148, 136, 0.12);
+
+  --modal-header-gradient: linear-gradient(135deg, #0d9488 0%, #0f766e 100%);
+  --modal-icon-bg: #ffffff;
+  --modal-icon-color: #0d9488;
+
+  --footer-bg: #1e293b;
+  --footer-text: #94a3b8;
+  --footer-border: rgba(255, 255, 255, 0.08);
+
   font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
 }
 
@@ -31,6 +47,7 @@
   --bs-border-color-translucent: rgba(244, 217, 160, 0.12) !important;
   --bs-secondary-color: #ad9e8f !important;
 
+  /* Option B: Warm Osteopathy & Holistic Rehab for Dark Mode */
   --amber-primary: #d48b3b;
   --amber-hover: #e09b4c;
   --gold-champagne: #f4d9a0;
@@ -40,13 +57,34 @@
   --teal-hover: #e09b4c;
   --teal-subtle: rgba(212, 139, 59, 0.15);
   --teal-border: rgba(244, 217, 160, 0.25);
-  --sage-accent: #f4d9a0;
+  --teal-glow: rgba(212, 139, 59, 0.3);
 
   --canvas-bg: #141210;
   --surface-card: #1e1a17;
   --border-color: #332c25;
   --text-primary: #faf5ee;
   --text-muted: #ad9e8f;
+
+  /* Option B Warm Surfaces & Banners in Dark Mode */
+  --banner-bg: #2e2116;
+  --banner-gradient: linear-gradient(135deg, #423022 0%, #291d14 100%);
+  --banner-border: rgba(244, 217, 160, 0.22);
+  --banner-text: #ffffff;
+  --banner-badge-bg: #f4d9a0;
+  --banner-badge-color: #3a2717;
+  --banner-btn-bg: #f4d9a0;
+  --banner-btn-color: #3a2717;
+
+  --hero-gradient: linear-gradient(135deg, rgba(200, 121, 44, 0.09) 0%, rgba(91, 70, 50, 0.05) 100%);
+  --hero-border: rgba(200, 121, 44, 0.18);
+
+  --modal-header-gradient: linear-gradient(135deg, #423022 0%, #291d14 100%);
+  --modal-icon-bg: #f4d9a0;
+  --modal-icon-color: #3a2717;
+
+  --footer-bg: #0e0c0b;
+  --footer-text: #ad9e8f;
+  --footer-border: rgba(244, 217, 160, 0.12);
 }
 
 body {
@@ -63,7 +101,7 @@ body {
   min-height: 100vh;
 }
 
-/* Warm Holistic Brand Utilities */
+/* Custom Teal Utilities */
 .bg-teal {
   background-color: var(--teal-primary) !important;
 }
@@ -85,7 +123,7 @@ body {
   background-color: var(--teal-hover);
   border-color: var(--teal-hover);
   color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(200, 121, 44, 0.25);
+  box-shadow: 0 4px 14px var(--teal-glow);
 }
 
 .btn-outline-teal {
@@ -105,6 +143,35 @@ body {
 .bg-teal-subtle {
   background-color: var(--teal-subtle) !important;
   color: var(--teal-primary) !important;
+}
+
+/* Theme-Adaptive Clinical Banners */
+.clinical-banner {
+  background: var(--banner-gradient) !important;
+  border: 1px solid var(--banner-border) !important;
+  color: var(--banner-text) !important;
+}
+
+.clinical-banner-badge {
+  background-color: var(--banner-badge-bg) !important;
+  color: var(--banner-badge-color) !important;
+}
+
+.clinical-banner-btn {
+  background-color: var(--banner-btn-bg) !important;
+  color: var(--banner-btn-color) !important;
+  border: none !important;
+}
+
+.clinical-modal-header {
+  background: var(--modal-header-gradient) !important;
+  border-bottom: 1px solid var(--banner-border) !important;
+  color: #ffffff !important;
+}
+
+.clinical-modal-icon {
+  background-color: var(--modal-icon-bg) !important;
+  color: var(--modal-icon-color) !important;
 }
 
 /* Polished Warm Card & Elevation */

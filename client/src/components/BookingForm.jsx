@@ -188,11 +188,7 @@ export const BookingForm = ({ onBookingSuccess } = {}) => {
   return (
     <div className="card border-0 shadow-lg rounded-4 overflow-hidden" id="booking-form">
       <div
-        className="card-header text-white p-4 text-center"
-        style={{
-          background: 'linear-gradient(135deg, #423022 0%, #291d14 100%)',
-          borderBottom: '1px solid rgba(244, 217, 160, 0.2)'
-        }}
+        className="card-header text-white p-4 text-center clinical-banner border-0"
       >
         <h3 className="fw-bold mb-1 d-flex align-items-center justify-content-center gap-2">
           <Calendar size={26} />

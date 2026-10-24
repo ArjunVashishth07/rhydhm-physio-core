@@ -81,8 +81,8 @@ export const Home = () => {
       <section
         className="hero-section text-center py-5 px-3 position-relative overflow-hidden"
         style={{
-          background: 'linear-gradient(135deg, rgba(200, 121, 44, 0.09) 0%, rgba(91, 70, 50, 0.05) 100%)',
-          borderBottom: '1px solid rgba(200, 121, 44, 0.18)'
+          background: 'var(--hero-gradient)',
+          borderBottom: '1px solid var(--hero-border)'
         }}
       >
         <div className="container py-4">
@@ -242,32 +242,36 @@ export const Home = () => {
           <div className="row g-4 align-items-stretch">
             {/* Address & Timings */}
             <div className="col-md-6 text-start">
-              <div className="card h-100 border-0 shadow-sm rounded-4 p-4">
-                <h4 className="fw-bold text-teal mb-3">{t('brand')}</h4>
+              <div className="card h-100 border-0 shadow-sm rounded-4 p-4 text-white clinical-banner">
+                <h4 className="fw-bold text-white mb-3">{t('brand')}</h4>
 
                 <div className="d-flex align-items-start gap-3 mb-3">
-                  <MapPin size={22} className="text-teal flex-shrink-0 mt-1" />
+                  <MapPin size={22} className="text-white-50 flex-shrink-0 mt-1" />
                   <div>
-                    <strong className="d-block text-body">{t('addressLabel')}</strong>
-                    <span className="text-muted small">{t('address')}</span>
+                    <strong className="d-block text-white">{t('addressLabel')}</strong>
+                    <span className="text-white-50 small">{t('address')}</span>
                   </div>
                 </div>
 
                 <div className="d-flex align-items-start gap-3 mb-3">
-                  <Clock size={22} className="text-teal flex-shrink-0 mt-1" />
+                  <Clock size={22} className="text-white-50 flex-shrink-0 mt-1" />
                   <div>
-                    <strong className="d-block text-body">{t('timingsLabel')}</strong>
-                    <span className="text-muted small">{t('timings')} (Monday – Saturday)</span>
+                    <strong className="d-block text-white">{t('timingsLabel')}</strong>
+                    <span className="text-white-50 small">{t('timings')} (Monday – Saturday)</span>
                   </div>
                 </div>
 
                 <div className="d-flex align-items-start gap-3">
-                  <Phone size={22} className="text-teal flex-shrink-0 mt-1" />
+                  <Phone size={22} className="text-white-50 flex-shrink-0 mt-1" />
                   <div>
-                    <strong className="d-block text-body">Phone Numbers</strong>
+                    <strong className="d-block text-white">Phone Numbers</strong>
                     <div className="d-flex gap-2 flex-wrap mt-1">
                       {clinicDetails.contacts.map((c, i) => (
-                        <a key={i} href={`tel:${c}`} className="btn btn-sm btn-outline-teal rounded-pill px-3">
+                        <a
+                          key={i}
+                          href={`tel:${c}`}
+                          className="btn btn-sm clinical-banner-btn rounded-pill px-3 fw-bold shadow-sm"
+                        >
                           {c}
                         </a>
                       ))}
@@ -280,33 +284,27 @@ export const Home = () => {
             {/* Doctor Info */}
             <div className="col-md-6 text-start">
               <div
-                className="card h-100 border-0 shadow-sm rounded-4 p-4 text-white"
-                style={{
-                  background: 'linear-gradient(135deg, #423022 0%, #291d14 100%)',
-                  border: '1px solid rgba(244, 217, 160, 0.22)'
-                }}
+                className="card h-100 border-0 shadow-sm rounded-4 p-4 text-white clinical-banner"
               >
                 <div className="d-flex align-items-center gap-3 mb-3">
                   <div
-                    className="p-3 rounded-circle d-flex align-items-center justify-content-center"
-                    style={{ backgroundColor: '#f4d9a0', color: '#3a2717' }}
+                    className="p-3 rounded-circle d-flex align-items-center justify-content-center clinical-banner-badge"
                   >
                     <Stethoscope size={28} />
                   </div>
                   <div>
                     <h4 className="fw-bold mb-0 text-white">{t('doctor')}</h4>
-                    <p className="mb-0" style={{ color: '#f4d9a0' }}>{t('qualifications')}</p>
+                    <p className="mb-0 opacity-75">{t('qualifications')}</p>
                   </div>
                 </div>
-                <p className="small mb-3" style={{ color: 'rgba(250, 245, 238, 0.85)' }}>
+                <p className="small mb-3 text-white-50">
                   {t('designation')} with extensive clinical experience treating musculoskeletal, spinal, and neurological conditions using advanced evidence-based modalities.
                 </p>
-                <div className="mt-auto pt-3 border-top d-flex justify-content-between align-items-center flex-wrap gap-2" style={{ borderColor: 'rgba(244, 217, 160, 0.25)' }}>
-                  <span className="small" style={{ color: 'rgba(250, 245, 238, 0.75)' }}>Need assistance? Call directly</span>
+                <div className="mt-auto pt-3 border-top border-white-50 d-flex justify-content-between align-items-center flex-wrap gap-2">
+                  <span className="small text-white-50">Need assistance? Call directly</span>
                   <a
                     href={`tel:${clinicDetails.contacts[0]}`}
-                    className="btn btn-sm rounded-pill fw-bold px-3 shadow-sm"
-                    style={{ backgroundColor: '#f4d9a0', color: '#3a2717', border: 'none' }}
+                    className="btn btn-sm rounded-pill fw-bold px-3 shadow-sm clinical-banner-btn"
                   >
                     {clinicDetails.contacts[0]}
                   </a>
