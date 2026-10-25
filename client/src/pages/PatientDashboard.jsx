@@ -229,12 +229,15 @@ export const PatientDashboard = () => {
     user.fullName || appointments.find((a) => a.patientName)?.patientName || (userPhone ? `+91 ${userPhone}` : 'Patient');
 
   return (
-    <div className="patient-dashboard pt-5 mt-4 pb-5 px-3 bg-body-tertiary min-vh-100 text-start">
-      <div className="container max-w-5xl">
+    <div
+      className="patient-dashboard pt-20 pb-5 bg-body-tertiary min-vh-100 text-start"
+      style={{ paddingTop: '5.25rem' }}
+    >
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6" style={{ maxWidth: '64rem' }}>
         {/* TOP BANNER OPTIMIZATION: Stacked banners pile removed. Only 1 compact critical notice shown if urgent */}
         {activeCriticalAnnouncement && (
           <div
-            className="alert border-0 shadow-sm rounded-4 p-3 mb-4 d-flex align-items-center justify-content-between flex-wrap gap-2.5"
+            className="alert border-0 shadow-sm rounded-4 p-3.5 sm:p-4 mb-4 d-flex align-items-center justify-content-between flex-wrap gap-2.5"
             style={{
               background:
                 theme === 'dark'
@@ -251,8 +254,11 @@ export const PatientDashboard = () => {
           >
             <div className="d-flex align-items-center gap-3">
               <div
-                className="p-2.5 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                className="w-9 h-9 min-w-[36px] rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
                 style={{
+                  width: '36px',
+                  height: '36px',
+                  minWidth: '36px',
                   background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
                   color: '#ffffff',
                   boxShadow: '0 2px 8px rgba(239, 68, 68, 0.4)'
@@ -274,14 +280,14 @@ export const PatientDashboard = () => {
                     CRITICAL NOTICE
                   </span>
                   <strong
-                    className="fw-bold"
-                    style={{ color: theme === 'dark' ? '#ffffff' : '#991b1b', fontSize: '0.95rem' }}
+                    className="text-sm sm:text-base font-semibold"
+                    style={{ color: theme === 'dark' ? '#ffffff' : '#991b1b' }}
                   >
                     {activeCriticalAnnouncement.title}
                   </strong>
                 </div>
                 <p
-                  className="mb-0 small text-truncate"
+                  className="mb-0 text-xs sm:text-sm leading-relaxed text-truncate"
                   style={{
                     maxWidth: '560px',
                     color: theme === 'dark' ? '#fca5a5' : '#7f1d1d'
@@ -324,7 +330,7 @@ export const PatientDashboard = () => {
 
         {/* TOP GREETING BANNER */}
         <div
-          className="card border-0 shadow-sm rounded-4 p-4 p-md-5 mb-4 text-white position-relative overflow-hidden clinical-banner"
+          className="card border-0 shadow-sm rounded-4 p-5 sm:p-6 mb-4 text-white position-relative overflow-hidden clinical-banner"
         >
           <div className="row align-items-center">
             <div className="col-md-8">
@@ -333,9 +339,9 @@ export const PatientDashboard = () => {
               >
                 Patient Portal
               </div>
-              <h2 className="fw-extrabold mb-1 text-white">
+              <h3 className="fw-bold mb-1 text-white">
                 {lang === 'hi' ? 'स्वागत है,' : 'Welcome back,'} {patientDisplayName}
-              </h2>
+              </h3>
               <p className="text-white-50 mb-3 small">
                 Mobile: +91 {userPhone} • Manage your physiotherapy appointments, exercise routines, and doctor prescriptions.
               </p>
@@ -345,9 +351,9 @@ export const PatientDashboard = () => {
                 <button
                   type="button"
                   onClick={() => setShowBookingModal(true)}
-                  className="btn rounded-pill fw-bold px-4 py-2 shadow-sm d-inline-flex align-items-center gap-2 clinical-banner-btn"
+                  className="btn rounded-pill fw-semibold px-3.5 py-1.5 shadow-sm d-inline-flex align-items-center gap-2 clinical-banner-btn"
                 >
-                  <Plus size={18} />
+                  <Plus size={17} />
                   <span>{t('bookAppointment')}</span>
                 </button>
                 <button
@@ -355,17 +361,17 @@ export const PatientDashboard = () => {
                     fetchPatientHistory();
                     fetchPatientAnnouncements();
                   }}
-                  className="btn btn-outline-light rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1.5"
+                  className="btn btn-outline-light rounded-pill px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1.5"
                   disabled={loading || announcementsLoading}
                 >
-                  <RefreshCw size={16} className={loading || announcementsLoading ? 'spin' : ''} />
+                  <RefreshCw size={15} className={loading || announcementsLoading ? 'spin' : ''} />
                   <span>Refresh</span>
                 </button>
               </div>
             </div>
 
             {/* Quick KPI Glassmorphism Stat Cards */}
-            <div className="col-md-4 mt-4 mt-md-0">
+            <div className="col-md-4 mt-3 mt-md-0">
               <div className="row g-2">
                 <div className="col-6">
                   <div
@@ -376,12 +382,12 @@ export const PatientDashboard = () => {
                       backdropFilter: 'blur(8px)'
                     }}
                   >
-                    <span className="small d-block fw-semibold mb-1" style={{ color: '#ffffff', opacity: 0.95 }}>
+                    <span className="small d-block fw-semibold mb-1" style={{ color: '#ffffff', opacity: 0.95, fontSize: '0.8rem' }}>
                       Total Sessions
                     </span>
-                    <h3 className="fw-extrabold mb-0" style={{ color: '#ffffff' }}>
+                    <h4 className="fw-bold mb-0" style={{ color: '#ffffff' }}>
                       {totalSessions}
-                    </h3>
+                    </h4>
                   </div>
                 </div>
                 <div className="col-6">
@@ -393,12 +399,12 @@ export const PatientDashboard = () => {
                       backdropFilter: 'blur(8px)'
                     }}
                   >
-                    <span className="small d-block fw-semibold mb-1" style={{ color: '#ffffff', opacity: 0.95 }}>
+                    <span className="small d-block fw-semibold mb-1" style={{ color: '#ffffff', opacity: 0.95, fontSize: '0.8rem' }}>
                       Upcoming Visits
                     </span>
-                    <h3 className="fw-extrabold mb-0" style={{ color: '#ffffff' }}>
+                    <h4 className="fw-bold mb-0" style={{ color: '#ffffff' }}>
                       {upcomingVisits}
-                    </h3>
+                    </h4>
                   </div>
                 </div>
               </div>
@@ -997,11 +1003,11 @@ export const PatientDashboard = () => {
                       </div>
 
                       {/* Card Body: Title & Full Description */}
-                      <div className="p-4 pt-3">
-                        <h5 className="announcement-card-title mb-2">
+                      <div className="p-3.5 sm:p-4 pt-2">
+                        <h5 className="announcement-card-title text-sm sm:text-base font-semibold mb-1.5">
                           {item.title}
                         </h5>
-                        <p className="announcement-card-desc mb-0">
+                        <p className="announcement-card-desc text-xs sm:text-sm leading-relaxed mb-0">
                           {item.description}
                         </p>
                       </div>

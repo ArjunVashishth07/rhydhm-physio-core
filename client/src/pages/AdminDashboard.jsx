@@ -232,22 +232,25 @@ export const AdminDashboard = () => {
   // Login Gate if not authenticated
   if (!isAuthenticated) {
     return (
-      <div className="container pt-5 mt-5 pb-5 my-4">
+      <div
+        className="max-w-5xl mx-auto px-4 sm:px-6 pt-20 pb-5"
+        style={{ paddingTop: '5.25rem' }}
+      >
         <div className="row justify-content-center">
           <div className="col-md-5 col-lg-4">
             <div className="card border-0 shadow-lg rounded-4 overflow-hidden">
               <div
-                className="card-header text-white text-center py-4 clinical-banner border-0"
+                className="card-header text-white text-center py-3.5 clinical-banner border-0"
               >
                 <div
-                  className="p-3 rounded-circle d-inline-flex mb-2 clinical-modal-icon"
+                  className="p-2.5 rounded-circle d-inline-flex mb-2 clinical-modal-icon"
                 >
-                  <Lock size={28} />
+                  <Lock size={24} />
                 </div>
-                <h4 className="fw-bold mb-0">Doctor Admin Portal</h4>
+                <h5 className="fw-bold mb-0">Doctor Admin Portal</h5>
                 <small className="text-white-50">RHYDHM Physio & Fitness Center</small>
               </div>
-              <div className="card-body p-4">
+              <div className="card-body p-3.5 sm:p-4">
                 {passcodeError && (
                   <div className="alert alert-danger small py-2 mb-3">{passcodeError}</div>
                 )}
@@ -256,7 +259,7 @@ export const AdminDashboard = () => {
                     <label className="form-label fw-semibold text-secondary small">Enter Passcode / PIN</label>
                     <input
                       type="password"
-                      className="form-control form-control-lg text-center fw-bold"
+                      className="form-control text-center fw-bold py-2 px-3 text-sm"
                       placeholder="••••"
                       value={passcode}
                       onChange={(e) => setPasscode(e.target.value)}
@@ -265,7 +268,7 @@ export const AdminDashboard = () => {
                   </div>
                   <button
                     type="submit"
-                    className="btn btn-teal w-100 btn-lg rounded-pill fw-bold text-white shadow-sm"
+                    className="btn btn-teal w-100 rounded-pill fw-bold text-white shadow-sm py-2 px-4 text-sm"
                   >
                     Unlock Portal
                   </button>
@@ -279,50 +282,53 @@ export const AdminDashboard = () => {
   }
 
   return (
-    <div className="admin-dashboard pt-5 mt-4 pb-5 px-3 bg-body-tertiary min-vh-100">
-      <div className="container-fluid max-w-7xl">
+    <div
+      className="admin-dashboard pt-20 pb-5 bg-body-tertiary min-vh-100 text-start"
+      style={{ paddingTop: '5.25rem' }}
+    >
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6" style={{ maxWidth: '72rem' }}>
         {/* Header Bar */}
-        <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
+        <div className="d-flex justify-content-between align-items-center mb-3.5 flex-wrap gap-2.5">
           <div className="text-start">
-            <span className="badge bg-teal-subtle text-teal px-3 py-1.5 rounded-pill mb-1 fw-semibold">
+            <span className="badge bg-teal-subtle text-teal px-3 py-1 rounded-pill mb-1 fw-semibold small">
               Doctor Management System
             </span>
-            <h2 className="fw-bold text-teal mb-0">Dr. Neha Sharma (PT) — Dashboard</h2>
+            <h2 className="text-2xl sm:text-3xl fw-bold text-teal mb-0">Dr. Neha Sharma (PT) — Dashboard</h2>
           </div>
           <div className="d-flex align-items-center gap-2">
             <button
               onClick={fetchAppointments}
-              className="btn btn-outline-teal btn-sm rounded-pill d-flex align-items-center gap-1 px-3 py-2 fw-semibold"
+              className="btn btn-outline-teal btn-sm rounded-pill d-flex align-items-center gap-1.5 px-3 py-1.5 text-sm fw-semibold"
               disabled={loading}
             >
-              <RefreshCw size={16} className={loading ? 'spin' : ''} />
+              <RefreshCw size={15} className={loading ? 'spin' : ''} />
               <span>Refresh Data</span>
             </button>
             <button
               onClick={handleLogout}
-              className="btn btn-outline-secondary btn-sm rounded-pill d-flex align-items-center gap-1 px-3 py-2 fw-semibold"
+              className="btn btn-outline-secondary btn-sm rounded-pill d-flex align-items-center gap-1.5 px-3 py-1.5 text-sm fw-semibold"
               title="Lock Admin Portal"
             >
-              <Lock size={16} />
+              <Lock size={15} />
               <span>Lock Portal</span>
             </button>
           </div>
         </div>
 
         {/* PRIMARY MANAGEMENT TABS */}
-        <div className="d-flex align-items-center gap-2 mb-4 border-bottom pb-3">
+        <div className="d-flex align-items-center gap-2 mb-3.5 border-bottom pb-2.5">
           <button
             type="button"
             onClick={() => setMainTab('appointments')}
-            className={`btn rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 transition-all ${
+            className={`btn rounded-pill px-3.5 py-1.5 text-sm fw-semibold d-inline-flex align-items-center gap-2 transition-all ${
               mainTab === 'appointments'
                 ? 'btn-teal text-white shadow-sm'
                 : 'btn-outline-secondary'
             }`}
           >
-            <Calendar size={18} />
+            <Calendar size={16} />
             <span>Appointments</span>
-            <span className="badge rounded-pill bg-white text-dark ms-1 opacity-90 px-2 py-0.5">
+            <span className="badge rounded-pill bg-white text-dark ms-1 opacity-90 px-2 py-0.5 small">
               {appointments.length}
             </span>
           </button>
@@ -330,13 +336,13 @@ export const AdminDashboard = () => {
           <button
             type="button"
             onClick={() => setMainTab('announcements')}
-            className={`btn rounded-pill px-4 py-2 fw-bold d-inline-flex align-items-center gap-2 transition-all ${
+            className={`btn rounded-pill px-3.5 py-1.5 text-sm fw-semibold d-inline-flex align-items-center gap-2 transition-all ${
               mainTab === 'announcements'
                 ? 'btn-teal text-white shadow-sm'
                 : 'btn-outline-secondary'
             }`}
           >
-            <Megaphone size={18} />
+            <Megaphone size={16} />
             <span>Announcements</span>
           </button>
         </div>
@@ -348,52 +354,52 @@ export const AdminDashboard = () => {
         {mainTab === 'appointments' && (
           <>
             {/* TOP KPI CARDS */}
-        <div className="row g-3 mb-4">
+        <div className="row g-2.5 mb-3.5">
           <div className="col-6 col-md-3">
-            <div className="card border-0 shadow-sm rounded-4 p-4 bg-body d-flex flex-column justify-content-between h-100" style={{ minHeight: '120px' }}>
+            <div className="card border-0 shadow-sm rounded-4 p-3 sm:p-3.5 bg-body d-flex flex-column justify-content-between h-100">
               <div className="d-flex align-items-center justify-content-between mb-2">
                 <span className="text-muted small fw-semibold">Total Bookings</span>
                 <div className="p-2 bg-primary-subtle text-primary rounded-circle d-flex align-items-center justify-content-center">
-                  <Users size={20} />
+                  <Users size={18} />
                 </div>
               </div>
-              <h2 className="fs-2 fw-bold m-0">{totalCount}</h2>
+              <h3 className="h4 fw-bold m-0">{totalCount}</h3>
             </div>
           </div>
 
           <div className="col-6 col-md-3">
-            <div className="card border-0 shadow-sm rounded-4 p-4 bg-body d-flex flex-column justify-content-between h-100" style={{ minHeight: '120px' }}>
+            <div className="card border-0 shadow-sm rounded-4 p-3 sm:p-3.5 bg-body d-flex flex-column justify-content-between h-100">
               <div className="d-flex align-items-center justify-content-between mb-2">
                 <span className="text-muted small fw-semibold">Pending</span>
                 <div className="p-2 bg-warning-subtle text-warning-emphasis rounded-circle d-flex align-items-center justify-content-center">
-                  <Clock size={20} />
+                  <Clock size={18} />
                 </div>
               </div>
-              <h2 className="fs-2 fw-bold m-0 text-warning-emphasis">{pendingCount}</h2>
+              <h3 className="h4 fw-bold m-0 text-warning-emphasis">{pendingCount}</h3>
             </div>
           </div>
 
           <div className="col-6 col-md-3">
-            <div className="card border-0 shadow-sm rounded-4 p-4 bg-body d-flex flex-column justify-content-between h-100" style={{ minHeight: '120px' }}>
+            <div className="card border-0 shadow-sm rounded-4 p-3 sm:p-3.5 bg-body d-flex flex-column justify-content-between h-100">
               <div className="d-flex align-items-center justify-content-between mb-2">
                 <span className="text-muted small fw-semibold">Confirmed</span>
                 <div className="p-2 bg-info-subtle text-info-emphasis rounded-circle d-flex align-items-center justify-content-center">
-                  <Calendar size={20} />
+                  <Calendar size={18} />
                 </div>
               </div>
-              <h2 className="fs-2 fw-bold m-0 text-info-emphasis">{confirmedCount}</h2>
+              <h3 className="h4 fw-bold m-0 text-info-emphasis">{confirmedCount}</h3>
             </div>
           </div>
 
           <div className="col-6 col-md-3">
-            <div className="card border-0 shadow-sm rounded-4 p-4 bg-body d-flex flex-column justify-content-between h-100" style={{ minHeight: '120px' }}>
+            <div className="card border-0 shadow-sm rounded-4 p-3 sm:p-3.5 bg-body d-flex flex-column justify-content-between h-100">
               <div className="d-flex align-items-center justify-content-between mb-2">
                 <span className="text-muted small fw-semibold">Completed Today</span>
                 <div className="p-2 bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center">
-                  <CheckCircle2 size={20} />
+                  <CheckCircle2 size={18} />
                 </div>
               </div>
-              <h2 className="fs-2 fw-bold m-0 text-success">{completedTodayCount}</h2>
+              <h3 className="h4 fw-bold m-0 text-success">{completedTodayCount}</h3>
             </div>
           </div>
         </div>

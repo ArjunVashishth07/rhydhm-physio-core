@@ -84,11 +84,11 @@
 .auth-layout {
   display: grid;
   grid-template-columns: 1fr 0.95fr;
-  max-width: 1200px;
-  min-height: 640px;
+  max-width: 960px;
+  min-height: 520px;
   margin: 0 auto;
   overflow: hidden;
-  border-radius: 26px;
+  border-radius: 20px;
   background: var(--auth-card-bg);
   box-shadow: 0 16px 45px rgba(18, 76, 74, 0.12);
   border: 1px solid var(--auth-border);
@@ -97,7 +97,7 @@
 /* Left image */
 .auth-visual {
   position: relative;
-  min-height: 640px;
+  min-height: 520px;
   overflow: hidden;
   background: #a6dfd9;
 }
@@ -183,37 +183,37 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(22px, 5vw, 65px);
+  padding: clamp(20px, 3.5vw, 40px);
   background: var(--auth-card-bg);
 }
 
 .auth-form-card {
   width: 100%;
-  max-width: 410px;
+  max-width: 390px;
 }
 
 .auth-form-card.auth-signup-card {
-  max-width: 450px;
+  max-width: 420px;
 }
 
 .auth-form-card.auth-signup-card .auth-heading {
-  margin-bottom: 20px;
+  margin-bottom: 16px;
 }
 
 .auth-form-card.auth-signup-card .auth-field {
-  margin-bottom: 14px;
+  margin-bottom: 12px;
 }
 
 .auth-form-card.auth-signup-card .auth-input-wrap {
-  min-height: 48px;
+  min-height: 42px;
 }
 
 .auth-form-card.auth-signup-card .auth-input-wrap input {
-  padding: 10px 0;
+  padding: 8px 0;
 }
 
 .auth-heading {
-  margin-bottom: 32px;
+  margin-bottom: 22px;
 }
 
 .auth-small-label {
@@ -224,38 +224,38 @@
 }
 
 .auth-heading h2 {
-  margin: 12px 0 8px;
+  margin: 8px 0 6px;
   color: var(--auth-text);
-  font-size: clamp(27px, 3vw, 36px);
+  font-size: clamp(20px, 2.2vw, 26px);
   font-weight: 750;
 }
 
 .auth-heading p {
   margin: 0;
   color: var(--auth-muted);
-  font-size: 14px;
+  font-size: 13px;
 }
 
 .auth-field {
-  margin-bottom: 22px;
+  margin-bottom: 16px;
 }
 
 .auth-field label {
   display: block;
-  margin-bottom: 9px;
+  margin-bottom: 7px;
   color: var(--auth-text);
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 650;
 }
 
 .auth-input-wrap {
   display: flex;
   align-items: center;
-  gap: 11px;
-  min-height: 52px;
-  padding: 0 14px;
+  gap: 10px;
+  min-height: 44px;
+  padding: 0 13px;
   border: 1px solid var(--auth-border);
-  border-radius: 12px;
+  border-radius: 10px;
   background: var(--auth-input-bg);
   color: var(--auth-muted);
   transition: border-color 0.2s;

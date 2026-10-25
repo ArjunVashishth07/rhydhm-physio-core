@@ -1,3 +1,9 @@
+html {
+  font-size: 14.5px; /* Default browser is 16px. Bringing it to ~14-14.5px brings an immediate, balanced 85-90% natural scaling across all Tailwind/Bootstrap rem utility classes */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 :root {
   /* Classic Medical Light Theme (Crisp White + Teal Green) */
   --teal-primary: #0d9488;
@@ -287,3 +293,40 @@ body {
 .transition-all {
   transition: all 0.25s ease;
 }
+
+/* ==========================================================================
+   STANDARDIZED GLOBAL CONTAINERS & NORMALIZED TYPOGRAPHY DENSITIES
+   ========================================================================== */
+.max-w-7xl {
+  max-width: 80rem !important;
+  width: 100%;
+}
+
+.max-w-6xl {
+  max-width: 72rem !important;
+  width: 100%;
+}
+
+.max-w-5xl {
+  max-width: 64rem !important;
+  width: 100%;
+}
+
+.max-w-4xl {
+  max-width: 56rem !important;
+  width: 100%;
+}
+
+.max-w-2xl {
+  max-width: 42rem !important;
+  width: 100%;
+}
+
+.leading-normal {
+  line-height: 1.5 !important;
+}
+
+.leading-relaxed {
+  line-height: 1.625 !important;
+}
+

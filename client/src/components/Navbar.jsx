@@ -23,7 +23,7 @@ export const Navbar = () => {
         borderBottom: theme === 'dark' ? '1px solid #332c25' : '1px solid #e8dfd3'
       }}
     >
-      <div className="container">
+      <div className="container max-w-6xl">
         {/* Brand / Logo */}
         <Link className="navbar-brand d-flex align-items-center gap-2" to="/">
           <div

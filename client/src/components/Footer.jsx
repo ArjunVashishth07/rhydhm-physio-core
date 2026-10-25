@@ -1,10 +1,17 @@
 import React from 'react';
+import { useLocation } from 'react-router-dom';
 import { useApp } from '../context/AppContext';
 import { clinicDetails } from '../data/clinicData';
 import { Activity, Phone, MapPin, Clock, Heart } from 'lucide-react';
 
 export const Footer = () => {
   const { t, theme } = useApp();
+  const location = useLocation();
+
+  // Restrict footer to Home/landing page only ('/')
+  if (location.pathname !== '/') {
+    return null;
+  }
 
   return (
     <footer
@@ -15,7 +22,7 @@ export const Footer = () => {
         borderTop: '1px solid var(--footer-border)'
       }}
     >
-      <div className="container text-start">
+      <div className="container max-w-6xl text-start">
         <div className="row g-4 mb-4">
           {/* Clinic Brand & Info */}
           <div className="col-md-5">
