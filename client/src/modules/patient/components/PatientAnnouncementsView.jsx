@@ -59,10 +59,10 @@ export const PatientAnnouncementsView = ({
                   key={filterOption}
                   type="button"
                   onClick={() => setFilter(filterOption)}
-                  className={`btn btn-sm rounded-pill px-3 py-1.5 fw-semibold transition-all d-inline-flex align-items-center gap-2 ${
+                  className={`btn btn-sm rounded-pill px-3 py-1.5 fw-semibold transition-all d-inline-flex align-items-center gap-2 mx-1 ${
                     isSelected
                       ? 'btn-teal text-white shadow-xs'
-                      : 'btn-outline-secondary border-0 bg-body-tertiary text-muted'
+                      : 'btn-outline-secondary border-0 bg-body-secondary text-muted'
                   }`}
                   style={{ fontSize: '0.82rem' }}
                 >

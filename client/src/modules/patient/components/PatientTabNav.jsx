@@ -1,5 +1,5 @@
 import React from 'react';
-import { Calendar, FileText, LogOut } from 'lucide-react';
+import { Calendar, FileText, LogOut, Megaphone } from 'lucide-react';
 
 export const PatientTabNav = ({
   activeTab = 'appointments',
@@ -62,20 +62,9 @@ export const PatientTabNav = ({
                 : 'btn-ghost text-secondary'
             }`}
           >
-            <span role="img" aria-label="announcements">📢</span>
+            <Megaphone size={17} className="me-1.5 " />
             <span>{lang === 'hi' ? 'सूचनाएं' : 'Announcements'}</span>
-            <span
-              className={`badge rounded-pill px-2 py-0.5 fw-bold ${
-                activeTab === 'announcements'
-                  ? 'bg-white text-teal'
-                  : announcementsCount > 0
-                  ? 'bg-teal text-white'
-                  : 'bg-secondary text-white'
-              }`}
-              style={{ fontSize: '0.75rem' }}
-            >
-              {announcementsCount}
-            </span>
+            <span className="ms-1.5 opacity-90">({announcementsCount})</span>
           </button>
         </div>
       </div>

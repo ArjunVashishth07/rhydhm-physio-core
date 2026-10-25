@@ -110,13 +110,13 @@ export const Home = () => {
               className="btn btn-teal rounded-pill px-4 py-2 text-sm fw-semibold shadow-sm d-flex align-items-center gap-2"
             >
               <Calendar size={18} />
-              <span>{user ? (lang === 'hi' ? 'अपॉइंटमेंट बुक करें (डैशबोर्ड)' : 'Book Appointment (Dashboard)') : t('bookAppointment')}</span>
+              <span>{user ? (lang === 'hi' ? 'अपॉइंटमेंट बुक करें ' : 'Book Appointment') : t('bookAppointment')}</span>
               <ArrowRight size={16} />
             </button>
 
             <a
               href={`tel:${clinicDetails.contacts[0]}`}
-              className="btn btn-outline-teal rounded-pill px-4 py-2 text-sm fw-semibold d-flex align-items-center gap-2"
+              className="btn btn-outline-teal rounded-pill px-4 py-2 text-sm fw-semibold d-flex align-items-center gap-2 ms-2"
             >
               <Phone size={18} />
               <span>{t('callNow')}</span>
@@ -179,7 +179,7 @@ export const Home = () => {
       {/* CREDENTIALS & HOSPITAL EXPERIENCE SECTION */}
       <section className="py-4 sm:py-5 bg-body-tertiary" id="doctor-about">
         <div className="max-w-6xl mx-auto px-4 sm:px-8">
-          <div className="text-center mb-3.5 sm:mb-4">
+          <div className="text-center mb-3.5 sm:mb-4 mb-3">
             <h2 className="text-2xl sm:text-3xl fw-bold text-teal mb-1">{t('aboutDoctor')}</h2>
             <p className="text-sm text-muted mb-0">{clinicDetails.doctor} ({clinicDetails.qualifications})</p>
           </div>
@@ -189,7 +189,7 @@ export const Home = () => {
             <div className="col-md-6 col-lg-5">
               <div className="card h-100 border-0 shadow-sm rounded-4 p-3.5 sm:p-4 card-hover">
                 <div className="d-flex align-items-center gap-2.5 mb-2.5">
-                  <div className="p-2.5 rounded-circle bg-teal-subtle text-teal flex-shrink-0">
+                  <div className="p-2.5 rounded-circle bg-teal-subtle text-teal flex-shrink-0 me-2">
                     <ShieldCheck size={24} />
                   </div>
                   <div>
@@ -212,7 +212,7 @@ export const Home = () => {
             <div className="col-md-6 col-lg-7">
               <div className="card h-100 border-0 shadow-sm rounded-4 p-3.5 sm:p-4 card-hover">
                 <div className="d-flex align-items-center gap-2.5 mb-2.5">
-                  <div className="p-2.5 rounded-circle bg-teal-subtle text-teal flex-shrink-0">
+                  <div className="p-2.5 rounded-circle bg-teal-subtle text-teal flex-shrink-0 me-2">
                     <Stethoscope size={24} />
                   </div>
                   <div>
@@ -220,7 +220,7 @@ export const Home = () => {
                     <small className="text-muted">Senior Roles in Premier Government & Private Hospitals</small>
                   </div>
                 </div>
-                <div className="row g-2">
+                <div className="row g-2 mt-2">
                   {clinicDetails.experience.map((exp, idx) => (
                     <div key={idx} className="col-12 col-sm-6">
                       <div className="p-2.5 rounded-3 bg-body border d-flex align-items-start gap-2 h-100">
@@ -290,7 +290,6 @@ export const Home = () => {
                   <div
                     className="p-2.5 rounded-circle d-flex align-items-center justify-content-center clinical-banner-badge flex-shrink-0"
                   >
-                    <Stethoscope size={24} />
                   </div>
                   <div>
                     <h5 className="fw-bold mb-0 text-white fs-6">{t('doctor')}</h5>
@@ -304,7 +303,7 @@ export const Home = () => {
                   <span className="small text-white-50">Need assistance? Call directly</span>
                   <a
                     href={`tel:${clinicDetails.contacts[0]}`}
-                    className="btn btn-sm rounded-pill fw-bold px-3 py-1 shadow-sm clinical-banner-btn"
+                    className="btn btn-sm rounded-pill fw-bold px-3 py-1 shadow-sm clinical-banner-btn my-1"
                   >
                     {clinicDetails.contacts[0]}
                   </a>

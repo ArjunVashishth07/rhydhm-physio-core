@@ -22,6 +22,7 @@ import {
 } from '../modules/announcements';
 
 export const AdminAnnouncements = () => {
+  const [filter, setFilter] = useState('All');
   const [announcements, setAnnouncements] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
@@ -351,7 +352,7 @@ export const AdminAnnouncements = () => {
                     : ['Live', 'Dismissed', 'Expired'].includes(tab)
                     ? announcements.filter((a) => a.status === tab).length
                     : announcements.filter((a) => a.type === tab.toLowerCase()).length;
-
+                    const isSelected = filter === tab;
                 return (
                   <button
                     key={tab}
@@ -364,9 +365,15 @@ export const AdminAnnouncements = () => {
                     }`}
                   >
                     <span>{tab}</span>
-                    <span className="badge rounded-pill bg-white text-dark opacity-90 px-1.5 py-0.5 small">
-                      {count}
-                    </span>
+                    <span
+                    className={`badge rounded-pill  py-0.5 fw-bold ms-1 ${
+                      isSelected
+                        ? 'bg-white text-teal shadow-xs'
+                        : 'bg-body text-secondary border'
+                    }`}
+                  >
+                    {count}
+                  </span>
                   </button>
                 );
               })}

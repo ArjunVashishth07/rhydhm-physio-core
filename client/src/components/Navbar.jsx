@@ -89,7 +89,6 @@ export const Navbar = () => {
                 to="/patient-dashboard"
                 onClick={() => setNavExpanded(false)}
               >
-                <UserCheck size={15} className="flex-shrink-0" />
                 <span>{t('patientHistory')}</span>
               </Link>
             </li>
@@ -206,7 +205,7 @@ export const Navbar = () => {
               className="btn btn-teal btn-sm rounded-pill px-3 py-0 fw-semibold d-inline-flex align-items-center gap-1.5 shadow-sm text-white flex-shrink-0 text-nowrap"
               style={{ height: '36px', fontSize: '0.85rem' }}
             >
-              <PhoneCall size={15} className="flex-shrink-0" />
+              <PhoneCall size={15} className="flex-shrink-0 me-1" />
               <span>{t('callNow')}</span>
             </a>
           </div>
