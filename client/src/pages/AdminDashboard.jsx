@@ -232,10 +232,7 @@ export const AdminDashboard = () => {
   // Login Gate if not authenticated
   if (!isAuthenticated) {
     return (
-      <div
-        className="max-w-5xl mx-auto px-4 sm:px-6 pt-20 pb-5"
-        style={{ paddingTop: '5.25rem' }}
-      >
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-4 sm:py-5">
         <div className="row justify-content-center">
           <div className="col-md-5 col-lg-4">
             <div className="card border-0 shadow-lg rounded-4 overflow-hidden">
@@ -282,11 +279,8 @@ export const AdminDashboard = () => {
   }
 
   return (
-    <div
-      className="admin-dashboard pt-20 pb-5 bg-body-tertiary min-vh-100 text-start"
-      style={{ paddingTop: '5.25rem' }}
-    >
-      <div className="max-w-6xl mx-auto px-4 sm:px-6 py-4 sm:py-6" style={{ maxWidth: '72rem' }}>
+    <div className="admin-dashboard pb-5 bg-body-tertiary min-vh-100 text-start">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 pt-3 sm:pt-4 pb-4" style={{ maxWidth: '72rem' }}>
         {/* Header Bar */}
         <div className="d-flex justify-content-between align-items-center mb-3.5 flex-wrap gap-2.5">
           <div className="text-start">

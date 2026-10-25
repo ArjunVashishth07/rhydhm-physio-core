@@ -229,11 +229,8 @@ export const PatientDashboard = () => {
     user.fullName || appointments.find((a) => a.patientName)?.patientName || (userPhone ? `+91 ${userPhone}` : 'Patient');
 
   return (
-    <div
-      className="patient-dashboard pt-20 pb-5 bg-body-tertiary min-vh-100 text-start"
-      style={{ paddingTop: '5.25rem' }}
-    >
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6" style={{ maxWidth: '64rem' }}>
+    <div className="patient-dashboard pb-5 bg-body-tertiary min-vh-100 text-start">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-3 sm:pt-4 pb-4" style={{ maxWidth: '64rem' }}>
         {/* TOP BANNER OPTIMIZATION: Stacked banners pile removed. Only 1 compact critical notice shown if urgent */}
         {activeCriticalAnnouncement && (
           <div
