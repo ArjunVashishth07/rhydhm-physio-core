@@ -140,6 +140,47 @@ body {
   border-color: var(--teal-primary);
 }
 
+/* Announcement Table Dismiss Action Button (Light & Dark mode contrast) */
+.btn-action-dismiss {
+  color: #b45309 !important;
+  border: 1px solid rgba(217, 119, 6, 0.6) !important;
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-action-dismiss:hover:not(:disabled):not(.disabled) {
+  background-color: #d97706 !important;
+  border-color: #d97706 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+[data-bs-theme="dark"] .btn-action-dismiss,
+[data-theme="dark"] .btn-action-dismiss {
+  color: #fbbf24 !important;
+  border: 1px solid rgba(251, 191, 36, 0.55) !important;
+  background-color: rgba(245, 158, 11, 0.12) !important;
+}
+
+[data-bs-theme="dark"] .btn-action-dismiss:hover:not(:disabled):not(.disabled),
+[data-theme="dark"] .btn-action-dismiss:hover:not(:disabled):not(.disabled) {
+  background-color: #f59e0b !important;
+  border-color: #f59e0b !important;
+  color: #141210 !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+.btn-action-dismiss:disabled,
+.btn-action-dismiss.disabled {
+  opacity: 0.4 !important;
+  border-color: rgba(148, 163, 184, 0.25) !important;
+  color: #94a3b8 !important;
+  background-color: transparent !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+
 .bg-teal-subtle {
   background-color: var(--teal-subtle) !important;
   color: var(--teal-primary) !important;

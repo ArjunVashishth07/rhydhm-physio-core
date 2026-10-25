@@ -677,10 +677,8 @@ export const AdminAnnouncements = () => {
                             type="button"
                             onClick={() => handleDismiss(item._id, item.title)}
                             disabled={!item.isActive}
-                            className={`btn btn-sm rounded-pill px-2.5 py-1 fw-semibold d-inline-flex align-items-center gap-1 ${
-                              item.isActive
-                                ? 'btn-outline-warning text-dark'
-                                : 'btn-outline-secondary opacity-50'
+                            className={`btn btn-sm rounded-pill px-2.5 py-1 fw-semibold d-inline-flex align-items-center gap-1 btn-action-dismiss ${
+                              !item.isActive ? 'disabled' : ''
                             }`}
                             title={
                               item.isActive

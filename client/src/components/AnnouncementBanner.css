@@ -28,381 +28,264 @@
 }
 
 /* ==========================================================================
-   1. REGULAR (SILVER / PLATINUM METAL GLASS) VARIANT
+   1. REGULAR (TACTILE METALLIC SILVER / SLATE GLASS)
    ========================================================================== */
 
-/* Regular - Light Mode (Default & container overrides) */
 .glass-banner-regular,
 [data-bs-theme="light"] .glass-banner-regular,
-[data-theme="light"] .glass-banner-regular {
-  background: rgba(248, 250, 252, 0.95);
-  border: 1px solid rgba(203, 213, 225, 0.9);
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.9), 0 4px 14px 0 rgba(0, 0, 0, 0.05);
-  color: #0f172a;
+[data-theme="light"] .glass-banner-regular,
+[data-bs-theme="dark"] .glass-banner-regular,
+[data-theme="dark"] .glass-banner-regular {
+  background: linear-gradient(135deg, rgba(51, 65, 85, 0.88) 0%, rgba(30, 41, 59, 0.94) 45%, rgba(15, 23, 42, 0.98) 100%) !important;
+  border: 1px solid rgba(203, 213, 225, 0.35) !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.45), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.35), 0 12px 30px -4px rgba(15, 23, 42, 0.45) !important;
+  color: #f1f5f9 !important;
 }
 
 .glass-banner-regular .banner-title,
 [data-bs-theme="light"] .glass-banner-regular .banner-title,
-[data-theme="light"] .glass-banner-regular .banner-title {
-  color: #0f172a; /* text-slate-900 */
+[data-theme="light"] .glass-banner-regular .banner-title,
+[data-bs-theme="dark"] .glass-banner-regular .banner-title,
+[data-theme="dark"] .glass-banner-regular .banner-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 .glass-banner-regular .banner-desc,
 [data-bs-theme="light"] .glass-banner-regular .banner-desc,
-[data-theme="light"] .glass-banner-regular .banner-desc {
-  color: #334155; /* text-slate-700 */
+[data-theme="light"] .glass-banner-regular .banner-desc,
+[data-bs-theme="dark"] .glass-banner-regular .banner-desc,
+[data-theme="dark"] .glass-banner-regular .banner-desc {
+  color: #cbd5e1 !important;
 }
 
 .glass-banner-regular .banner-badge,
 [data-bs-theme="light"] .glass-banner-regular .banner-badge,
-[data-theme="light"] .glass-banner-regular .banner-badge {
-  background: rgba(226, 232, 240, 0.85);
-  color: #334155;
-  border: 1px solid rgba(203, 213, 225, 0.9);
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.6), 0 2px 4px rgba(0, 0, 0, 0.05);
+[data-theme="light"] .glass-banner-regular .banner-badge,
+[data-bs-theme="dark"] .glass-banner-regular .banner-badge,
+[data-theme="dark"] .glass-banner-regular .banner-badge {
+  background: rgba(51, 65, 85, 0.75) !important;
+  color: #f1f5f9 !important;
+  border: 1px solid rgba(203, 213, 225, 0.35) !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.3) !important;
 }
 
 .glass-banner-regular .banner-icon-disc,
 [data-bs-theme="light"] .glass-banner-regular .banner-icon-disc,
-[data-theme="light"] .glass-banner-regular .banner-icon-disc {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  color: #334155;
-  border: 1px solid #cbd5e1;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.9), 0 2px 6px rgba(0, 0, 0, 0.06);
+[data-theme="light"] .glass-banner-regular .banner-icon-disc,
+[data-bs-theme="dark"] .glass-banner-regular .banner-icon-disc,
+[data-theme="dark"] .glass-banner-regular .banner-icon-disc {
+  background: linear-gradient(180deg, rgba(71, 85, 105, 0.7) 0%, rgba(30, 41, 59, 0.9) 100%) !important;
+  border: 1px solid rgba(203, 213, 225, 0.4) !important;
+  color: #f1f5f9 !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.35), 0 4px 10px rgba(0, 0, 0, 0.4) !important;
 }
 
 .glass-banner-regular .banner-dismiss-btn,
 [data-bs-theme="light"] .glass-banner-regular .banner-dismiss-btn,
-[data-theme="light"] .glass-banner-regular .banner-dismiss-btn {
-  background: rgba(226, 232, 240, 0.65);
-  border: 1px solid rgba(203, 213, 225, 0.9);
-  color: #334155;
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.6), 0 2px 4px rgba(0, 0, 0, 0.05);
+[data-theme="light"] .glass-banner-regular .banner-dismiss-btn,
+[data-bs-theme="dark"] .glass-banner-regular .banner-dismiss-btn,
+[data-theme="dark"] .glass-banner-regular .banner-dismiss-btn {
+  background: rgba(51, 65, 85, 0.5) !important;
+  border: 1px solid rgba(203, 213, 225, 0.32) !important;
+  color: #f1f5f9 !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 2px 5px rgba(0, 0, 0, 0.3) !important;
 }
 
 .glass-banner-regular .banner-dismiss-btn:hover,
 [data-bs-theme="light"] .glass-banner-regular .banner-dismiss-btn:hover,
-[data-theme="light"] .glass-banner-regular .banner-dismiss-btn:hover {
-  background: rgba(203, 213, 225, 0.9);
-  color: #0f172a;
-  border-color: rgba(148, 163, 184, 0.95);
+[data-theme="light"] .glass-banner-regular .banner-dismiss-btn:hover,
+[data-bs-theme="dark"] .glass-banner-regular .banner-dismiss-btn:hover,
+[data-theme="dark"] .glass-banner-regular .banner-dismiss-btn:hover {
+  background: rgba(71, 85, 105, 0.85) !important;
+  color: #ffffff !important;
+  border-color: rgba(203, 213, 225, 0.6) !important;
 }
 
 .glass-banner-regular .banner-expiry,
 [data-bs-theme="light"] .glass-banner-regular .banner-expiry,
-[data-theme="light"] .glass-banner-regular .banner-expiry {
-  color: #64748b;
-}
-
-/* Regular - Dark Mode (Silver/Platinum Metal Glass) */
-[data-bs-theme="dark"] .glass-banner-regular,
-[data-theme="dark"] .glass-banner-regular {
-  background: linear-gradient(135deg, rgba(30, 41, 59, 0.82), rgba(15, 23, 42, 0.92)) !important;
-  border: 1px solid rgba(226, 232, 240, 0.35) !important; /* Crisp silver metal edge */
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.45), 0 8px 24px -4px rgba(0, 0, 0, 0.5) !important;
-  color: #f1f5f9 !important;
-}
-
-[data-bs-theme="dark"] .glass-banner-regular .banner-title,
-[data-theme="dark"] .glass-banner-regular .banner-title {
-  color: #f1f5f9 !important; /* text-slate-100 font-semibold */
-  font-weight: 600 !important;
-}
-
-[data-bs-theme="dark"] .glass-banner-regular .banner-desc,
-[data-theme="dark"] .glass-banner-regular .banner-desc {
-  color: #cbd5e1 !important; /* text-slate-300 */
-}
-
-[data-bs-theme="dark"] .glass-banner-regular .banner-badge,
-[data-theme="dark"] .glass-banner-regular .banner-badge {
-  background: rgba(51, 65, 85, 0.6) !important; /* bg-slate-700/60 */
-  color: #e2e8f0 !important; /* text-slate-200 */
-  border: 1px solid rgba(100, 116, 139, 0.4) !important; /* border-slate-500/40 */
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.3), 0 2px 4px rgba(0, 0, 0, 0.3) !important;
-}
-
-[data-bs-theme="dark"] .glass-banner-regular .banner-icon-disc,
-[data-theme="dark"] .glass-banner-regular .banner-icon-disc {
-  background: linear-gradient(135deg, rgba(71, 85, 105, 0.6) 0%, rgba(30, 41, 59, 0.8) 100%) !important;
-  color: #e2e8f0 !important;
-  border: 1px solid rgba(226, 232, 240, 0.3) !important;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.35), 0 4px 10px rgba(0, 0, 0, 0.4) !important;
-}
-
-[data-bs-theme="dark"] .glass-banner-regular .banner-dismiss-btn,
-[data-theme="dark"] .glass-banner-regular .banner-dismiss-btn {
-  background: rgba(51, 65, 85, 0.4) !important;
-  border: 1px solid rgba(226, 232, 240, 0.25) !important;
-  color: #e2e8f0 !important;
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 2px 5px rgba(0, 0, 0, 0.3) !important;
-}
-
-[data-bs-theme="dark"] .glass-banner-regular .banner-dismiss-btn:hover,
-[data-theme="dark"] .glass-banner-regular .banner-dismiss-btn:hover {
-  background: rgba(71, 85, 105, 0.7) !important;
-  color: #ffffff !important;
-  border-color: rgba(226, 232, 240, 0.45) !important;
-}
-
+[data-theme="light"] .glass-banner-regular .banner-expiry,
 [data-bs-theme="dark"] .glass-banner-regular .banner-expiry,
 [data-theme="dark"] .glass-banner-regular .banner-expiry {
-  color: rgba(203, 213, 225, 0.7) !important;
+  color: rgba(203, 213, 225, 0.75) !important;
 }
 
 /* ==========================================================================
-   2. CRITICAL (RED) VARIANT
+   2. CRITICAL (CRIMSON RUBY METALLIC GLASS)
    ========================================================================== */
 
-/* Critical - Light Mode (Soft rose surface, crisp red border, dark red text) */
 .glass-banner-critical,
 [data-bs-theme="light"] .glass-banner-critical,
-[data-theme="light"] .glass-banner-critical {
-  background: rgba(254, 242, 242, 0.95);
-  border: 1px solid #f87171; /* border-red-400 */
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.9), 0 4px 14px 0 rgba(239, 68, 68, 0.12);
-  color: #450a0a;
+[data-theme="light"] .glass-banner-critical,
+[data-bs-theme="dark"] .glass-banner-critical,
+[data-theme="dark"] .glass-banner-critical {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.35) 0%, rgba(15, 23, 42, 0.92) 50%, rgba(220, 38, 38, 0.28) 100%) !important;
+  border: 1px solid rgba(248, 113, 113, 0.52) !important;
+  box-shadow: inset 0 1px 1px 0 rgba(248, 113, 113, 0.6), 0 0 30px rgba(239, 68, 68, 0.32), 0 12px 32px -4px rgba(0, 0, 0, 0.4) !important;
+  color: #ffffff !important;
+  animation: criticalPulse 3s infinite ease-in-out !important;
 }
 
 .glass-banner-critical .banner-title,
 [data-bs-theme="light"] .glass-banner-critical .banner-title,
-[data-theme="light"] .glass-banner-critical .banner-title {
-  color: #450a0a; /* text-red-950 */
+[data-theme="light"] .glass-banner-critical .banner-title,
+[data-bs-theme="dark"] .glass-banner-critical .banner-title,
+[data-theme="dark"] .glass-banner-critical .banner-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 .glass-banner-critical .banner-desc,
 [data-bs-theme="light"] .glass-banner-critical .banner-desc,
-[data-theme="light"] .glass-banner-critical .banner-desc {
-  color: #991b1b; /* text-red-800 */
-}
-
-.glass-banner-critical .banner-badge,
-[data-bs-theme="light"] .glass-banner-critical .banner-badge,
-[data-theme="light"] .glass-banner-critical .banner-badge {
-  background: #dc2626;
-  color: #ffffff;
-  border: 1px solid #b91c1c;
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.35), 0 2px 4px rgba(220, 38, 38, 0.25);
-}
-
-.glass-banner-critical .banner-icon-disc,
-[data-bs-theme="light"] .glass-banner-critical .banner-icon-disc,
-[data-theme="light"] .glass-banner-critical .banner-icon-disc {
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-  color: #dc2626;
-  border: 1px solid rgba(248, 113, 113, 0.6);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.8), 0 2px 6px rgba(220, 38, 38, 0.15);
-}
-
-.glass-banner-critical .banner-dismiss-btn,
-[data-bs-theme="light"] .glass-banner-critical .banner-dismiss-btn,
-[data-theme="light"] .glass-banner-critical .banner-dismiss-btn {
-  background: rgba(254, 226, 226, 0.8);
-  border: 1px solid rgba(248, 113, 113, 0.6);
-  color: #991b1b;
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.6), 0 2px 4px rgba(220, 38, 38, 0.1);
-}
-
-.glass-banner-critical .banner-dismiss-btn:hover,
-[data-bs-theme="light"] .glass-banner-critical .banner-dismiss-btn:hover,
-[data-theme="light"] .glass-banner-critical .banner-dismiss-btn:hover {
-  background: rgba(254, 202, 202, 0.95);
-  color: #450a0a;
-  border-color: #ef4444;
-}
-
-.glass-banner-critical .banner-expiry,
-[data-bs-theme="light"] .glass-banner-critical .banner-expiry,
-[data-theme="light"] .glass-banner-critical .banner-expiry {
-  color: rgba(153, 27, 27, 0.8);
-}
-
-/* Critical - Dark Mode (Ruby-Glass with tactile glow) */
-[data-bs-theme="dark"] .glass-banner-critical,
-[data-theme="dark"] .glass-banner-critical {
-  background: linear-gradient(135deg, rgba(220, 38, 38, 0.16) 0%, rgba(15, 23, 42, 0.85) 100%) !important;
-  border: 1px solid rgba(239, 68, 68, 0.4) !important;
-  box-shadow: 0 0 25px rgba(239, 68, 68, 0.25), 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), inset 0 1px 2px 0 rgba(239, 68, 68, 0.3) !important;
-  color: #ffffff !important;
-  animation: criticalPulse 3s infinite ease-in-out;
-}
-
-[data-bs-theme="dark"] .glass-banner-critical .banner-title,
-[data-theme="dark"] .glass-banner-critical .banner-title {
-  color: #ffffff !important;
-}
-
+[data-theme="light"] .glass-banner-critical .banner-desc,
 [data-bs-theme="dark"] .glass-banner-critical .banner-desc,
 [data-theme="dark"] .glass-banner-critical .banner-desc {
   color: #fecaca !important;
 }
 
+.glass-banner-critical .banner-badge,
+[data-bs-theme="light"] .glass-banner-critical .banner-badge,
+[data-theme="light"] .glass-banner-critical .banner-badge,
 [data-bs-theme="dark"] .glass-banner-critical .banner-badge,
 [data-theme="dark"] .glass-banner-critical .banner-badge {
-  background: rgba(239, 68, 68, 0.28) !important;
+  background: rgba(239, 68, 68, 0.32) !important;
   color: #fca5a5 !important;
-  border: 1px solid rgba(239, 68, 68, 0.55) !important;
+  border: 1px solid rgba(248, 113, 113, 0.55) !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.25), 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
+.glass-banner-critical .banner-icon-disc,
+[data-bs-theme="light"] .glass-banner-critical .banner-icon-disc,
+[data-theme="light"] .glass-banner-critical .banner-icon-disc,
 [data-bs-theme="dark"] .glass-banner-critical .banner-icon-disc,
 [data-theme="dark"] .glass-banner-critical .banner-icon-disc {
-  background: linear-gradient(135deg, rgba(239, 68, 68, 0.4) 0%, rgba(185, 28, 28, 0.7) 100%) !important;
+  background: linear-gradient(180deg, rgba(239, 68, 68, 0.45) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+  border: 1px solid rgba(248, 113, 113, 0.6) !important;
   color: #fecaca !important;
-  border: 1px solid rgba(239, 68, 68, 0.55) !important;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 4px 10px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.3), 0 4px 12px rgba(239, 68, 68, 0.35) !important;
 }
 
+.glass-banner-critical .banner-dismiss-btn,
+[data-bs-theme="light"] .glass-banner-critical .banner-dismiss-btn,
+[data-theme="light"] .glass-banner-critical .banner-dismiss-btn,
 [data-bs-theme="dark"] .glass-banner-critical .banner-dismiss-btn,
 [data-theme="dark"] .glass-banner-critical .banner-dismiss-btn {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  color: rgba(255, 255, 255, 0.8) !important;
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+  background: rgba(239, 68, 68, 0.18) !important;
+  border: 1px solid rgba(248, 113, 113, 0.4) !important;
+  color: #ffffff !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 2px 5px rgba(0, 0, 0, 0.25) !important;
 }
 
+.glass-banner-critical .banner-dismiss-btn:hover,
+[data-bs-theme="light"] .glass-banner-critical .banner-dismiss-btn:hover,
+[data-theme="light"] .glass-banner-critical .banner-dismiss-btn:hover,
 [data-bs-theme="dark"] .glass-banner-critical .banner-dismiss-btn:hover,
 [data-theme="dark"] .glass-banner-critical .banner-dismiss-btn:hover {
-  background: rgba(255, 255, 255, 0.2) !important;
+  background: rgba(239, 68, 68, 0.4) !important;
   color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.4) !important;
+  border-color: rgba(248, 113, 113, 0.75) !important;
 }
 
+.glass-banner-critical .banner-expiry,
+[data-bs-theme="light"] .glass-banner-critical .banner-expiry,
+[data-theme="light"] .glass-banner-critical .banner-expiry,
 [data-bs-theme="dark"] .glass-banner-critical .banner-expiry,
 [data-theme="dark"] .glass-banner-critical .banner-expiry {
-  color: rgba(254, 202, 202, 0.75) !important;
+  color: rgba(254, 202, 202, 0.8) !important;
 }
 
 @keyframes criticalPulse {
   0%, 100% {
-    box-shadow: 0 0 20px rgba(239, 68, 68, 0.22), 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2);
-    border-color: rgba(239, 68, 68, 0.4);
+    box-shadow: inset 0 1px 1px 0 rgba(248, 113, 113, 0.6), 0 0 24px rgba(239, 68, 68, 0.25), 0 12px 32px -4px rgba(0, 0, 0, 0.4);
+    border-color: rgba(248, 113, 113, 0.52);
   }
   50% {
-    box-shadow: 0 0 32px rgba(239, 68, 68, 0.42), 0 10px 30px -5px rgba(0, 0, 0, 0.6), inset 0 1px 1px 0 rgba(255, 255, 255, 0.35);
-    border-color: rgba(239, 68, 68, 0.65);
+    box-shadow: inset 0 1px 1px 0 rgba(248, 113, 113, 0.8), 0 0 36px rgba(239, 68, 68, 0.45), 0 12px 32px -4px rgba(0, 0, 0, 0.5);
+    border-color: rgba(248, 113, 113, 0.75);
   }
 }
 
 /* ==========================================================================
-   3. ADVISORY (BLUE / AMBER) VARIANT
+   3. ADVISORY (NORDIC CYAN METALLIC GLASS)
    ========================================================================== */
 
-/* Advisory - Light Mode */
 .glass-banner-advisory,
 [data-bs-theme="light"] .glass-banner-advisory,
-[data-theme="light"] .glass-banner-advisory {
-  background: rgba(240, 249, 255, 0.95);
-  border: 1px solid rgba(14, 165, 233, 0.35);
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.85), 0 4px 14px 0 rgba(14, 165, 233, 0.12), inset 0 1px 2px 0 rgba(14, 165, 233, 0.2);
-  color: #082f49;
+[data-theme="light"] .glass-banner-advisory,
+[data-bs-theme="dark"] .glass-banner-advisory,
+[data-theme="dark"] .glass-banner-advisory {
+  background: linear-gradient(135deg, rgba(14, 165, 233, 0.38) 0%, rgba(15, 23, 42, 0.92) 50%, rgba(2, 132, 199, 0.3) 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.48) !important;
+  box-shadow: inset 0 1px 1px 0 rgba(56, 189, 248, 0.6), inset 0 1px 2px 0 rgba(14, 165, 233, 0.35), 0 12px 32px -4px rgba(14, 165, 233, 0.28), 0 6px 18px rgba(0, 0, 0, 0.25) !important;
+  color: #f0f9ff !important;
 }
 
 .glass-banner-advisory .banner-title,
 [data-bs-theme="light"] .glass-banner-advisory .banner-title,
-[data-theme="light"] .glass-banner-advisory .banner-title {
-  color: #082f49; /* text-sky-950 */
+[data-theme="light"] .glass-banner-advisory .banner-title,
+[data-bs-theme="dark"] .glass-banner-advisory .banner-title,
+[data-theme="dark"] .glass-banner-advisory .banner-title {
+  color: #ffffff !important;
+  font-weight: 700 !important;
 }
 
 .glass-banner-advisory .banner-desc,
 [data-bs-theme="light"] .glass-banner-advisory .banner-desc,
-[data-theme="light"] .glass-banner-advisory .banner-desc {
-  color: #0369a1; /* text-sky-900 */
-}
-
-.glass-banner-advisory .banner-badge,
-[data-bs-theme="light"] .glass-banner-advisory .banner-badge,
-[data-theme="light"] .glass-banner-advisory .banner-badge {
-  background: rgba(14, 165, 233, 0.18);
-  color: #0284c7;
-  border: 1px solid rgba(14, 165, 233, 0.45);
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.5), 0 2px 4px rgba(14, 165, 233, 0.15);
-}
-
-.glass-banner-advisory .banner-icon-disc,
-[data-bs-theme="light"] .glass-banner-advisory .banner-icon-disc,
-[data-theme="light"] .glass-banner-advisory .banner-icon-disc {
-  background: linear-gradient(135deg, #e0f2fe 0%, #bae6fd 100%);
-  color: #0284c7;
-  border: 1px solid rgba(14, 165, 233, 0.35);
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.7), 0 2px 6px rgba(14, 165, 233, 0.15);
-}
-
-.glass-banner-advisory .banner-dismiss-btn,
-[data-bs-theme="light"] .glass-banner-advisory .banner-dismiss-btn,
-[data-theme="light"] .glass-banner-advisory .banner-dismiss-btn {
-  background: rgba(14, 165, 233, 0.1);
-  border: 1px solid rgba(14, 165, 233, 0.25);
-  color: #0284c7;
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.6), 0 2px 4px rgba(14, 165, 233, 0.1);
-}
-
-.glass-banner-advisory .banner-dismiss-btn:hover,
-[data-bs-theme="light"] .glass-banner-advisory .banner-dismiss-btn:hover,
-[data-theme="light"] .glass-banner-advisory .banner-dismiss-btn:hover {
-  background: rgba(14, 165, 233, 0.2);
-  color: #082f49;
-  border-color: rgba(14, 165, 233, 0.45);
-}
-
-.glass-banner-advisory .banner-expiry,
-[data-bs-theme="light"] .glass-banner-advisory .banner-expiry,
-[data-theme="light"] .glass-banner-advisory .banner-expiry {
-  color: rgba(3, 105, 161, 0.8);
-}
-
-/* Advisory - Dark Mode */
-[data-bs-theme="dark"] .glass-banner-advisory,
-[data-theme="dark"] .glass-banner-advisory {
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.12) 0%, rgba(15, 23, 42, 0.85) 100%) !important;
-  border: 1px solid rgba(14, 165, 233, 0.35) !important;
-  box-shadow: 0 10px 30px -5px rgba(0, 0, 0, 0.5), inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), inset 0 1px 2px 0 rgba(14, 165, 233, 0.3) !important;
-  color: #f0f9ff !important;
-}
-
-[data-bs-theme="dark"] .glass-banner-advisory .banner-title,
-[data-theme="dark"] .glass-banner-advisory .banner-title {
-  color: #f0f9ff !important;
-}
-
+[data-theme="light"] .glass-banner-advisory .banner-desc,
 [data-bs-theme="dark"] .glass-banner-advisory .banner-desc,
 [data-theme="dark"] .glass-banner-advisory .banner-desc {
   color: #bae6fd !important;
 }
 
+.glass-banner-advisory .banner-badge,
+[data-bs-theme="light"] .glass-banner-advisory .banner-badge,
+[data-theme="light"] .glass-banner-advisory .banner-badge,
 [data-bs-theme="dark"] .glass-banner-advisory .banner-badge,
 [data-theme="dark"] .glass-banner-advisory .banner-badge {
-  background: rgba(14, 165, 233, 0.2) !important;
+  background: rgba(14, 165, 233, 0.28) !important;
   color: #38bdf8 !important;
-  border: 1px solid rgba(14, 165, 233, 0.45) !important;
+  border: 1px solid rgba(56, 189, 248, 0.5) !important;
   box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.25), 0 2px 4px rgba(0, 0, 0, 0.2) !important;
 }
 
+.glass-banner-advisory .banner-icon-disc,
+[data-bs-theme="light"] .glass-banner-advisory .banner-icon-disc,
+[data-theme="light"] .glass-banner-advisory .banner-icon-disc,
 [data-bs-theme="dark"] .glass-banner-advisory .banner-icon-disc,
 [data-theme="dark"] .glass-banner-advisory .banner-icon-disc {
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.35) 0%, rgba(3, 105, 161, 0.6) 100%) !important;
+  background: linear-gradient(180deg, rgba(14, 165, 233, 0.5) 0%, rgba(15, 23, 42, 0.9) 100%) !important;
+  border: 1px solid rgba(56, 189, 248, 0.6) !important;
   color: #7dd3fc !important;
-  border: 1px solid rgba(14, 165, 233, 0.45) !important;
-  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.25), 0 4px 10px rgba(0, 0, 0, 0.35) !important;
+  box-shadow: inset 0 1px 2px rgba(255, 255, 255, 0.35), 0 4px 12px rgba(14, 165, 233, 0.35) !important;
 }
 
+.glass-banner-advisory .banner-dismiss-btn,
+[data-bs-theme="light"] .glass-banner-advisory .banner-dismiss-btn,
+[data-theme="light"] .glass-banner-advisory .banner-dismiss-btn,
 [data-bs-theme="dark"] .glass-banner-advisory .banner-dismiss-btn,
 [data-theme="dark"] .glass-banner-advisory .banner-dismiss-btn {
-  background: rgba(255, 255, 255, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.18) !important;
-  color: rgba(255, 255, 255, 0.8) !important;
-  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 2px 5px rgba(0, 0, 0, 0.3) !important;
+  background: rgba(14, 165, 233, 0.18) !important;
+  border: 1px solid rgba(56, 189, 248, 0.4) !important;
+  color: #e0f2fe !important;
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.2), 0 2px 5px rgba(0, 0, 0, 0.25) !important;
 }
 
+.glass-banner-advisory .banner-dismiss-btn:hover,
+[data-bs-theme="light"] .glass-banner-advisory .banner-dismiss-btn:hover,
+[data-theme="light"] .glass-banner-advisory .banner-dismiss-btn:hover,
 [data-bs-theme="dark"] .glass-banner-advisory .banner-dismiss-btn:hover,
 [data-theme="dark"] .glass-banner-advisory .banner-dismiss-btn:hover {
-  background: rgba(255, 255, 255, 0.2) !important;
+  background: rgba(14, 165, 233, 0.4) !important;
   color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.4) !important;
+  border-color: rgba(56, 189, 248, 0.75) !important;
 }
 
+.glass-banner-advisory .banner-expiry,
+[data-bs-theme="light"] .glass-banner-advisory .banner-expiry,
+[data-theme="light"] .glass-banner-advisory .banner-expiry,
 [data-bs-theme="dark"] .glass-banner-advisory .banner-expiry,
 [data-theme="dark"] .glass-banner-advisory .banner-expiry {
-  color: rgba(186, 230, 253, 0.7) !important;
+  color: rgba(186, 230, 253, 0.8) !important;
 }
 
 /* ==========================================================================
@@ -474,3 +357,377 @@
   color: #5eead4 !important;
   border: 1px solid rgba(94, 234, 212, 0.35) !important;
 }
+
+/* Announcement Table Dismiss Action Button (High Contrast across Themes) */
+.btn-action-dismiss {
+  color: #b45309 !important;
+  border: 1px solid rgba(217, 119, 6, 0.6) !important;
+  background-color: rgba(245, 158, 11, 0.08) !important;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-action-dismiss:hover:not(:disabled):not(.disabled) {
+  background-color: #d97706 !important;
+  border-color: #d97706 !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.3);
+}
+
+[data-bs-theme="dark"] .btn-action-dismiss,
+[data-theme="dark"] .btn-action-dismiss {
+  color: #fbbf24 !important;
+  border: 1px solid rgba(251, 191, 36, 0.55) !important;
+  background-color: rgba(245, 158, 11, 0.12) !important;
+}
+
+[data-bs-theme="dark"] .btn-action-dismiss:hover:not(:disabled):not(.disabled),
+[data-theme="dark"] .btn-action-dismiss:hover:not(:disabled):not(.disabled) {
+  background-color: #f59e0b !important;
+  border-color: #f59e0b !important;
+  color: #141210 !important;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.4);
+}
+
+.btn-action-dismiss:disabled,
+.btn-action-dismiss.disabled {
+  opacity: 0.4 !important;
+  border-color: rgba(148, 163, 184, 0.25) !important;
+  color: #94a3b8 !important;
+  background-color: transparent !important;
+  cursor: not-allowed !important;
+  box-shadow: none !important;
+}
+
+/* ==========================================================================
+   PATIENT DASHBOARD ANNOUNCEMENT TAB STYLES
+   ========================================================================== */
+
+/* Spacing stack between announcement cards */
+.announcement-cards-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem !important; /* 24px distinct, generous spacing */
+  padding-bottom: 1.5rem;
+}
+
+/* Card Base */
+.patient-announcement-card {
+  position: relative;
+  border-radius: 18px;
+  overflow: hidden;
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+/* Smooth internal left accent bar (prevents border-radius corner distortion) */
+.patient-announcement-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5px;
+  border-top-left-radius: 18px;
+  border-bottom-left-radius: 18px;
+  z-index: 3;
+  transition: width 0.2s ease, opacity 0.2s ease;
+}
+
+.patient-announcement-card:hover::before {
+  width: 6.5px;
+}
+
+/* --------------------------------------------------------------------------
+   LIGHT THEME: Ultra-Clean, Airy & Clinical Luxury
+   -------------------------------------------------------------------------- */
+.patient-announcement-card.light-card {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05), 0 2px 4px -1px rgba(15, 23, 42, 0.02);
+}
+
+.patient-announcement-card.light-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 14px 32px -4px rgba(15, 23, 42, 0.09), 0 4px 10px -2px rgba(15, 23, 42, 0.04);
+}
+
+/* Light Mode: Specific Type Accents & Ambient Glows */
+.patient-announcement-card.light-card.announcement-accent-critical {
+  background: linear-gradient(180deg, #ffffff 0%, #fffbfb 60%, #fff5f5 100%);
+  border-color: #fecaca;
+}
+.patient-announcement-card.light-card.announcement-accent-critical::before {
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%);
+}
+.patient-announcement-card.light-card.announcement-accent-critical:hover {
+  border-color: #f87171;
+  box-shadow: 0 14px 34px -4px rgba(239, 68, 68, 0.12), 0 4px 12px -2px rgba(239, 68, 68, 0.06);
+}
+
+.patient-announcement-card.light-card.announcement-accent-advisory {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfdff 60%, #f0f9ff 100%);
+  border-color: #bae6fd;
+}
+.patient-announcement-card.light-card.announcement-accent-advisory::before {
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+}
+.patient-announcement-card.light-card.announcement-accent-advisory:hover {
+  border-color: #7dd3fc;
+  box-shadow: 0 14px 34px -4px rgba(2, 132, 199, 0.12), 0 4px 12px -2px rgba(2, 132, 199, 0.06);
+}
+
+.patient-announcement-card.light-card.announcement-accent-regular {
+  background: linear-gradient(180deg, #ffffff 0%, #fbfeff 60%, #f0fdfa 100%);
+  border-color: #99f6e4;
+}
+.patient-announcement-card.light-card.announcement-accent-regular::before {
+  background: linear-gradient(180deg, #0d9488 0%, #0f766e 100%);
+}
+.patient-announcement-card.light-card.announcement-accent-regular:hover {
+  border-color: #5eead4;
+  box-shadow: 0 14px 34px -4px rgba(13, 148, 136, 0.12), 0 4px 12px -2px rgba(13, 148, 136, 0.06);
+}
+
+/* Light Card Header (Clean, Airy, Seamless - No dark cutting box) */
+.patient-announcement-card.light-card .announcement-card-header {
+  background: transparent;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+  padding: 1.1rem 1.4rem 0.85rem 1.6rem;
+}
+
+.patient-announcement-card.light-card .announcement-card-title {
+  color: #0f172a;
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+}
+
+.patient-announcement-card.light-card .announcement-card-desc {
+  color: #334155;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* --------------------------------------------------------------------------
+   DARK THEME: Double-Shade Slate
+   -------------------------------------------------------------------------- */
+.patient-announcement-card.dark-slate-card {
+  background: linear-gradient(150deg, #1e293b 0%, #151e2e 50%, #0f172a 100%);
+  border: 1px solid rgba(148, 163, 184, 0.22);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.08), inset 0 -1px 1px 0 rgba(0, 0, 0, 0.35), 0 12px 30px -6px rgba(0, 0, 0, 0.55);
+}
+
+.patient-announcement-card.dark-slate-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(203, 213, 225, 0.4);
+  box-shadow: inset 0 1px 1px 0 rgba(255, 255, 255, 0.14), 0 16px 36px -6px rgba(0, 0, 0, 0.7);
+}
+
+.patient-announcement-card.dark-slate-card.announcement-accent-critical::before {
+  background: #ef4444;
+  box-shadow: 0 0 14px rgba(239, 68, 68, 0.65);
+}
+
+.patient-announcement-card.dark-slate-card.announcement-accent-advisory::before {
+  background: #38bdf8;
+  box-shadow: 0 0 14px rgba(56, 189, 248, 0.65);
+}
+
+.patient-announcement-card.dark-slate-card.announcement-accent-regular::before {
+  background: #2dd4bf;
+  box-shadow: 0 0 14px rgba(45, 212, 191, 0.65);
+}
+
+.patient-announcement-card.dark-slate-card .announcement-card-header {
+  background: rgba(30, 41, 59, 0.75);
+  border-bottom: 1px solid rgba(148, 163, 184, 0.15);
+  padding: 1.1rem 1.4rem 0.85rem 1.6rem;
+}
+
+.patient-announcement-card.dark-slate-card .announcement-card-title {
+  color: #f8fafc;
+  font-size: 1.18rem;
+  font-weight: 700;
+  letter-spacing: -0.015em;
+  line-height: 1.35;
+}
+
+.patient-announcement-card.dark-slate-card .announcement-card-desc {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.65;
+}
+
+/* --------------------------------------------------------------------------
+   MODERN TAILORED BADGES (Crisp Light & Glowing Dark)
+   -------------------------------------------------------------------------- */
+.announcement-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  text-transform: uppercase;
+  transition: all 0.2s ease;
+}
+
+/* Light Theme Badges */
+.light-card .announcement-badge-critical {
+  background: #fef2f2 !important;
+  color: #dc2626 !important;
+  border: 1px solid #fca5a5 !important;
+  box-shadow: 0 1px 2px rgba(239, 68, 68, 0.08);
+}
+
+.light-card .announcement-badge-advisory {
+  background: #f0f9ff !important;
+  color: #0284c7 !important;
+  border: 1px solid #bae6fd !important;
+  box-shadow: 0 1px 2px rgba(2, 132, 199, 0.08);
+}
+
+.light-card .announcement-badge-regular {
+  background: #f0fdfa !important;
+  color: #0f766e !important;
+  border: 1px solid #99f6e4 !important;
+  box-shadow: 0 1px 2px rgba(13, 148, 136, 0.08);
+}
+
+.light-card .announcement-badge-direct {
+  background: #f5f3ff !important;
+  color: #7c3aed !important;
+  border: 1px solid #ddd6fe !important;
+}
+
+.light-card .announcement-expiry-meta {
+  color: #64748b !important;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.light-card .announcement-expiry-chip {
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+}
+
+.light-card .announcement-expiry-chip.chip-critical {
+  background: #fee2e2;
+  color: #dc2626;
+  border-color: #fca5a5;
+}
+
+/* Dark Theme Badges */
+.dark-slate-card .announcement-badge-critical {
+  background: rgba(239, 68, 68, 0.25) !important;
+  color: #fca5a5 !important;
+  border: 1px solid rgba(248, 113, 113, 0.5) !important;
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
+}
+
+.dark-slate-card .announcement-badge-advisory {
+  background: rgba(14, 165, 233, 0.25) !important;
+  color: #7dd3fc !important;
+  border: 1px solid rgba(56, 189, 248, 0.5) !important;
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.25);
+}
+
+.dark-slate-card .announcement-badge-regular {
+  background: rgba(13, 148, 136, 0.25) !important;
+  color: #5eead4 !important;
+  border: 1px solid rgba(94, 234, 212, 0.4) !important;
+  box-shadow: 0 0 10px rgba(13, 148, 136, 0.25);
+}
+
+.dark-slate-card .announcement-badge-direct {
+  background: rgba(139, 92, 246, 0.25) !important;
+  color: #c4b5fd !important;
+  border: 1px solid rgba(167, 139, 250, 0.4) !important;
+}
+
+.dark-slate-card .announcement-expiry-meta {
+  color: #94a3b8 !important;
+  font-size: 0.8rem;
+  font-weight: 600;
+}
+
+.dark-slate-card .announcement-expiry-chip {
+  background: rgba(255, 255, 255, 0.1);
+  color: #cbd5e1;
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  font-size: 0.72rem;
+  font-weight: 600;
+  padding: 0.25rem 0.65rem;
+  border-radius: 9999px;
+}
+
+.dark-slate-card .announcement-expiry-chip.chip-critical {
+  background: rgba(239, 68, 68, 0.25);
+  color: #fca5a5;
+  border-color: rgba(248, 113, 113, 0.45);
+}
+
+/* Patient Announcement Clean Table */
+.patient-announcement-table {
+  border-collapse: separate;
+  border-spacing: 0;
+  width: 100%;
+}
+
+.patient-announcement-table thead tr th {
+  padding: 0.95rem 1.25rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.patient-announcement-table tbody tr td {
+  padding: 1.2rem 1.25rem;
+  vertical-align: middle;
+  transition: background-color 0.15s ease;
+}
+
+/* Light Table styling */
+.patient-table-light thead tr th {
+  background-color: #f8fafc;
+  color: #64748b;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.patient-table-light tbody tr td {
+  background-color: #ffffff;
+  border-bottom: 1px solid #f1f5f9;
+  color: #0f172a;
+}
+
+.patient-table-light tbody tr:hover td {
+  background-color: #f8fafc;
+}
+
+/* Dark Double-Shade Slate Table styling */
+.patient-table-dark thead tr th {
+  background-color: #1e293b;
+  color: #94a3b8;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.patient-table-dark tbody tr td {
+  background-color: #0f172a;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
+  color: #f8fafc;
+}
+
+.patient-table-dark tbody tr:hover td {
+  background-color: #1e293b;
+}
+
+

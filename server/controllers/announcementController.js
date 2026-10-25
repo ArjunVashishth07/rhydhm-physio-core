@@ -251,10 +251,12 @@ exports.getPatientAnnouncements = async (req, res) => {
       ...targetCriteria
     };
 
-    const announcements = await Announcement.find(query).sort({
-      // Critical announcements first, then advisory, then regular, then newest
-      createdAt: -1
-    });
+    const announcements = await Announcement.find(query)
+      .populate('targetPatientId', 'fullName email mobile')
+      .sort({
+        // Critical announcements first, then advisory, then regular, then newest
+        createdAt: -1
+      });
 
     // Custom sort priority: critical (1) > advisory (2) > regular (3)
     const priorityMap = { critical: 1, advisory: 2, regular: 3 };
@@ -265,10 +267,18 @@ exports.getPatientAnnouncements = async (req, res) => {
       return new Date(b.createdAt) - new Date(a.createdAt);
     });
 
+    const formatted = announcements.map((item) => {
+      const obj = item.toObject();
+      return {
+        ...obj,
+        targetPatientName: obj.targetPatientId?.fullName || null
+      };
+    });
+
     return res.status(200).json({
       success: true,
-      count: announcements.length,
-      announcements
+      count: formatted.length,
+      announcements: formatted
     });
   } catch (error) {
     console.error('Error fetching patient announcements:', error);

@@ -137,6 +137,45 @@ export const Home = () => {
         </div>
       </section>
 
+          {/* SERVICES SECTION */}
+      <section className="py-5" id="services">
+        <div className="container">
+          <div className="text-center mb-5">
+            <span className="badge bg-teal-subtle text-teal px-3 py-1.5 rounded-pill mb-2 fw-semibold">
+              Specialized Therapies
+            </span>
+            <h2 className="fw-bold text-teal mb-2">{t('services')}</h2>
+            <p className="text-muted max-w-xl mx-auto" style={{ maxWidth: '600px' }}>
+              Comprehensive physiotherapy, osteopathy, and rehabilitation procedures tailored for optimal recovery.
+            </p>
+          </div>
+
+          <div className="row g-4">
+            {servicesList.map((service, index) => {
+              const IconComp = service.icon;
+              return (
+                <div key={index} className="col-md-6 col-lg-4">
+                  <div className="card h-100 border shadow-sm rounded-4 p-4 card-hover text-start d-flex flex-column">
+                    <div className="p-3 rounded-3 bg-teal-subtle text-teal d-inline-flex mb-3" style={{ width: 'fit-content' }}>
+                      <IconComp size={26} />
+                    </div>
+                    <h5 className="fw-bold mb-2">{service.title}</h5>
+                    <p className="text-muted small mb-3 flex-grow-1">{service.desc}</p>
+                    <button
+                      type="button"
+                      onClick={handleConsultationCTA}
+                      className="btn btn-link p-0 text-teal text-decoration-none fw-semibold small d-inline-flex align-items-center gap-1 mt-auto text-start"
+                    >
+                      <span>{t('bookAppointment')}</span> &rarr;
+                    </button>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        </div>
+      </section>
+
       {/* CREDENTIALS & HOSPITAL EXPERIENCE SECTION */}
       <section className="py-5 bg-body-tertiary" id="doctor-about">
         <div className="container">
@@ -193,45 +232,6 @@ export const Home = () => {
                 </div>
               </div>
             </div>
-          </div>
-        </div>
-      </section>
-
-      {/* SERVICES SECTION */}
-      <section className="py-5" id="services">
-        <div className="container">
-          <div className="text-center mb-5">
-            <span className="badge bg-teal-subtle text-teal px-3 py-1.5 rounded-pill mb-2 fw-semibold">
-              Specialized Therapies
-            </span>
-            <h2 className="fw-bold text-teal mb-2">{t('services')}</h2>
-            <p className="text-muted max-w-xl mx-auto" style={{ maxWidth: '600px' }}>
-              Comprehensive physiotherapy, osteopathy, and rehabilitation procedures tailored for optimal recovery.
-            </p>
-          </div>
-
-          <div className="row g-4">
-            {servicesList.map((service, index) => {
-              const IconComp = service.icon;
-              return (
-                <div key={index} className="col-md-6 col-lg-4">
-                  <div className="card h-100 border shadow-sm rounded-4 p-4 card-hover text-start d-flex flex-column">
-                    <div className="p-3 rounded-3 bg-teal-subtle text-teal d-inline-flex mb-3" style={{ width: 'fit-content' }}>
-                      <IconComp size={26} />
-                    </div>
-                    <h5 className="fw-bold mb-2">{service.title}</h5>
-                    <p className="text-muted small mb-3 flex-grow-1">{service.desc}</p>
-                    <button
-                      type="button"
-                      onClick={handleConsultationCTA}
-                      className="btn btn-link p-0 text-teal text-decoration-none fw-semibold small d-inline-flex align-items-center gap-1 mt-auto text-start"
-                    >
-                      <span>{t('bookAppointment')}</span> &rarr;
-                    </button>
-                  </div>
-                </div>
-              );
-            })}
           </div>
         </div>
       </section>

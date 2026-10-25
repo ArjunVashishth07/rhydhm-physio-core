@@ -18,23 +18,40 @@ import {
   Home as HomeIcon,
   XCircle,
   Award,
-  X
+  X,
+  Megaphone,
+  AlertTriangle,
+  Sparkles,
+  Info,
+  UserCheck,
+  ArrowRight,
+  Filter,
+  Layers,
+  Table as TableIcon
 } from 'lucide-react';
 import BookingForm from '../components/BookingForm';
-import AnnouncementBanner from '../components/AnnouncementBanner';
+import '../components/AnnouncementBanner.css';
 
 const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/appointments`;
+const ANNOUNCEMENTS_API_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/announcements/patient`;
 
 export const PatientDashboard = () => {
   const { user, logoutUser, lang, t, theme } = useApp();
   const navigate = useNavigate();
 
-  const [activeTab, setActiveTab] = useState('appointments'); // 'appointments' | 'prescriptions'
+  const [activeTab, setActiveTab] = useState('appointments'); // 'appointments' | 'prescriptions' | 'announcements'
   const [appointments, setAppointments] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [cancelLoadingId, setCancelLoadingId] = useState(null);
   const [showBookingModal, setShowBookingModal] = useState(false);
+
+  // Dedicated Announcements State
+  const [announcements, setAnnouncements] = useState([]);
+  const [announcementsLoading, setAnnouncementsLoading] = useState(true);
+  const [dismissedCriticalId, setDismissedCriticalId] = useState(null);
+  const [announcementFilter, setAnnouncementFilter] = useState('All'); // 'All' | 'critical' | 'advisory' | 'regular'
+  const [announcementViewMode, setAnnouncementViewMode] = useState('cards'); // 'cards' | 'table'
 
   // Authentication Guard: Redirect guest to /login
   useEffect(() => {
@@ -72,11 +89,49 @@ export const PatientDashboard = () => {
     }
   };
 
+  // Fetch active patient announcements
+  const fetchPatientAnnouncements = async () => {
+    setAnnouncementsLoading(true);
+    try {
+      const token = localStorage.getItem('rhydhm_token');
+      const patientId = user?.id || user?._id;
+
+      const headers = {};
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+
+      const params = {};
+      if (patientId) {
+        params.patientId = patientId;
+      }
+
+      const res = await axios.get(ANNOUNCEMENTS_API_URL, {
+        headers,
+        params
+      });
+
+      if (res.data?.success && Array.isArray(res.data.announcements)) {
+        setAnnouncements(res.data.announcements);
+      }
+    } catch (err) {
+      console.error('Error fetching patient announcements:', err);
+    } finally {
+      setAnnouncementsLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (userPhone) {
       fetchPatientHistory();
     }
   }, [userPhone]);
+
+  useEffect(() => {
+    if (user) {
+      fetchPatientAnnouncements();
+    }
+  }, [user]);
 
   // Handle Cancel Appointment
   const handleCancelAppointment = async (id, appDate) => {
@@ -127,14 +182,144 @@ export const PatientDashboard = () => {
         a.sessionNotes.nextFollowUp)
   );
 
+  // Announcement KPI Counts & Helpers
+  const activeAnnouncementsCount = announcements.length;
+  const criticalCount = announcements.filter((a) => a.type === 'critical').length;
+  const advisoryCount = announcements.filter((a) => a.type === 'advisory').length;
+  const regularCount = announcements.filter((a) => a.type === 'regular' || !a.type).length;
+
+  // Top Banner Optimization: Show only 1 sleek critical alert if active and not dismissed
+  const activeCriticalAnnouncement = announcements.find(
+    (a) => a.type === 'critical' && a._id !== dismissedCriticalId
+  );
+
+  // Format announcement expiry
+  const formatAnnouncementExpiry = (dateStr) => {
+    if (!dateStr) return 'No expiry date';
+    const date = new Date(dateStr);
+    return date.toLocaleDateString(lang === 'hi' ? 'hi-IN' : 'en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
+
+  // Remaining validity time label
+  const getExpiryStatus = (dateStr) => {
+    if (!dateStr) return null;
+    const diffMs = new Date(dateStr) - new Date();
+    if (diffMs <= 0) return 'Expired';
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffHours < 24) {
+      return `${diffHours}h left`;
+    }
+    return `${diffDays}d left`;
+  };
+
+  const filteredAnnouncements = announcements.filter((item) => {
+    if (announcementFilter === 'All') return true;
+    return item.type === announcementFilter.toLowerCase();
+  });
+
   const patientDisplayName =
     user.fullName || appointments.find((a) => a.patientName)?.patientName || (userPhone ? `+91 ${userPhone}` : 'Patient');
 
   return (
     <div className="patient-dashboard pt-5 mt-4 pb-5 px-3 bg-body-tertiary min-vh-100 text-start">
       <div className="container max-w-5xl">
-        {/* SKEUOMORPHIC / GLASSMORPHIC ANNOUNCEMENT BANNER */}
-        <AnnouncementBanner />
+        {/* TOP BANNER OPTIMIZATION: Stacked banners pile removed. Only 1 compact critical notice shown if urgent */}
+        {activeCriticalAnnouncement && (
+          <div
+            className="alert border-0 shadow-sm rounded-4 p-3 mb-4 d-flex align-items-center justify-content-between flex-wrap gap-2.5"
+            style={{
+              background:
+                theme === 'dark'
+                  ? 'linear-gradient(135deg, rgba(239, 68, 68, 0.25) 0%, rgba(15, 23, 42, 0.95) 100%)'
+                  : 'linear-gradient(135deg, #fef2f2 0%, #fee2e2 100%)',
+              borderLeft: '5px solid #ef4444',
+              border: '1px solid rgba(239, 68, 68, 0.35)',
+              boxShadow:
+                theme === 'dark'
+                  ? '0 8px 24px -4px rgba(239, 68, 68, 0.3)'
+                  : '0 4px 16px -2px rgba(239, 68, 68, 0.15)'
+            }}
+            role="alert"
+          >
+            <div className="d-flex align-items-center gap-3">
+              <div
+                className="p-2.5 rounded-circle d-flex align-items-center justify-content-center flex-shrink-0"
+                style={{
+                  background: 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)',
+                  color: '#ffffff',
+                  boxShadow: '0 2px 8px rgba(239, 68, 68, 0.4)'
+                }}
+              >
+                <AlertTriangle size={18} />
+              </div>
+              <div>
+                <div className="d-flex align-items-center gap-2 mb-0.5">
+                  <span
+                    className="badge rounded-pill px-2 py-0.5 fw-bold"
+                    style={{
+                      background: '#dc2626',
+                      color: '#ffffff',
+                      fontSize: '0.68rem',
+                      letterSpacing: '0.05em'
+                    }}
+                  >
+                    CRITICAL NOTICE
+                  </span>
+                  <strong
+                    className="fw-bold"
+                    style={{ color: theme === 'dark' ? '#ffffff' : '#991b1b', fontSize: '0.95rem' }}
+                  >
+                    {activeCriticalAnnouncement.title}
+                  </strong>
+                </div>
+                <p
+                  className="mb-0 small text-truncate"
+                  style={{
+                    maxWidth: '560px',
+                    color: theme === 'dark' ? '#fca5a5' : '#7f1d1d'
+                  }}
+                >
+                  {activeCriticalAnnouncement.description}
+                </p>
+              </div>
+            </div>
+
+            <div className="d-flex align-items-center gap-2 ms-auto">
+              <button
+                type="button"
+                onClick={() => setActiveTab('announcements')}
+                className="btn btn-danger btn-sm rounded-pill px-3 py-1.5 fw-semibold d-inline-flex align-items-center gap-1 shadow-xs"
+                style={{ fontSize: '0.82rem' }}
+              >
+                <span>View Details</span>
+                <ArrowRight size={14} />
+              </button>
+              <button
+                type="button"
+                onClick={() => setDismissedCriticalId(activeCriticalAnnouncement._id)}
+                className="btn btn-sm rounded-circle d-flex align-items-center justify-content-center"
+                style={{
+                  width: '30px',
+                  height: '30px',
+                  background: theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)',
+                  border: 'none',
+                  color: theme === 'dark' ? '#fca5a5' : '#991b1b'
+                }}
+                title="Dismiss alert"
+                aria-label="Dismiss alert"
+              >
+                <X size={15} />
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* TOP GREETING BANNER */}
         <div
@@ -165,11 +350,14 @@ export const PatientDashboard = () => {
                   <span>{t('bookAppointment')}</span>
                 </button>
                 <button
-                  onClick={fetchPatientHistory}
+                  onClick={() => {
+                    fetchPatientHistory();
+                    fetchPatientAnnouncements();
+                  }}
                   className="btn btn-outline-light rounded-pill px-3 py-2 fw-semibold d-inline-flex align-items-center gap-1.5"
-                  disabled={loading}
+                  disabled={loading || announcementsLoading}
                 >
-                  <RefreshCw size={16} className={loading ? 'spin' : ''} />
+                  <RefreshCw size={16} className={loading || announcementsLoading ? 'spin' : ''} />
                   <span>Refresh</span>
                 </button>
               </div>
@@ -222,7 +410,7 @@ export const PatientDashboard = () => {
           <div className="btn-group p-1 bg-body rounded-pill shadow-xs border" role="group">
             <button
               onClick={() => setActiveTab('appointments')}
-              className={`btn rounded-pill px-4 py-2 fw-bold text-nowrap transition-all ${
+              className={`btn rounded-pill px-3.5 px-md-4 py-2 fw-bold text-nowrap transition-all ${
                 activeTab === 'appointments' ? 'btn-teal text-white shadow-sm' : 'btn-ghost text-secondary'
               }`}
             >
@@ -231,12 +419,33 @@ export const PatientDashboard = () => {
             </button>
             <button
               onClick={() => setActiveTab('prescriptions')}
-              className={`btn rounded-pill px-4 py-2 fw-bold text-nowrap transition-all ${
+              className={`btn rounded-pill px-3.5 px-md-4 py-2 fw-bold text-nowrap transition-all ${
                 activeTab === 'prescriptions' ? 'btn-teal text-white shadow-sm' : 'btn-ghost text-secondary'
               }`}
             >
               <FileText size={18} className="me-1.5" />
               {lang === 'hi' ? 'पर्चा और व्यायाम' : 'Prescriptions & Exercises'} ({prescriptionRecords.length})
+            </button>
+            <button
+              onClick={() => setActiveTab('announcements')}
+              className={`btn rounded-pill px-3.5 px-md-4 py-2 fw-bold text-nowrap transition-all d-inline-flex align-items-center gap-1.5 ${
+                activeTab === 'announcements' ? 'btn-teal text-white shadow-sm' : 'btn-ghost text-secondary'
+              }`}
+            >
+              <span role="img" aria-label="announcements">📢</span>
+              <span>{lang === 'hi' ? 'सूचनाएं' : 'Announcements'}</span>
+              <span
+                className={`badge rounded-pill px-2 py-0.5 fw-bold ${
+                  activeTab === 'announcements'
+                    ? 'bg-white text-teal'
+                    : activeAnnouncementsCount > 0
+                    ? 'bg-teal text-white'
+                    : 'bg-secondary text-white'
+                }`}
+                style={{ fontSize: '0.75rem' }}
+              >
+                {activeAnnouncementsCount}
+              </span>
             </button>
           </div>
 
@@ -486,6 +695,327 @@ export const PatientDashboard = () => {
             )}
           </div>
         )}
+
+        {/* TAB 3: ANNOUNCEMENTS */}
+        {activeTab === 'announcements' && (
+          <div>
+            {/* Control Bar: Category Filters & View Switcher */}
+            <div className="card border-0 shadow-sm rounded-4 p-3 mb-4 bg-body">
+              <div className="d-flex flex-wrap align-items-center justify-content-between gap-3">
+                {/* Filter Pills */}
+                <div className="d-flex align-items-center gap-1.5 flex-wrap">
+                  <span className="small text-muted fw-semibold me-1 d-flex align-items-center gap-1">
+                    <Filter size={14} /> Filter:
+                  </span>
+                  {['All', 'Critical', 'Advisory', 'Regular'].map((filterOption) => {
+                    const count =
+                      filterOption === 'All'
+                        ? announcements.length
+                        : filterOption === 'Critical'
+                        ? criticalCount
+                        : filterOption === 'Advisory'
+                        ? advisoryCount
+                        : regularCount;
+
+                    const isSelected = announcementFilter === filterOption;
+                    return (
+                      <button
+                        key={filterOption}
+                        type="button"
+                        onClick={() => setAnnouncementFilter(filterOption)}
+                        className={`btn btn-sm rounded-pill px-3 py-1 fw-semibold transition-all d-inline-flex align-items-center gap-1.5 ${
+                          isSelected
+                            ? 'btn-teal text-white shadow-xs'
+                            : 'btn-outline-secondary border-0 bg-body-tertiary text-muted'
+                        }`}
+                        style={{ fontSize: '0.8rem' }}
+                      >
+                        <span>{filterOption}</span>
+                        <span
+                          className={`badge rounded-pill ${
+                            isSelected ? 'bg-white text-teal' : 'bg-secondary-subtle text-secondary'
+                          }`}
+                          style={{ fontSize: '0.68rem', padding: '0.2em 0.5em' }}
+                        >
+                          {count}
+                        </span>
+                      </button>
+                    );
+                  })}
+                </div>
+
+                {/* View Switcher: Cards vs Table */}
+                <div className="d-flex align-items-center gap-1 bg-body-tertiary p-1 rounded-pill border ms-auto">
+                  <button
+                    type="button"
+                    onClick={() => setAnnouncementViewMode('cards')}
+                    className={`btn btn-sm rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-1.5 transition-all ${
+                      announcementViewMode === 'cards'
+                        ? 'btn-teal text-white shadow-xs'
+                        : 'text-muted border-0 bg-transparent'
+                    }`}
+                    style={{ fontSize: '0.8rem' }}
+                  >
+                    <Layers size={14} />
+                    <span>Cards</span>
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setAnnouncementViewMode('table')}
+                    className={`btn btn-sm rounded-pill px-3 py-1 fw-semibold d-inline-flex align-items-center gap-1.5 transition-all ${
+                      announcementViewMode === 'table'
+                        ? 'btn-teal text-white shadow-xs'
+                        : 'text-muted border-0 bg-transparent'
+                    }`}
+                    style={{ fontSize: '0.8rem' }}
+                  >
+                    <TableIcon size={14} />
+                    <span>Table</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+            {/* Content Loader */}
+            {announcementsLoading ? (
+              <div className="text-center py-5">
+                <div className="spinner-border text-teal" role="status"></div>
+                <p className="mt-2 text-muted small">Loading clinic announcements...</p>
+              </div>
+            ) : filteredAnnouncements.length === 0 ? (
+              <div className="card border-0 shadow-sm rounded-4 p-5 text-center my-3">
+                <div
+                  className="p-3 rounded-circle bg-teal-subtle text-teal d-inline-flex align-items-center justify-content-center mx-auto mb-3"
+                  style={{ width: '64px', height: '64px' }}
+                >
+                  <Megaphone size={32} />
+                </div>
+                <h5 className="fw-bold mb-2">
+                  {announcements.length === 0
+                    ? 'No Active Announcements'
+                    : `No ${announcementFilter} Announcements Found`}
+                </h5>
+                <p className="text-muted small max-w-md mx-auto mb-0" style={{ maxWidth: '460px' }}>
+                  {announcements.length === 0
+                    ? 'You are all caught up! There are currently no new announcements, clinic schedule changes, or personal advisories.'
+                    : `There are currently no announcements matching the "${announcementFilter}" category.`}
+                </p>
+                {announcements.length > 0 && announcementFilter !== 'All' && (
+                  <button
+                    type="button"
+                    onClick={() => setAnnouncementFilter('All')}
+                    className="btn btn-outline-teal btn-sm rounded-pill px-3 py-1.5 mt-3 mx-auto fw-semibold"
+                  >
+                    Reset Filter
+                  </button>
+                )}
+              </div>
+            ) : announcementViewMode === 'table' ? (
+              /* CLEAN TABLE FORMAT */
+              <div
+                className={`card border-0 shadow-sm rounded-4 overflow-hidden ${
+                  theme === 'dark' ? 'patient-table-dark' : 'patient-table-light'
+                }`}
+              >
+                <div className="table-responsive">
+                  <table className="table patient-announcement-table align-middle mb-0 text-start">
+                    <thead>
+                      <tr>
+                        <th style={{ minWidth: '130px' }}>Type</th>
+                        <th style={{ minWidth: '280px' }}>Title & Description</th>
+                        <th style={{ minWidth: '180px' }}>Expiry Date</th>
+                        <th style={{ minWidth: '120px' }}>Audience</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {filteredAnnouncements.map((item) => {
+                        const itemType = item.type || 'regular';
+                        const remaining = getExpiryStatus(item.expiryDate);
+
+                        return (
+                          <tr key={item._id}>
+                            {/* Column 1: Type Badge */}
+                            <td>
+                              {itemType === 'critical' ? (
+                                <span className="announcement-badge announcement-badge-critical">
+                                  <AlertTriangle size={13} />
+                                  <span>Critical</span>
+                                </span>
+                              ) : itemType === 'advisory' ? (
+                                <span className="announcement-badge announcement-badge-advisory">
+                                  <Sparkles size={13} />
+                                  <span>Advisory</span>
+                                </span>
+                              ) : (
+                                <span className="announcement-badge announcement-badge-regular">
+                                  <Info size={13} />
+                                  <span>Regular</span>
+                                </span>
+                              )}
+                            </td>
+
+                            {/* Column 2: Title & Description */}
+                            <td>
+                              <div className="fw-bold fs-6 mb-1">{item.title}</div>
+                              <p
+                                className="small mb-1"
+                                style={{
+                                  color: theme === 'dark' ? '#cbd5e1' : '#475569',
+                                  lineHeight: '1.5'
+                                }}
+                              >
+                                {item.description}
+                              </p>
+                              {item.targetType === 'individual' && (
+                                <span className="badge banner-direct-notice-badge rounded-pill px-2 py-0.5 d-inline-flex align-items-center gap-1 small fw-semibold">
+                                  <UserCheck size={11} />
+                                  <span>
+                                    Direct Notice {item.targetPatientName ? `• ${item.targetPatientName}` : ''}
+                                  </span>
+                                </span>
+                              )}
+                            </td>
+
+                            {/* Column 3: Expiry Date */}
+                            <td>
+                              <div className="d-flex flex-column gap-1">
+                                <div className="d-flex align-items-center gap-1.5 small fw-semibold">
+                                  <Clock size={14} className="text-teal" />
+                                  <span>{formatAnnouncementExpiry(item.expiryDate)}</span>
+                                </div>
+                                {remaining && (
+                                  <span
+                                    className="badge rounded-pill px-2 py-0.5 fw-medium d-inline-block"
+                                    style={{
+                                      width: 'fit-content',
+                                      fontSize: '0.7rem',
+                                      backgroundColor:
+                                        itemType === 'critical'
+                                          ? 'rgba(239, 68, 68, 0.15)'
+                                          : theme === 'dark'
+                                          ? 'rgba(148, 163, 184, 0.15)'
+                                          : 'rgba(15, 23, 42, 0.06)',
+                                      color:
+                                        itemType === 'critical'
+                                          ? '#ef4444'
+                                          : theme === 'dark'
+                                          ? '#cbd5e1'
+                                          : '#475569'
+                                    }}
+                                  >
+                                    Valid ({remaining})
+                                  </span>
+                                )}
+                              </div>
+                            </td>
+
+                            {/* Column 4: Audience */}
+                            <td>
+                              {item.targetType === 'individual' ? (
+                                <span className="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2 py-1 small fw-semibold d-inline-flex align-items-center gap-1">
+                                  <User size={12} /> Personal
+                                </span>
+                              ) : (
+                                <span className="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-2 py-1 small fw-semibold">
+                                  All Patients
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            ) : (
+              /* CLEAN CARDS VIEW: Redesigned Airy Light Theme & Double-Shade Dark Theme */
+              <div className="announcement-cards-stack">
+                {filteredAnnouncements.map((item) => {
+                  const itemType = item.type || 'regular';
+                  const remaining = getExpiryStatus(item.expiryDate);
+                  const isDark = theme === 'dark';
+
+                  const cardClass = isDark
+                    ? 'patient-announcement-card dark-slate-card'
+                    : 'patient-announcement-card light-card';
+
+                  const accentClass =
+                    itemType === 'critical'
+                      ? 'announcement-accent-critical'
+                      : itemType === 'advisory'
+                      ? 'announcement-accent-advisory'
+                      : 'announcement-accent-regular';
+
+                  return (
+                    <div key={item._id} className={`${cardClass} ${accentClass}`}>
+                      {/* Top Header Bar */}
+                      <div className="announcement-card-header d-flex align-items-center justify-content-between flex-wrap gap-2">
+                        <div className="d-flex align-items-center gap-2 flex-wrap">
+                          {/* Type Badge: Regular / Advisory / Critical */}
+                          {itemType === 'critical' ? (
+                            <span className="announcement-badge announcement-badge-critical">
+                              <AlertTriangle size={13} />
+                              <span>CRITICAL</span>
+                            </span>
+                          ) : itemType === 'advisory' ? (
+                            <span className="announcement-badge announcement-badge-advisory">
+                              <Sparkles size={13} />
+                              <span>ADVISORY</span>
+                            </span>
+                          ) : (
+                            <span className="announcement-badge announcement-badge-regular">
+                              <Info size={13} />
+                              <span>REGULAR</span>
+                            </span>
+                          )}
+
+                          {/* Direct Notice Tag */}
+                          {item.targetType === 'individual' && (
+                            <span className="announcement-badge announcement-badge-direct">
+                              <UserCheck size={12} />
+                              <span>
+                                Direct Notice {item.targetPatientName ? `• ${item.targetPatientName}` : ''}
+                              </span>
+                            </span>
+                          )}
+                        </div>
+
+                        {/* Expiry Date Display */}
+                        <div className="d-flex align-items-center gap-2 ms-auto">
+                          <span className="announcement-expiry-meta d-inline-flex align-items-center gap-1.5">
+                            <Calendar size={13} className="text-teal" />
+                            <span>Expires: {formatAnnouncementExpiry(item.expiryDate)}</span>
+                          </span>
+                          {remaining && (
+                            <span
+                              className={`announcement-expiry-chip ${
+                                itemType === 'critical' ? 'chip-critical' : ''
+                              }`}
+                            >
+                              {remaining}
+                            </span>
+                          )}
+                        </div>
+                      </div>
+
+                      {/* Card Body: Title & Full Description */}
+                      <div className="p-4 pt-3">
+                        <h5 className="announcement-card-title mb-2">
+                          {item.title}
+                        </h5>
+                        <p className="announcement-card-desc mb-0">
+                          {item.description}
+                        </p>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        )}
+
         {/* BOOKING MODAL */}
         {showBookingModal && (
           <div
