@@ -62,7 +62,33 @@ const optionalAuth = (req, res, next) => {
   next();
 };
 
+/**
+ * Role-Based Access Control (RBAC) Middleware
+ * Checks if decoded req.user has an authorized role (e.g. 'doctor', 'admin')
+ * @param  {...string} allowedRoles
+ */
+const requireRole = (...allowedRoles) => {
+  return (req, res, next) => {
+    if (!req.user || !req.user.role) {
+      return res.status(403).json({
+        success: false,
+        message: 'Access denied: User authentication role unverified.'
+      });
+    }
+
+    if (!allowedRoles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        message: `Forbidden: Access requires one of [${allowedRoles.join(', ')}] permissions.`
+      });
+    }
+
+    next();
+  };
+};
+
 module.exports = {
   authenticate,
-  optionalAuth
+  optionalAuth,
+  requireRole
 };

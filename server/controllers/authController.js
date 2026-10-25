@@ -132,3 +132,56 @@ exports.login = async (req, res) => {
     });
   }
 };
+
+// @desc    Doctor Admin PIN Login (generates signed doctor JWT)
+// @route   POST /api/auth/doctor-pin-login
+exports.doctorPinLogin = async (req, res) => {
+  try {
+    const { passcode, pin } = req.body;
+    const submittedPin = String(passcode || pin || '').trim();
+    const validPin = process.env.ADMIN_PIN || '7777';
+
+    if (!submittedPin) {
+      return res.status(400).json({
+        success: false,
+        message: 'Passcode is required.'
+      });
+    }
+
+    if (submittedPin !== validPin) {
+      return res.status(401).json({
+        success: false,
+        message: 'Invalid passcode. Access denied.'
+      });
+    }
+
+    // Generate signed JWT with doctor role
+    const token = jwt.sign(
+      {
+        userId: 'doctor_admin',
+        role: 'doctor',
+        fullName: 'Dr. Neha Sharma (PT)'
+      },
+      JWT_SECRET,
+      { expiresIn: JWT_EXPIRES_IN }
+    );
+
+    return res.status(200).json({
+      success: true,
+      message: 'Doctor portal unlocked successfully.',
+      token,
+      user: {
+        id: 'doctor_admin',
+        fullName: 'Dr. Neha Sharma (PT)',
+        role: 'doctor'
+      }
+    });
+  } catch (error) {
+    console.error('Doctor PIN login error:', error);
+    return res.status(500).json({
+      success: false,
+      message: error.message || 'Server error during doctor authentication.'
+    });
+  }
+};
+

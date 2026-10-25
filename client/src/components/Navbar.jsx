@@ -107,7 +107,7 @@ export const Navbar = () => {
           </ul>
 
           {/* Right Controls */}
-          <div className="d-flex align-items-center gap-2 flex-nowrap flex-shrink-0 mt-2 mt-lg-0 ms-lg-auto">
+          <div className="d-flex align-items-center justify-content-center justify-content-lg-end gap-2 flex-wrap flex-lg-nowrap mt-2 mt-lg-0 ms-lg-auto">
             {/* Patient Auth Button / User Dropdown */}
             {user === null ? (
               <Link

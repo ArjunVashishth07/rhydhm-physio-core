@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
 import { useApp } from '../context/AppContext';
 import { conditionSymptomsMap, timeSlots as defaultTimeSlots } from '../data/clinicData';
-import { Calendar, Clock, User, Phone, Activity, CheckCircle, AlertCircle, MessageSquare } from 'lucide-react';
-
-const API_BASE_URL = `${import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000'}/api/appointments`;
+import { Calendar, User, Phone, Activity, CheckCircle, AlertCircle } from 'lucide-react';
+import {
+  SlotPicker,
+  SymptomSelector,
+  BookingSuccessView,
+  fetchAvailableSlots,
+  bookAppointment
+} from '../modules/appointments';
 
 export const BookingForm = ({ onBookingSuccess } = {}) => {
   const { t, lang, user, openAuthModal } = useApp();
@@ -31,7 +35,6 @@ export const BookingForm = ({ onBookingSuccess } = {}) => {
   // Async & Response States
   const [availableSlots, setAvailableSlots] = useState([]);
   const [loadingSlots, setLoadingSlots] = useState(false);
-  const [slotError, setSlotError] = useState('');
   const [submitting, setSubmitting] = useState(false);
   const [bookingSuccess, setBookingSuccess] = useState(null);
   const [bookingError, setBookingError] = useState('');
@@ -51,13 +54,12 @@ export const BookingForm = ({ onBookingSuccess } = {}) => {
   useEffect(() => {
     if (!appointmentDate) return;
 
-    const fetchSlots = async () => {
+    const loadSlots = async () => {
       setLoadingSlots(true);
-      setSlotError('');
       try {
-        const response = await axios.get(`${API_BASE_URL}/available-slots?date=${appointmentDate}`);
-        if (response.data && response.data.availableSlots) {
-          setAvailableSlots(response.data.availableSlots);
+        const response = await fetchAvailableSlots(appointmentDate);
+        if (response && response.availableSlots) {
+          setAvailableSlots(response.availableSlots);
         } else {
           setAvailableSlots(defaultTimeSlots);
         }
@@ -69,13 +71,12 @@ export const BookingForm = ({ onBookingSuccess } = {}) => {
       }
     };
 
-    fetchSlots();
+    loadSlots();
   }, [appointmentDate]);
 
   // Reset selected symptoms when primary issue changes
   const handlePrimaryIssueChange = (e) => {
-    const newIssue = e.target.value;
-    setPrimaryIssue(newIssue);
+    setPrimaryIssue(e.target.value);
     setSymptoms([]);
   };
 
@@ -104,30 +105,24 @@ export const BookingForm = ({ onBookingSuccess } = {}) => {
       timeSlot
     };
 
-    console.log('Form Submitted:');
-    console.log('Data sent:', payload);
-
     setSubmitting(true);
+    setBookingError('');
 
     try {
-      const res = await axios.post(API_BASE_URL, payload);
-      console.log('Response received:', res.data);
+      const res = await bookAppointment(payload);
+      const appointmentData = res?.appointment || res?.data || payload;
+      setBookingSuccess(appointmentData);
 
-      if (res.status === 201 || res.data) {
-        const appointmentData = res.data?.appointment || res.data?.data || payload;
-        setBookingSuccess(appointmentData);
-
-        if (onBookingSuccess && typeof onBookingSuccess === 'function') {
-          onBookingSuccess(appointmentData);
-        }
-
-        // Reset form inputs except date
-        setPatientName('');
-        if (!user) setPhone('');
-        setAge('');
-        setSymptoms([]);
-        setTimeSlot('');
+      if (onBookingSuccess && typeof onBookingSuccess === 'function') {
+        onBookingSuccess(appointmentData);
       }
+
+      // Reset form inputs except date
+      setPatientName('');
+      if (!user) setPhone('');
+      setAge('');
+      setSymptoms([]);
+      setTimeSlot('');
     } catch (err) {
       console.error('Booking Error:', err);
       const errMsg =
@@ -168,28 +163,11 @@ export const BookingForm = ({ onBookingSuccess } = {}) => {
     executeBooking(user.phone || phone);
   };
 
-  // Generate WhatsApp Share Link
-  const getWhatsAppLink = (booking) => {
-    const text =
-      `*RHYDHM Physio & Fitness Center - New Appointment*\n\n` +
-      `*Patient Name:* ${booking.patientName}\n` +
-      `*Phone:* ${booking.phone}\n` +
-      `*Age/Gender:* ${booking.age} yrs / ${booking.gender}\n` +
-      `*Primary Issue:* ${booking.primaryIssue}\n` +
-      `*Date:* ${booking.appointmentDate}\n` +
-      `*Time Slot:* ${booking.timeSlot}\n` +
-      (booking.symptoms?.length ? `*Symptoms:* ${booking.symptoms.join(', ')}\n` : '');
-
-    return `https://wa.me/919760421410?text=${encodeURIComponent(text)}`;
-  };
-
   const currentSymptoms = conditionSymptomsMap[primaryIssue] || [];
 
   return (
     <div className="card border-0 shadow-lg rounded-4 overflow-hidden" id="booking-form">
-      <div
-        className="card-header text-white p-4 text-center clinical-banner border-0"
-      >
+      <div className="card-header text-white p-4 text-center clinical-banner border-0">
         <h3 className="fw-bold mb-1 d-flex align-items-center justify-content-center gap-2">
           <Calendar size={26} />
           {t('bookAppointment')}
@@ -202,104 +180,72 @@ export const BookingForm = ({ onBookingSuccess } = {}) => {
       </div>
 
       <div className="card-body p-4 p-md-5">
-        {/* Success Alert */}
+        {/* Success Alert with WhatsApp Action */}
         {bookingSuccess && (
-          <div className="alert alert-success border-0 shadow-sm p-4 mb-4 rounded-3 text-start">
-            <div className="d-flex align-items-center gap-3 mb-2">
-              <CheckCircle className="text-success" size={32} />
-              <div>
-                <h5 className="alert-heading fw-bold mb-0">{t('bookingSuccess')}</h5>
-                <small className="text-muted">
-                  Booking ID: #{bookingSuccess._id ? bookingSuccess._id.substring(18) : 'RHY-' + Date.now().toString().slice(-4)}
-                </small>
-              </div>
-            </div>
-            <hr />
-            <div className="row g-2 mb-3 small">
-              <div className="col-sm-6">
-                <strong>{t('fullName')}:</strong> {bookingSuccess.patientName}
-              </div>
-              <div className="col-sm-6">
-                <strong>{t('phoneNumber')}:</strong> {bookingSuccess.phone}
-              </div>
-              <div className="col-sm-6">
-                <strong>{t('selectDate')}:</strong> {bookingSuccess.appointmentDate}
-              </div>
-              <div className="col-sm-6">
-                <strong>{t('availableSlots')}:</strong> {bookingSuccess.timeSlot}
-              </div>
-              <div className="col-12">
-                <strong>{t('selectCondition')}:</strong> {bookingSuccess.primaryIssue}
-              </div>
-            </div>
-
-            <a
-              href={getWhatsAppLink(bookingSuccess)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="btn btn-success rounded-pill w-100 fw-bold d-flex align-items-center justify-content-center gap-2 py-2.5 shadow-sm"
-            >
-              <MessageSquare size={20} />
-              {lang === 'hi' ? 'WhatsApp पर पुष्टि भेजें' : 'Confirm & Send Details on WhatsApp'}
-            </a>
-          </div>
+          <BookingSuccessView
+            booking={bookingSuccess}
+            lang={lang}
+            title={t('bookingSuccess')}
+            whatsAppButtonText={
+              lang === 'hi' ? 'WhatsApp पर पुष्टि भेजें' : 'Confirm & Send Details on WhatsApp'
+            }
+          />
         )}
 
         {/* Error Alert */}
         {bookingError && (
-          <div className="alert alert-danger border-0 shadow-sm d-flex align-items-center gap-2 mb-4">
-            <AlertCircle size={20} className="flex-shrink-0" />
+          <div className="alert alert-danger border-0 shadow-sm d-flex align-items-center gap-2 mb-4 rounded-3 text-start">
+            <AlertCircle size={20} />
             <span>{bookingError}</span>
           </div>
         )}
 
         <form onSubmit={handleSubmit}>
-          {/* Patient Details Row */}
-          <div className="row g-3 mb-4">
-            {/* Full Name */}
-            <div className="col-md-6 text-start">
-              <label className="form-label fw-semibold text-secondary small">
-                {t('fullName')} <span className="text-danger">*</span>
-              </label>
-              <div className="input-group">
-                <span className="input-group-text bg-body-tertiary">
-                  <User size={18} className="text-muted" />
-                </span>
-                <input
-                  type="text"
-                  className="form-control"
-                  placeholder={lang === 'hi' ? 'उदाहरण: राहुल शर्मा' : 'e.g. Rahul Sharma'}
-                  value={patientName}
-                  onChange={(e) => setPatientName(e.target.value)}
-                  required
-                />
-              </div>
+          {/* Patient Name */}
+          <div className="mb-4 text-start">
+            <label className="form-label fw-semibold text-secondary small">
+              {t('fullName')} <span className="text-danger">*</span>
+            </label>
+            <div className="input-group">
+              <span className="input-group-text bg-body-tertiary">
+                <User size={18} className="text-teal" />
+              </span>
+              <input
+                type="text"
+                className="form-control"
+                placeholder={lang === 'hi' ? 'उदा. राहुल शर्मा' : 'e.g. Rahul Sharma'}
+                value={patientName}
+                onChange={(e) => setPatientName(e.target.value)}
+                required
+              />
             </div>
+          </div>
 
-            {/* Phone Number */}
-            <div className="col-md-6 text-start">
-              <label className="form-label fw-semibold text-secondary small">
-                {t('phoneNumber')} <span className="text-danger">*</span>
-              </label>
-              <div className="input-group">
-                <span className="input-group-text bg-body-tertiary">
-                  <Phone size={18} className="text-muted" />
-                </span>
-                <input
-                  type="tel"
-                  className="form-control"
-                  placeholder="97604XXXXX"
-                  pattern="[0-9]{10}"
-                  title="10-digit phone number"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  required
-                />
-              </div>
+          {/* Mobile Number */}
+          <div className="mb-4 text-start">
+            <label className="form-label fw-semibold text-secondary small">
+              {t('phoneNumber')} <span className="text-danger">*</span>
+            </label>
+            <div className="input-group">
+              <span className="input-group-text bg-body-tertiary">
+                <Phone size={18} className="text-teal" />
+              </span>
+              <input
+                type="tel"
+                className="form-control"
+                placeholder="10-digit mobile number"
+                pattern="[0-9]{10}"
+                maxLength="10"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                required
+              />
             </div>
+          </div>
 
-            {/* Age */}
-            <div className="col-md-4 text-start">
+          {/* Age & Gender Row */}
+          <div className="row g-3 mb-4 text-start">
+            <div className="col-sm-6">
               <label className="form-label fw-semibold text-secondary small">
                 {t('age')} <span className="text-danger">*</span>
               </label>
@@ -314,38 +260,29 @@ export const BookingForm = ({ onBookingSuccess } = {}) => {
                 required
               />
             </div>
-
-            {/* Gender Radio Pills */}
-            <div className="col-md-8 text-start">
+            <div className="col-sm-6">
               <label className="form-label fw-semibold text-secondary small d-block">
                 {t('gender')} <span className="text-danger">*</span>
               </label>
-              <div className="btn-group w-100" role="group" aria-label="Gender selection">
+              <div className="btn-group w-100" role="group">
                 {['Male', 'Female', 'Other'].map((g) => {
-                  const isSelected = gender === g;
+                  const isChecked = gender === g;
                   return (
                     <React.Fragment key={g}>
                       <input
                         type="radio"
                         className="btn-check"
-                        name="genderRadio"
+                        name="genderOptions"
                         id={`gender-${g}`}
-                        value={g}
-                        checked={isSelected}
+                        autoComplete="off"
+                        checked={isChecked}
                         onChange={() => setGender(g)}
                       />
                       <label
-                        className={`btn py-2 fw-semibold transition-all ${
-                          isSelected ? 'shadow-sm' : ''
+                        className={`btn btn-outline-secondary ${
+                          isChecked ? 'active btn-teal text-white' : ''
                         }`}
                         htmlFor={`gender-${g}`}
-                        style={{
-                          backgroundColor: isSelected ? 'var(--teal-primary)' : 'transparent',
-                          color: isSelected ? '#ffffff' : 'var(--teal-primary)',
-                          borderColor: 'var(--teal-primary)',
-                          borderWidth: '1px',
-                          borderStyle: 'solid'
-                        }}
                       >
                         {t(g.toLowerCase())}
                       </label>
@@ -380,34 +317,15 @@ export const BookingForm = ({ onBookingSuccess } = {}) => {
             </div>
           </div>
 
-          {/* Dynamic Symptoms Checkboxes / Badges */}
-          {currentSymptoms.length > 0 && (
-            <div className="mb-4 text-start">
-              <label className="form-label fw-semibold text-secondary small d-block">
-                {t('symptoms')} <small className="text-muted fw-normal">({lang === 'hi' ? 'वैकल्पिक' : 'Optional'})</small>
-              </label>
-              <div className="d-flex flex-wrap gap-2">
-                {currentSymptoms.map((sym) => {
-                  const isSelected = symptoms.includes(sym);
-                  return (
-                    <button
-                      type="button"
-                      key={sym}
-                      onClick={() => handleSymptomToggle(sym)}
-                      className={`btn btn-sm rounded-pill transition-all text-start d-flex align-items-center gap-1.5 px-3 py-1.5 ${
-                        isSelected
-                          ? 'btn-teal text-white shadow-sm'
-                          : 'btn-outline-secondary opacity-85'
-                      }`}
-                    >
-                      <span style={{ fontSize: '1.1em' }}>{isSelected ? '✓' : '+'}</span>
-                      <span>{sym}</span>
-                    </button>
-                  );
-                })}
-              </div>
-            </div>
-          )}
+          {/* Modular Symptoms Chips */}
+          <SymptomSelector
+            symptomsList={currentSymptoms}
+            selectedSymptoms={symptoms}
+            onToggleSymptom={handleSymptomToggle}
+            lang={lang}
+            label={t('symptoms')}
+            optionalText={lang === 'hi' ? 'वैकल्पिक' : 'Optional'}
+          />
 
           {/* Date Picker */}
           <div className="mb-4 text-start">
@@ -424,52 +342,16 @@ export const BookingForm = ({ onBookingSuccess } = {}) => {
             />
           </div>
 
-          {/* Available Slots Pill Grid */}
-          <div className="mb-4 text-start">
-            <label className="form-label fw-semibold text-secondary small d-flex align-items-center justify-content-between">
-              <span>
-                {t('availableSlots')} <span className="text-danger">*</span>
-              </span>
-              <span className="badge bg-teal-subtle text-teal">
-                <Clock size={14} className="me-1" />
-                4:00 PM - 8:00 PM
-              </span>
-            </label>
-
-            {loadingSlots ? (
-              <div className="text-center py-3">
-                <div className="spinner-border spinner-border-sm text-teal" role="status"></div>
-                <span className="ms-2 small text-muted">
-                  {lang === 'hi' ? 'समय स्लॉट लोड हो रहे हैं...' : 'Loading available slots...'}
-                </span>
-              </div>
-            ) : availableSlots.length === 0 ? (
-              <div className="alert alert-warning small mb-0">
-                {t('noSlotsAvailable')}
-              </div>
-            ) : (
-              <div className="row g-2">
-                {availableSlots.map((slot) => {
-                  const isSelected = timeSlot === slot;
-                  return (
-                    <div key={slot} className="col-6 col-md-3">
-                      <button
-                        type="button"
-                        onClick={() => setTimeSlot(slot)}
-                        className={`btn btn-sm w-100 rounded-3 py-2.5 fw-semibold transition-all ${
-                          isSelected
-                            ? 'btn-teal text-white shadow-sm scale-102'
-                            : 'btn-outline-secondary'
-                        }`}
-                      >
-                        {slot}
-                      </button>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          {/* Modular Slot Picker */}
+          <SlotPicker
+            availableSlots={availableSlots}
+            selectedSlot={timeSlot}
+            onSelectSlot={setTimeSlot}
+            loading={loadingSlots}
+            lang={lang}
+            label={t('availableSlots')}
+            noSlotsText={t('noSlotsAvailable')}
+          />
 
           {/* Submit Button */}
           <button

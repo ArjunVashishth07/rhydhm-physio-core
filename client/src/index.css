@@ -297,6 +297,11 @@ body {
 /* ==========================================================================
    STANDARDIZED GLOBAL CONTAINERS & NORMALIZED TYPOGRAPHY DENSITIES
    ========================================================================== */
+.admin-portal-container {
+  max-width: 1440px !important;
+  width: 100%;
+}
+
 .max-w-7xl {
   max-width: 80rem !important;
   width: 100%;

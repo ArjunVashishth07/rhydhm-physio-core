@@ -6,6 +6,10 @@ const {
   updatePrescription,
   deleteAppointment
 } = require('../controllers/adminController');
+const { authenticate, requireRole } = require('../middleware/auth');
+
+// Guard all administrative routes behind JWT authentication and role verification
+router.use(authenticate, requireRole('doctor', 'admin'));
 
 // GET /api/admin/appointments
 router.get('/appointments', getAllAppointments);
