@@ -560,7 +560,7 @@
 }
 
 /* --------------------------------------------------------------------------
-   MODERN TAILORED BADGES (Crisp Light & Glowing Dark)
+   MODERN TAILORED BADGES (Universal across Cards & Table)
    -------------------------------------------------------------------------- */
 .announcement-badge {
   display: inline-flex;
@@ -573,109 +573,145 @@
   border-radius: 9999px;
   text-transform: uppercase;
   transition: all 0.2s ease;
+  white-space: nowrap;
 }
 
-/* Light Theme Badges */
-.light-card .announcement-badge-critical {
+/* Light Theme Badges (Default / Light Card / Light Table) */
+.announcement-badge-critical,
+.light-card .announcement-badge-critical,
+.patient-table-light .announcement-badge-critical {
   background: #fef2f2 !important;
   color: #dc2626 !important;
   border: 1px solid #fca5a5 !important;
-  box-shadow: 0 1px 2px rgba(239, 68, 68, 0.08);
+  box-shadow: 0 1px 2px rgba(239, 68, 68, 0.08) !important;
 }
 
-.light-card .announcement-badge-advisory {
+.announcement-badge-advisory,
+.light-card .announcement-badge-advisory,
+.patient-table-light .announcement-badge-advisory {
   background: #f0f9ff !important;
   color: #0284c7 !important;
   border: 1px solid #bae6fd !important;
-  box-shadow: 0 1px 2px rgba(2, 132, 199, 0.08);
+  box-shadow: 0 1px 2px rgba(2, 132, 199, 0.08) !important;
 }
 
-.light-card .announcement-badge-regular {
+.announcement-badge-regular,
+.light-card .announcement-badge-regular,
+.patient-table-light .announcement-badge-regular {
   background: #f0fdfa !important;
   color: #0f766e !important;
   border: 1px solid #99f6e4 !important;
-  box-shadow: 0 1px 2px rgba(13, 148, 136, 0.08);
+  box-shadow: 0 1px 2px rgba(13, 148, 136, 0.08) !important;
 }
 
-.light-card .announcement-badge-direct {
+.announcement-badge-direct,
+.light-card .announcement-badge-direct,
+.patient-table-light .announcement-badge-direct {
   background: #f5f3ff !important;
   color: #7c3aed !important;
   border: 1px solid #ddd6fe !important;
 }
 
-.light-card .announcement-expiry-meta {
+.announcement-expiry-meta,
+.light-card .announcement-expiry-meta,
+.patient-table-light .announcement-expiry-meta {
   color: #64748b !important;
   font-size: 0.8rem;
   font-weight: 600;
 }
 
-.light-card .announcement-expiry-chip {
-  background: #f1f5f9;
-  color: #475569;
-  border: 1px solid #e2e8f0;
+.announcement-expiry-chip,
+.light-card .announcement-expiry-chip,
+.patient-table-light .announcement-expiry-chip {
+  background: #f1f5f9 !important;
+  color: #475569 !important;
+  border: 1px solid #e2e8f0 !important;
   font-size: 0.72rem;
   font-weight: 600;
   padding: 0.25rem 0.65rem;
   border-radius: 9999px;
+  white-space: nowrap;
 }
 
-.light-card .announcement-expiry-chip.chip-critical {
-  background: #fee2e2;
-  color: #dc2626;
-  border-color: #fca5a5;
+.announcement-expiry-chip.chip-critical,
+.light-card .announcement-expiry-chip.chip-critical,
+.patient-table-light .announcement-expiry-chip.chip-critical {
+  background: #fee2e2 !important;
+  color: #dc2626 !important;
+  border-color: #fca5a5 !important;
 }
 
-/* Dark Theme Badges */
-.dark-slate-card .announcement-badge-critical {
+/* Dark Theme Badges (Dark Mode / Dark Card / Dark Table) */
+[data-bs-theme="dark"] .announcement-badge-critical,
+.dark-slate-card .announcement-badge-critical,
+.patient-table-dark .announcement-badge-critical {
   background: rgba(239, 68, 68, 0.25) !important;
   color: #fca5a5 !important;
   border: 1px solid rgba(248, 113, 113, 0.5) !important;
-  box-shadow: 0 0 10px rgba(239, 68, 68, 0.25);
+  box-shadow: 0 0 10px rgba(239, 68, 68, 0.25) !important;
 }
 
-.dark-slate-card .announcement-badge-advisory {
+[data-bs-theme="dark"] .announcement-badge-advisory,
+.dark-slate-card .announcement-badge-advisory,
+.patient-table-dark .announcement-badge-advisory {
   background: rgba(14, 165, 233, 0.25) !important;
   color: #7dd3fc !important;
   border: 1px solid rgba(56, 189, 248, 0.5) !important;
-  box-shadow: 0 0 10px rgba(14, 165, 233, 0.25);
+  box-shadow: 0 0 10px rgba(14, 165, 233, 0.25) !important;
 }
 
-.dark-slate-card .announcement-badge-regular {
+[data-bs-theme="dark"] .announcement-badge-regular,
+.dark-slate-card .announcement-badge-regular,
+.patient-table-dark .announcement-badge-regular {
   background: rgba(13, 148, 136, 0.25) !important;
   color: #5eead4 !important;
   border: 1px solid rgba(94, 234, 212, 0.4) !important;
-  box-shadow: 0 0 10px rgba(13, 148, 136, 0.25);
+  box-shadow: 0 0 10px rgba(13, 148, 136, 0.25) !important;
 }
 
-.dark-slate-card .announcement-badge-direct {
+[data-bs-theme="dark"] .announcement-badge-direct,
+.dark-slate-card .announcement-badge-direct,
+.patient-table-dark .announcement-badge-direct {
   background: rgba(139, 92, 246, 0.25) !important;
   color: #c4b5fd !important;
   border: 1px solid rgba(167, 139, 250, 0.4) !important;
 }
 
-.dark-slate-card .announcement-expiry-meta {
+[data-bs-theme="dark"] .announcement-expiry-meta,
+.dark-slate-card .announcement-expiry-meta,
+.patient-table-dark .announcement-expiry-meta {
   color: #94a3b8 !important;
   font-size: 0.8rem;
   font-weight: 600;
 }
 
-.dark-slate-card .announcement-expiry-chip {
-  background: rgba(255, 255, 255, 0.1);
-  color: #cbd5e1;
-  border: 1px solid rgba(255, 255, 255, 0.12);
+[data-bs-theme="dark"] .announcement-expiry-chip,
+.dark-slate-card .announcement-expiry-chip,
+.patient-table-dark .announcement-expiry-chip {
+  background: rgba(255, 255, 255, 0.1) !important;
+  color: #cbd5e1 !important;
+  border: 1px solid rgba(255, 255, 255, 0.12) !important;
   font-size: 0.72rem;
   font-weight: 600;
   padding: 0.25rem 0.65rem;
   border-radius: 9999px;
+  white-space: nowrap;
 }
 
-.dark-slate-card .announcement-expiry-chip.chip-critical {
-  background: rgba(239, 68, 68, 0.25);
-  color: #fca5a5;
-  border-color: rgba(248, 113, 113, 0.45);
+[data-bs-theme="dark"] .announcement-expiry-chip.chip-critical,
+.dark-slate-card .announcement-expiry-chip.chip-critical,
+.patient-table-dark .announcement-expiry-chip.chip-critical {
+  background: rgba(239, 68, 68, 0.25) !important;
+  color: #fca5a5 !important;
+  border-color: rgba(248, 113, 113, 0.45) !important;
 }
 
 /* Patient Announcement Clean Table */
+.patient-table-container {
+  border-radius: 18px !important;
+  overflow: hidden;
+}
+
 .patient-announcement-table {
   border-collapse: separate;
   border-spacing: 0;
@@ -683,51 +719,72 @@
 }
 
 .patient-announcement-table thead tr th {
-  padding: 0.95rem 1.25rem;
+  padding: 1rem 1.35rem;
   font-size: 0.74rem;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.07em;
   text-transform: uppercase;
+  border: none;
 }
 
 .patient-announcement-table tbody tr td {
-  padding: 1.2rem 1.25rem;
+  padding: 1.25rem 1.35rem;
   vertical-align: middle;
   transition: background-color 0.15s ease;
 }
 
 /* Light Table styling */
+.patient-table-light {
+  background-color: #ffffff !important;
+  border: 1px solid #e2e8f0 !important;
+  box-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05) !important;
+}
+
 .patient-table-light thead tr th {
-  background-color: #f8fafc;
-  color: #64748b;
-  border-bottom: 1px solid #e2e8f0;
+  background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%) !important;
+  color: #475569 !important;
+  border-bottom: 2px solid #e2e8f0 !important;
 }
 
 .patient-table-light tbody tr td {
   background-color: #ffffff;
-  border-bottom: 1px solid #f1f5f9;
-  color: #0f172a;
+  border-bottom: 1px solid #f1f5f9 !important;
+  color: #0f172a !important;
+}
+
+.patient-table-light tbody tr:last-child td {
+  border-bottom: none !important;
 }
 
 .patient-table-light tbody tr:hover td {
-  background-color: #f8fafc;
+  background-color: #f8fbff !important;
 }
 
 /* Dark Double-Shade Slate Table styling */
+.patient-table-dark {
+  background-color: #0f172a !important;
+  border: 1px solid rgba(148, 163, 184, 0.22) !important;
+  box-shadow: 0 12px 30px -6px rgba(0, 0, 0, 0.55) !important;
+}
+
 .patient-table-dark thead tr th {
-  background-color: #1e293b;
-  color: #94a3b8;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+  background: linear-gradient(180deg, #1e293b 0%, #172033 100%) !important;
+  color: #94a3b8 !important;
+  border-bottom: 2px solid rgba(148, 163, 184, 0.25) !important;
 }
 
 .patient-table-dark tbody tr td {
   background-color: #0f172a;
-  border-bottom: 1px solid rgba(148, 163, 184, 0.12);
-  color: #f8fafc;
+  border-bottom: 1px solid rgba(148, 163, 184, 0.12) !important;
+  color: #f8fafc !important;
+}
+
+.patient-table-dark tbody tr:last-child td {
+  border-bottom: none !important;
 }
 
 .patient-table-dark tbody tr:hover td {
-  background-color: #1e293b;
+  background-color: #1e293b !important;
 }
 
 

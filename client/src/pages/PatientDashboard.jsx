@@ -27,7 +27,8 @@ import {
   ArrowRight,
   Filter,
   Layers,
-  Table as TableIcon
+  Table as TableIcon,
+  Users
 } from 'lucide-react';
 import BookingForm from '../components/BookingForm';
 import '../components/AnnouncementBanner.css';
@@ -723,19 +724,21 @@ export const PatientDashboard = () => {
                         key={filterOption}
                         type="button"
                         onClick={() => setAnnouncementFilter(filterOption)}
-                        className={`btn btn-sm rounded-pill px-3 py-1 fw-semibold transition-all d-inline-flex align-items-center gap-1.5 ${
+                        className={`btn btn-sm rounded-pill px-3 py-1.5 fw-semibold transition-all d-inline-flex align-items-center gap-2 ${
                           isSelected
                             ? 'btn-teal text-white shadow-xs'
                             : 'btn-outline-secondary border-0 bg-body-tertiary text-muted'
                         }`}
-                        style={{ fontSize: '0.8rem' }}
+                        style={{ fontSize: '0.82rem' }}
                       >
                         <span>{filterOption}</span>
                         <span
-                          className={`badge rounded-pill ${
-                            isSelected ? 'bg-white text-teal' : 'bg-secondary-subtle text-secondary'
+                          className={`badge rounded-pill px-2 py-0.5 fw-bold ms-1 ${
+                            isSelected
+                              ? 'bg-white text-teal shadow-xs'
+                              : 'bg-body text-secondary border'
                           }`}
-                          style={{ fontSize: '0.68rem', padding: '0.2em 0.5em' }}
+                          style={{ fontSize: '0.72rem', minWidth: '1.4rem' }}
                         >
                           {count}
                         </span>
@@ -813,7 +816,7 @@ export const PatientDashboard = () => {
             ) : announcementViewMode === 'table' ? (
               /* CLEAN TABLE FORMAT */
               <div
-                className={`card border-0 shadow-sm rounded-4 overflow-hidden ${
+                className={`card border shadow-sm rounded-4 overflow-hidden patient-table-container ${
                   theme === 'dark' ? 'patient-table-dark' : 'patient-table-light'
                 }`}
               >
@@ -821,10 +824,10 @@ export const PatientDashboard = () => {
                   <table className="table patient-announcement-table align-middle mb-0 text-start">
                     <thead>
                       <tr>
-                        <th style={{ minWidth: '130px' }}>Type</th>
-                        <th style={{ minWidth: '280px' }}>Title & Description</th>
-                        <th style={{ minWidth: '180px' }}>Expiry Date</th>
-                        <th style={{ minWidth: '120px' }}>Audience</th>
+                        <th style={{ minWidth: '140px', width: '15%' }}>TYPE</th>
+                        <th style={{ minWidth: '280px', width: '45%' }}>TITLE & DESCRIPTION</th>
+                        <th style={{ minWidth: '220px', width: '25%' }}>EXPIRY DATE</th>
+                        <th style={{ minWidth: '130px', width: '15%' }}>AUDIENCE</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -856,18 +859,23 @@ export const PatientDashboard = () => {
 
                             {/* Column 2: Title & Description */}
                             <td>
-                              <div className="fw-bold fs-6 mb-1">{item.title}</div>
+                              <div className="fw-bold fs-6 mb-1 text-truncate" style={{ maxWidth: '420px' }}>
+                                {item.title}
+                              </div>
                               <p
                                 className="small mb-1"
                                 style={{
                                   color: theme === 'dark' ? '#cbd5e1' : '#475569',
-                                  lineHeight: '1.5'
+                                  lineHeight: '1.55'
                                 }}
                               >
                                 {item.description}
                               </p>
                               {item.targetType === 'individual' && (
-                                <span className="badge banner-direct-notice-badge rounded-pill px-2 py-0.5 d-inline-flex align-items-center gap-1 small fw-semibold">
+                                <span
+                                  className="announcement-badge announcement-badge-direct mt-1"
+                                  style={{ fontSize: '0.68rem', padding: '0.2rem 0.55rem' }}
+                                >
                                   <UserCheck size={11} />
                                   <span>
                                     Direct Notice {item.targetPatientName ? `• ${item.targetPatientName}` : ''}
@@ -878,30 +886,17 @@ export const PatientDashboard = () => {
 
                             {/* Column 3: Expiry Date */}
                             <td>
-                              <div className="d-flex flex-column gap-1">
-                                <div className="d-flex align-items-center gap-1.5 small fw-semibold">
-                                  <Clock size={14} className="text-teal" />
+                              <div className="d-flex flex-column gap-1.5">
+                                <div className="d-inline-flex align-items-center gap-1.5 small fw-semibold text-nowrap">
+                                  <Clock size={14} className="text-teal flex-shrink-0" />
                                   <span>{formatAnnouncementExpiry(item.expiryDate)}</span>
                                 </div>
                                 {remaining && (
                                   <span
-                                    className="badge rounded-pill px-2 py-0.5 fw-medium d-inline-block"
-                                    style={{
-                                      width: 'fit-content',
-                                      fontSize: '0.7rem',
-                                      backgroundColor:
-                                        itemType === 'critical'
-                                          ? 'rgba(239, 68, 68, 0.15)'
-                                          : theme === 'dark'
-                                          ? 'rgba(148, 163, 184, 0.15)'
-                                          : 'rgba(15, 23, 42, 0.06)',
-                                      color:
-                                        itemType === 'critical'
-                                          ? '#ef4444'
-                                          : theme === 'dark'
-                                          ? '#cbd5e1'
-                                          : '#475569'
-                                    }}
+                                    className={`announcement-expiry-chip ${
+                                      itemType === 'critical' ? 'chip-critical' : ''
+                                    }`}
+                                    style={{ width: 'fit-content' }}
                                   >
                                     Valid ({remaining})
                                   </span>
@@ -912,12 +907,14 @@ export const PatientDashboard = () => {
                             {/* Column 4: Audience */}
                             <td>
                               {item.targetType === 'individual' ? (
-                                <span className="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-2 py-1 small fw-semibold d-inline-flex align-items-center gap-1">
-                                  <User size={12} /> Personal
+                                <span className="badge rounded-pill px-2.5 py-1 small fw-semibold bg-warning-subtle text-warning-emphasis border border-warning-subtle d-inline-flex align-items-center gap-1.5">
+                                  <User size={12} />
+                                  <span>Personal</span>
                                 </span>
                               ) : (
-                                <span className="badge bg-secondary-subtle text-secondary border border-secondary-subtle rounded-pill px-2 py-1 small fw-semibold">
-                                  All Patients
+                                <span className="badge rounded-pill px-2.5 py-1 small fw-semibold bg-primary-subtle text-primary border border-primary-subtle d-inline-flex align-items-center gap-1.5">
+                                  <Users size={12} />
+                                  <span>All Patients</span>
                                 </span>
                               )}
                             </td>
